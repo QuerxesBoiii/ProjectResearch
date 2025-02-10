@@ -68,8 +68,6 @@ namespace Fragsurf.Movement {
 
         private bool underwater = false;
 
-        private Alteruna.Avatar _avatar;
-
         ///// Properties /////
 
         public MoveType moveType { get { return MoveType.Walk; } }
@@ -116,10 +114,6 @@ namespace Fragsurf.Movement {
 
         private void Start () {
 
-            _avatar = GetComponent<Alteruna.Avatar> ();
-
-            if (!_avatar.IsMe)
-                return;
             
             _colliderObject = new GameObject ("PlayerCollider");
             _colliderObject.layer = gameObject.layer;
@@ -227,8 +221,6 @@ namespace Fragsurf.Movement {
 
         private void Update () {
 
-            if (!_avatar.IsMe)
-                return;
             _colliderObject.transform.rotation = Quaternion.identity;
 
 
