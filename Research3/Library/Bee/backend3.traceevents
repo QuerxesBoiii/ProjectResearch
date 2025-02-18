@@ -1,0 +1,683 @@
+{ "cat":"", "pid":12345, "tid":0, "ts":0, "ph":"M", "name":"process_name", "args": { "name":"bee_backend" } }
+,{ "pid":12345, "tid":0, "ts":1739808077063981, "dur":17726, "ph":"X", "name": "DriverInitData",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":0, "ts":1739808077081713, "dur":140, "ph":"X", "name": "RemoveStaleOutputs",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":0, "ts":1739808077081896, "dur":463, "ph":"X", "name": "BuildQueueInit",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":0, "ts":1739808077082371, "dur":2398, "ph":"X", "name": "EnqueueRequestedNodes",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":0, "ts":1739808077084770, "dur":14320988, "ph":"X", "name": "WaitForBuildFinished", "cname":"thread_state_sleeping",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":0, "ts":1739808091405760, "dur":416, "ph":"X", "name": "JoinBuildThread",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":0, "ts":1739808091406415, "dur":1354, "ph":"X", "name": "Tundra",  "args": { "detail":"Write AllBuiltNodes" }}
+,{ "pid":12345, "tid":1, "ts":1739808077082602, "dur":2229, "ph":"X", "name": "FirstLock",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":1, "ts":1739808077084834, "dur":722, "ph":"X", "name": "EarlyStatNonGeneratedFile",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":1, "ts":1739808077085556, "dur":2838, "ph":"X", "name": "WaitingForWork", "cname":"thread_state_sleeping",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":1, "ts":1739808077088394, "dur":52, "ph":"X", "name": "CheckInputSignature",  "args": { "detail":"CopyFiles C:/Users/querx.QRXS/Desktop/Build/Research3/UnityPlayer.dll" }}
+,{ "pid":12345, "tid":1, "ts":1739808077088446, "dur":218, "ph":"X", "name": "OutputFilesMissingFor",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":1, "ts":1739808077088669, "dur":1808, "ph":"X", "name": "WaitingForWork", "cname":"thread_state_sleeping",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":1, "ts":1739808077090491, "dur":26055, "ph":"X", "name": "ComputeFileSignatureSha1",  "args": { "detail":"Library\\Bee\\artifacts\\WinPlayerBuildProgram\\ManagedStripped\\UnityEngine.ClusterRendererModule.dll" }}
+,{ "pid":12345, "tid":1, "ts":1739808077090477, "dur":26071, "ph":"X", "name": "CheckInputSignature",  "args": { "detail":"CopyFiles C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/UnityEngine.ClusterRendererModule.dll" }}
+,{ "pid":12345, "tid":1, "ts":1739808077118350, "dur":6287, "ph":"X", "name": "CopyFiles",  "args": { "detail":"C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/UnityEngine.ClusterRendererModule.dll" }}
+,{ "pid":12345, "tid":1, "ts":1739808077124651, "dur":22805, "ph":"X", "name": "ComputeFileSignatureSha1",  "args": { "detail":"Library\\Bee\\artifacts\\WinPlayerBuildProgram\\ManagedStripped\\Unity.Multiplayer.Center.Common.dll" }}
+,{ "pid":12345, "tid":1, "ts":1739808077124639, "dur":22819, "ph":"X", "name": "CheckInputSignature",  "args": { "detail":"CopyFiles C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/Unity.Multiplayer.Center.Common.dll" }}
+,{ "pid":12345, "tid":1, "ts":1739808077147492, "dur":842, "ph":"X", "name": "CopyFiles",  "args": { "detail":"C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/Unity.Multiplayer.Center.Common.dll" }}
+,{ "pid":12345, "tid":1, "ts":1739808077148347, "dur":22654, "ph":"X", "name": "ComputeFileSignatureSha1",  "args": { "detail":"Library\\Bee\\artifacts\\WinPlayerBuildProgram\\ManagedStripped\\UnityEngine.UnityConnectModule.dll" }}
+,{ "pid":12345, "tid":1, "ts":1739808077148336, "dur":22666, "ph":"X", "name": "CheckInputSignature",  "args": { "detail":"CopyFiles C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/UnityEngine.UnityConnectModule.dll" }}
+,{ "pid":12345, "tid":1, "ts":1739808077171018, "dur":957, "ph":"X", "name": "CopyFiles",  "args": { "detail":"C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/UnityEngine.UnityConnectModule.dll" }}
+,{ "pid":12345, "tid":1, "ts":1739808077171994, "dur":112618, "ph":"X", "name": "ComputeFileSignatureSha1",  "args": { "detail":"Library\\Bee\\artifacts\\WinPlayerBuildProgram\\ManagedStripped\\Unity.Netcode.Runtime.dll" }}
+,{ "pid":12345, "tid":1, "ts":1739808077171978, "dur":112635, "ph":"X", "name": "CheckInputSignature",  "args": { "detail":"CopyFiles C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/Unity.Netcode.Runtime.dll" }}
+,{ "pid":12345, "tid":1, "ts":1739808077284625, "dur":1144, "ph":"X", "name": "CopyFiles",  "args": { "detail":"C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/Unity.Netcode.Runtime.dll" }}
+,{ "pid":12345, "tid":1, "ts":1739808077285784, "dur":80148, "ph":"X", "name": "ComputeFileSignatureSha1",  "args": { "detail":"Library\\Bee\\artifacts\\WinPlayerBuildProgram\\ManagedStripped\\System.Xml.Linq.dll" }}
+,{ "pid":12345, "tid":1, "ts":1739808077285771, "dur":80163, "ph":"X", "name": "CheckInputSignature",  "args": { "detail":"CopyFiles C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/System.Xml.Linq.dll" }}
+,{ "pid":12345, "tid":1, "ts":1739808077365947, "dur":853, "ph":"X", "name": "CopyFiles",  "args": { "detail":"C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/System.Xml.Linq.dll" }}
+,{ "pid":12345, "tid":1, "ts":1739808077366801, "dur":14039003, "ph":"X", "name": "WaitingForWork", "cname":"thread_state_sleeping",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":2, "ts":1739808077082503, "dur":2289, "ph":"X", "name": "FirstLock",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":2, "ts":1739808077084794, "dur":531, "ph":"X", "name": "EarlyStatNonGeneratedFile",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":2, "ts":1739808077085326, "dur":456, "ph":"X", "name": "EarlyStatNonGeneratedFile",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":2, "ts":1739808077085782, "dur":2584, "ph":"X", "name": "WaitingForWork", "cname":"thread_state_sleeping",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":2, "ts":1739808077088381, "dur":52, "ph":"X", "name": "CheckInputSignature",  "args": { "detail":"CopyFiles C:/Users/querx.QRXS/Desktop/Build/Research3/MonoBleedingEdge/etc/mono/4.0/web.config" }}
+,{ "pid":12345, "tid":2, "ts":1739808077088434, "dur":329, "ph":"X", "name": "OutputFilesMissingFor",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":2, "ts":1739808077088773, "dur":1720, "ph":"X", "name": "WaitingForWork", "cname":"thread_state_sleeping",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":2, "ts":1739808077090528, "dur":97241, "ph":"X", "name": "ComputeFileSignatureSha1",  "args": { "detail":"Library\\Bee\\artifacts\\WinPlayerBuildProgram\\ManagedStripped\\System.ServiceModel.Internals.dll" }}
+,{ "pid":12345, "tid":2, "ts":1739808077090511, "dur":97259, "ph":"X", "name": "CheckInputSignature",  "args": { "detail":"CopyFiles C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/System.ServiceModel.Internals.dll" }}
+,{ "pid":12345, "tid":2, "ts":1739808077187799, "dur":1123, "ph":"X", "name": "CopyFiles",  "args": { "detail":"C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/System.ServiceModel.Internals.dll" }}
+,{ "pid":12345, "tid":2, "ts":1739808077188937, "dur":27762, "ph":"X", "name": "ComputeFileSignatureSha1",  "args": { "detail":"Library\\Bee\\artifacts\\WinPlayerBuildProgram\\ManagedStripped\\Unity.Services.Core.Scheduler.dll" }}
+,{ "pid":12345, "tid":2, "ts":1739808077188925, "dur":27775, "ph":"X", "name": "CheckInputSignature",  "args": { "detail":"CopyFiles C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/Unity.Services.Core.Scheduler.dll" }}
+,{ "pid":12345, "tid":2, "ts":1739808077216712, "dur":699, "ph":"X", "name": "CopyFiles",  "args": { "detail":"C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/Unity.Services.Core.Scheduler.dll" }}
+,{ "pid":12345, "tid":2, "ts":1739808077217424, "dur":848, "ph":"X", "name": "ComputeFileSignatureSha1",  "args": { "detail":"Library\\Bee\\artifacts\\WinPlayerBuildProgram\\ManagedStripped\\Unity.RenderPipelines.Universal.Shaders.dll" }}
+,{ "pid":12345, "tid":2, "ts":1739808077217413, "dur":859, "ph":"X", "name": "CheckInputSignature",  "args": { "detail":"CopyFiles C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/Unity.RenderPipelines.Universal.Shaders.dll" }}
+,{ "pid":12345, "tid":2, "ts":1739808077218283, "dur":1799, "ph":"X", "name": "CopyFiles",  "args": { "detail":"C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/Unity.RenderPipelines.Universal.Shaders.dll" }}
+,{ "pid":12345, "tid":2, "ts":1739808077220101, "dur":29840, "ph":"X", "name": "ComputeFileSignatureSha1",  "args": { "detail":"Library\\Bee\\artifacts\\WinPlayerBuildProgram\\ManagedStripped\\UnityEngine.SpriteShapeModule.dll" }}
+,{ "pid":12345, "tid":2, "ts":1739808077220085, "dur":29858, "ph":"X", "name": "CheckInputSignature",  "args": { "detail":"CopyFiles C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/UnityEngine.SpriteShapeModule.dll" }}
+,{ "pid":12345, "tid":2, "ts":1739808077249955, "dur":1236, "ph":"X", "name": "CopyFiles",  "args": { "detail":"C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/UnityEngine.SpriteShapeModule.dll" }}
+,{ "pid":12345, "tid":2, "ts":1739808077251209, "dur":21273, "ph":"X", "name": "ComputeFileSignatureSha1",  "args": { "detail":"Library\\Bee\\artifacts\\WinPlayerBuildProgram\\ManagedStripped\\UnityEngine.StreamingModule.dll" }}
+,{ "pid":12345, "tid":2, "ts":1739808077251193, "dur":21291, "ph":"X", "name": "CheckInputSignature",  "args": { "detail":"CopyFiles C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/UnityEngine.StreamingModule.dll" }}
+,{ "pid":12345, "tid":2, "ts":1739808077272521, "dur":927, "ph":"X", "name": "CopyFiles",  "args": { "detail":"C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/UnityEngine.StreamingModule.dll" }}
+,{ "pid":12345, "tid":2, "ts":1739808077273461, "dur":30227, "ph":"X", "name": "ComputeFileSignatureSha1",  "args": { "detail":"Library\\Bee\\artifacts\\WinPlayerBuildProgram\\ManagedStripped\\Unity.Services.Core.Components.dll" }}
+,{ "pid":12345, "tid":2, "ts":1739808077273450, "dur":30239, "ph":"X", "name": "CheckInputSignature",  "args": { "detail":"CopyFiles C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/Unity.Services.Core.Components.dll" }}
+,{ "pid":12345, "tid":2, "ts":1739808077303703, "dur":1160, "ph":"X", "name": "CopyFiles",  "args": { "detail":"C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/Unity.Services.Core.Components.dll" }}
+,{ "pid":12345, "tid":2, "ts":1739808077304875, "dur":53849, "ph":"X", "name": "ComputeFileSignatureSha1",  "args": { "detail":"Library\\Bee\\artifacts\\WinPlayerBuildProgram\\ManagedStripped\\UnityEngine.PropertiesModule.dll" }}
+,{ "pid":12345, "tid":2, "ts":1739808077304865, "dur":53860, "ph":"X", "name": "CheckInputSignature",  "args": { "detail":"CopyFiles C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/UnityEngine.PropertiesModule.dll" }}
+,{ "pid":12345, "tid":2, "ts":1739808077358734, "dur":1388, "ph":"X", "name": "CopyFiles",  "args": { "detail":"C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/UnityEngine.PropertiesModule.dll" }}
+,{ "pid":12345, "tid":2, "ts":1739808077360124, "dur":14045652, "ph":"X", "name": "WaitingForWork", "cname":"thread_state_sleeping",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":3, "ts":1739808077082548, "dur":2254, "ph":"X", "name": "FirstLock",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":3, "ts":1739808077084804, "dur":489, "ph":"X", "name": "EarlyStatNonGeneratedFile",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":3, "ts":1739808077085294, "dur":501, "ph":"X", "name": "EarlyStatNonGeneratedFile",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":3, "ts":1739808077085795, "dur":2568, "ph":"X", "name": "WaitingForWork", "cname":"thread_state_sleeping",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":3, "ts":1739808077088380, "dur":141, "ph":"X", "name": "OutputFilesMissingFor",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":3, "ts":1739808077088532, "dur":212, "ph":"X", "name": "OutputFilesMissingFor",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":3, "ts":1739808077088744, "dur":94, "ph":"X", "name": "EmitNodeUpToDate",  "args": { "detail":"CopyFiles C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/RuntimeInitializeOnLoads.json" }}
+,{ "pid":12345, "tid":3, "ts":1739808077088838, "dur":1657, "ph":"X", "name": "WaitingForWork", "cname":"thread_state_sleeping",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":3, "ts":1739808077090513, "dur":44002, "ph":"X", "name": "ComputeFileSignatureSha1",  "args": { "detail":"Library\\Bee\\artifacts\\WinPlayerBuildProgram\\ManagedStripped\\UnityEngine.InputLegacyModule.dll" }}
+,{ "pid":12345, "tid":3, "ts":1739808077090495, "dur":44022, "ph":"X", "name": "CheckInputSignature",  "args": { "detail":"CopyFiles C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/UnityEngine.InputLegacyModule.dll" }}
+,{ "pid":12345, "tid":3, "ts":1739808077134535, "dur":777, "ph":"X", "name": "CopyFiles",  "args": { "detail":"C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/UnityEngine.InputLegacyModule.dll" }}
+,{ "pid":12345, "tid":3, "ts":1739808077135325, "dur":36692, "ph":"X", "name": "ComputeFileSignatureSha1",  "args": { "detail":"Library\\Bee\\artifacts\\WinPlayerBuildProgram\\ManagedStripped\\Unity.Services.Core.Registration.dll" }}
+,{ "pid":12345, "tid":3, "ts":1739808077135314, "dur":36705, "ph":"X", "name": "CheckInputSignature",  "args": { "detail":"CopyFiles C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/Unity.Services.Core.Registration.dll" }}
+,{ "pid":12345, "tid":3, "ts":1739808077172031, "dur":1140, "ph":"X", "name": "CopyFiles",  "args": { "detail":"C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/Unity.Services.Core.Registration.dll" }}
+,{ "pid":12345, "tid":3, "ts":1739808077173188, "dur":185978, "ph":"X", "name": "ComputeFileSignatureSha1",  "args": { "detail":"Library\\Bee\\artifacts\\WinPlayerBuildProgram\\ManagedStripped\\System.Xml.dll" }}
+,{ "pid":12345, "tid":3, "ts":1739808077173173, "dur":185993, "ph":"X", "name": "CheckInputSignature",  "args": { "detail":"CopyFiles C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/System.Xml.dll" }}
+,{ "pid":12345, "tid":3, "ts":1739808077359181, "dur":1795, "ph":"X", "name": "CopyFiles",  "args": { "detail":"C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/System.Xml.dll" }}
+,{ "pid":12345, "tid":3, "ts":1739808077360978, "dur":14044799, "ph":"X", "name": "WaitingForWork", "cname":"thread_state_sleeping",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":4, "ts":1739808077082574, "dur":2233, "ph":"X", "name": "FirstLock",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":4, "ts":1739808077084811, "dur":459, "ph":"X", "name": "EarlyStatNonGeneratedFile",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":4, "ts":1739808077085271, "dur":571, "ph":"X", "name": "EarlyStatNonGeneratedFile",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":4, "ts":1739808077085843, "dur":2556, "ph":"X", "name": "WaitingForWork", "cname":"thread_state_sleeping",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":4, "ts":1739808077088401, "dur":127, "ph":"X", "name": "OutputFilesMissingFor",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":4, "ts":1739808077088533, "dur":240, "ph":"X", "name": "OutputFilesMissingFor",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":4, "ts":1739808077088776, "dur":1735, "ph":"X", "name": "WaitingForWork", "cname":"thread_state_sleeping",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":4, "ts":1739808077090541, "dur":26006, "ph":"X", "name": "ComputeFileSignatureSha1",  "args": { "detail":"Library\\Bee\\artifacts\\WinPlayerBuildProgram\\ManagedStripped\\UnityEngine.SpriteMaskModule.dll" }}
+,{ "pid":12345, "tid":4, "ts":1739808077090514, "dur":26034, "ph":"X", "name": "CheckInputSignature",  "args": { "detail":"CopyFiles C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/UnityEngine.SpriteMaskModule.dll" }}
+,{ "pid":12345, "tid":4, "ts":1739808077118232, "dur":2717, "ph":"X", "name": "CopyFiles",  "args": { "detail":"C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/UnityEngine.SpriteMaskModule.dll" }}
+,{ "pid":12345, "tid":4, "ts":1739808077120966, "dur":50851, "ph":"X", "name": "ComputeFileSignatureSha1",  "args": { "detail":"Library\\Bee\\artifacts\\WinPlayerBuildProgram\\ManagedStripped\\UnityEngine.VideoModule.dll" }}
+,{ "pid":12345, "tid":4, "ts":1739808077120952, "dur":50866, "ph":"X", "name": "CheckInputSignature",  "args": { "detail":"CopyFiles C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/UnityEngine.VideoModule.dll" }}
+,{ "pid":12345, "tid":4, "ts":1739808077171832, "dur":891, "ph":"X", "name": "CopyFiles",  "args": { "detail":"C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/UnityEngine.VideoModule.dll" }}
+,{ "pid":12345, "tid":4, "ts":1739808077172742, "dur":18212, "ph":"X", "name": "ComputeFileSignatureSha1",  "args": { "detail":"Library\\Bee\\artifacts\\WinPlayerBuildProgram\\ManagedStripped\\UnityEngine.GraphicsStateCollectionSerializerModule.dll" }}
+,{ "pid":12345, "tid":4, "ts":1739808077172725, "dur":18231, "ph":"X", "name": "CheckInputSignature",  "args": { "detail":"CopyFiles C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/UnityEngine.GraphicsStateCollectionSerializerModule.dll" }}
+,{ "pid":12345, "tid":4, "ts":1739808077190968, "dur":2444, "ph":"X", "name": "CopyFiles",  "args": { "detail":"C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/UnityEngine.GraphicsStateCollectionSerializerModule.dll" }}
+,{ "pid":12345, "tid":4, "ts":1739808077193430, "dur":22217, "ph":"X", "name": "ComputeFileSignatureSha1",  "args": { "detail":"Library\\Bee\\artifacts\\WinPlayerBuildProgram\\ManagedStripped\\UnityEngine.ClusterInputModule.dll" }}
+,{ "pid":12345, "tid":4, "ts":1739808077193415, "dur":22233, "ph":"X", "name": "CheckInputSignature",  "args": { "detail":"CopyFiles C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/UnityEngine.ClusterInputModule.dll" }}
+,{ "pid":12345, "tid":4, "ts":1739808077215659, "dur":1238, "ph":"X", "name": "CopyFiles",  "args": { "detail":"C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/UnityEngine.ClusterInputModule.dll" }}
+,{ "pid":12345, "tid":4, "ts":1739808077216908, "dur":70434, "ph":"X", "name": "ComputeFileSignatureSha1",  "args": { "detail":"Library\\Bee\\artifacts\\WinPlayerBuildProgram\\ManagedStripped\\Unity.RenderPipelines.Universal.Runtime.dll" }}
+,{ "pid":12345, "tid":4, "ts":1739808077216898, "dur":70445, "ph":"X", "name": "CheckInputSignature",  "args": { "detail":"CopyFiles C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/Unity.RenderPipelines.Universal.Runtime.dll" }}
+,{ "pid":12345, "tid":4, "ts":1739808077287704, "dur":1479, "ph":"X", "name": "CopyFiles",  "args": { "detail":"C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/Unity.RenderPipelines.Universal.Runtime.dll" }}
+,{ "pid":12345, "tid":4, "ts":1739808077289200, "dur":51035, "ph":"X", "name": "ComputeFileSignatureSha1",  "args": { "detail":"Library\\Bee\\artifacts\\WinPlayerBuildProgram\\ManagedStripped\\System.Transactions.dll" }}
+,{ "pid":12345, "tid":4, "ts":1739808077289186, "dur":51051, "ph":"X", "name": "CheckInputSignature",  "args": { "detail":"CopyFiles C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/System.Transactions.dll" }}
+,{ "pid":12345, "tid":4, "ts":1739808077340309, "dur":1617, "ph":"X", "name": "CopyFiles",  "args": { "detail":"C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/System.Transactions.dll" }}
+,{ "pid":12345, "tid":4, "ts":1739808077341927, "dur":14063889, "ph":"X", "name": "WaitingForWork", "cname":"thread_state_sleeping",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":5, "ts":1739808077082447, "dur":2333, "ph":"X", "name": "FirstLock",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":5, "ts":1739808077084784, "dur":421, "ph":"X", "name": "EarlyStatNonGeneratedFile",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":5, "ts":1739808077085205, "dur":643, "ph":"X", "name": "EarlyStatNonGeneratedFile",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":5, "ts":1739808077085848, "dur":2540, "ph":"X", "name": "WaitingForWork", "cname":"thread_state_sleeping",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":5, "ts":1739808077088433, "dur":148, "ph":"X", "name": "OutputFilesMissingFor",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":5, "ts":1739808077088585, "dur":176, "ph":"X", "name": "OutputFilesMissingFor",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":5, "ts":1739808077088762, "dur":102, "ph":"X", "name": "EmitNodeUpToDate",  "args": { "detail":"CopyFiles C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/level0" }}
+,{ "pid":12345, "tid":5, "ts":1739808077088865, "dur":1617, "ph":"X", "name": "WaitingForWork", "cname":"thread_state_sleeping",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":5, "ts":1739808077090502, "dur":34873, "ph":"X", "name": "ComputeFileSignatureSha1",  "args": { "detail":"Library\\Bee\\artifacts\\WinPlayerBuildProgram\\ManagedStripped\\System.IO.Compression.FileSystem.dll" }}
+,{ "pid":12345, "tid":5, "ts":1739808077090486, "dur":34890, "ph":"X", "name": "CheckInputSignature",  "args": { "detail":"CopyFiles C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/System.IO.Compression.FileSystem.dll" }}
+,{ "pid":12345, "tid":5, "ts":1739808077125410, "dur":747, "ph":"X", "name": "CopyFiles",  "args": { "detail":"C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/System.IO.Compression.FileSystem.dll" }}
+,{ "pid":12345, "tid":5, "ts":1739808077126173, "dur":25027, "ph":"X", "name": "ComputeFileSignatureSha1",  "args": { "detail":"Library\\Bee\\artifacts\\WinPlayerBuildProgram\\ManagedStripped\\UnityEngine.GridModule.dll" }}
+,{ "pid":12345, "tid":5, "ts":1739808077126159, "dur":25042, "ph":"X", "name": "CheckInputSignature",  "args": { "detail":"CopyFiles C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/UnityEngine.GridModule.dll" }}
+,{ "pid":12345, "tid":5, "ts":1739808077151215, "dur":1101, "ph":"X", "name": "CopyFiles",  "args": { "detail":"C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/UnityEngine.GridModule.dll" }}
+,{ "pid":12345, "tid":5, "ts":1739808077152331, "dur":24405, "ph":"X", "name": "ComputeFileSignatureSha1",  "args": { "detail":"Library\\Bee\\artifacts\\WinPlayerBuildProgram\\ManagedStripped\\Unity.Services.Core.Threading.dll" }}
+,{ "pid":12345, "tid":5, "ts":1739808077152318, "dur":24420, "ph":"X", "name": "CheckInputSignature",  "args": { "detail":"CopyFiles C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/Unity.Services.Core.Threading.dll" }}
+,{ "pid":12345, "tid":5, "ts":1739808077176754, "dur":1022, "ph":"X", "name": "CopyFiles",  "args": { "detail":"C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/Unity.Services.Core.Threading.dll" }}
+,{ "pid":12345, "tid":5, "ts":1739808077177790, "dur":63357, "ph":"X", "name": "ComputeFileSignatureSha1",  "args": { "detail":"Library\\Bee\\artifacts\\WinPlayerBuildProgram\\ManagedStripped\\UnityEngine.XRModule.dll" }}
+,{ "pid":12345, "tid":5, "ts":1739808077177778, "dur":63370, "ph":"X", "name": "CheckInputSignature",  "args": { "detail":"CopyFiles C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/UnityEngine.XRModule.dll" }}
+,{ "pid":12345, "tid":5, "ts":1739808077241161, "dur":2261, "ph":"X", "name": "CopyFiles",  "args": { "detail":"C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/UnityEngine.XRModule.dll" }}
+,{ "pid":12345, "tid":5, "ts":1739808077243433, "dur":20146, "ph":"X", "name": "ComputeFileSignatureSha1",  "args": { "detail":"Library\\Bee\\artifacts\\WinPlayerBuildProgram\\ManagedStripped\\UnityEngine.UnityCurlModule.dll" }}
+,{ "pid":12345, "tid":5, "ts":1739808077243423, "dur":20157, "ph":"X", "name": "CheckInputSignature",  "args": { "detail":"CopyFiles C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/UnityEngine.UnityCurlModule.dll" }}
+,{ "pid":12345, "tid":5, "ts":1739808077263597, "dur":2006, "ph":"X", "name": "CopyFiles",  "args": { "detail":"C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/UnityEngine.UnityCurlModule.dll" }}
+,{ "pid":12345, "tid":5, "ts":1739808077265618, "dur":22009, "ph":"X", "name": "ComputeFileSignatureSha1",  "args": { "detail":"Library\\Bee\\artifacts\\WinPlayerBuildProgram\\ManagedStripped\\UnityEngine.MultiplayerModule.dll" }}
+,{ "pid":12345, "tid":5, "ts":1739808077265606, "dur":22022, "ph":"X", "name": "CheckInputSignature",  "args": { "detail":"CopyFiles C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/UnityEngine.MultiplayerModule.dll" }}
+,{ "pid":12345, "tid":5, "ts":1739808077287639, "dur":1265, "ph":"X", "name": "CopyFiles",  "args": { "detail":"C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/UnityEngine.MultiplayerModule.dll" }}
+,{ "pid":12345, "tid":5, "ts":1739808077288922, "dur":32561, "ph":"X", "name": "ComputeFileSignatureSha1",  "args": { "detail":"Library\\Bee\\artifacts\\WinPlayerBuildProgram\\ManagedStripped\\UnityEngine.NVIDIAModule.dll" }}
+,{ "pid":12345, "tid":5, "ts":1739808077288907, "dur":32578, "ph":"X", "name": "CheckInputSignature",  "args": { "detail":"CopyFiles C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/UnityEngine.NVIDIAModule.dll" }}
+,{ "pid":12345, "tid":5, "ts":1739808077321498, "dur":937, "ph":"X", "name": "CopyFiles",  "args": { "detail":"C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/UnityEngine.NVIDIAModule.dll" }}
+,{ "pid":12345, "tid":5, "ts":1739808077322447, "dur":20979, "ph":"X", "name": "ComputeFileSignatureSha1",  "args": { "detail":"Library\\Bee\\artifacts\\WinPlayerBuildProgram\\ManagedStripped\\UnityEngine.UnityWebRequestTextureModule.dll" }}
+,{ "pid":12345, "tid":5, "ts":1739808077322436, "dur":20992, "ph":"X", "name": "CheckInputSignature",  "args": { "detail":"CopyFiles C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/UnityEngine.UnityWebRequestTextureModule.dll" }}
+,{ "pid":12345, "tid":5, "ts":1739808077343446, "dur":935, "ph":"X", "name": "CopyFiles",  "args": { "detail":"C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/UnityEngine.UnityWebRequestTextureModule.dll" }}
+,{ "pid":12345, "tid":5, "ts":1739808077344383, "dur":14061392, "ph":"X", "name": "WaitingForWork", "cname":"thread_state_sleeping",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":6, "ts":1739808077082501, "dur":2286, "ph":"X", "name": "FirstLock",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":6, "ts":1739808077084790, "dur":475, "ph":"X", "name": "EarlyStatNonGeneratedFile",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":6, "ts":1739808077085265, "dur":531, "ph":"X", "name": "EarlyStatNonGeneratedFile",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":6, "ts":1739808077085796, "dur":2565, "ph":"X", "name": "WaitingForWork", "cname":"thread_state_sleeping",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":6, "ts":1739808077088410, "dur":180, "ph":"X", "name": "OutputFilesMissingFor",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":6, "ts":1739808077088601, "dur":183, "ph":"X", "name": "OutputFilesMissingFor",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":6, "ts":1739808077088794, "dur":1710, "ph":"X", "name": "WaitingForWork", "cname":"thread_state_sleeping",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":6, "ts":1739808077090566, "dur":77588, "ph":"X", "name": "ComputeFileSignatureSha1",  "args": { "detail":"Library\\Bee\\artifacts\\WinPlayerBuildProgram\\ManagedStripped\\Unity.Collections.dll" }}
+,{ "pid":12345, "tid":6, "ts":1739808077090506, "dur":77649, "ph":"X", "name": "CheckInputSignature",  "args": { "detail":"CopyFiles C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/Unity.Collections.dll" }}
+,{ "pid":12345, "tid":6, "ts":1739808077168188, "dur":867, "ph":"X", "name": "CopyFiles",  "args": { "detail":"C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/Unity.Collections.dll" }}
+,{ "pid":12345, "tid":6, "ts":1739808077169073, "dur":68484, "ph":"X", "name": "ComputeFileSignatureSha1",  "args": { "detail":"Library\\Bee\\artifacts\\WinPlayerBuildProgram\\ManagedStripped\\UnityEngine.HierarchyCoreModule.dll" }}
+,{ "pid":12345, "tid":6, "ts":1739808077169057, "dur":68502, "ph":"X", "name": "CheckInputSignature",  "args": { "detail":"CopyFiles C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/UnityEngine.HierarchyCoreModule.dll" }}
+,{ "pid":12345, "tid":6, "ts":1739808077237579, "dur":1870, "ph":"X", "name": "CopyFiles",  "args": { "detail":"C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/UnityEngine.HierarchyCoreModule.dll" }}
+,{ "pid":12345, "tid":6, "ts":1739808077239567, "dur":52016, "ph":"X", "name": "ComputeFileSignatureSha1",  "args": { "detail":"Library\\Bee\\artifacts\\WinPlayerBuildProgram\\ManagedStripped\\UnityEngine.AIModule.dll" }}
+,{ "pid":12345, "tid":6, "ts":1739808077239451, "dur":52134, "ph":"X", "name": "CheckInputSignature",  "args": { "detail":"CopyFiles C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/UnityEngine.AIModule.dll" }}
+,{ "pid":12345, "tid":6, "ts":1739808077291602, "dur":1316, "ph":"X", "name": "CopyFiles",  "args": { "detail":"C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/UnityEngine.AIModule.dll" }}
+,{ "pid":12345, "tid":6, "ts":1739808077292934, "dur":102931, "ph":"X", "name": "ComputeFileSignatureSha1",  "args": { "detail":"Library\\Bee\\artifacts\\WinPlayerBuildProgram\\ManagedStripped\\Unity.Rendering.LightTransport.Runtime.dll" }}
+,{ "pid":12345, "tid":6, "ts":1739808077292921, "dur":102946, "ph":"X", "name": "CheckInputSignature",  "args": { "detail":"CopyFiles C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/Unity.Rendering.LightTransport.Runtime.dll" }}
+,{ "pid":12345, "tid":6, "ts":1739808077395882, "dur":1044, "ph":"X", "name": "CopyFiles",  "args": { "detail":"C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/Unity.Rendering.LightTransport.Runtime.dll" }}
+,{ "pid":12345, "tid":6, "ts":1739808077396927, "dur":14008877, "ph":"X", "name": "WaitingForWork", "cname":"thread_state_sleeping",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":7, "ts":1739808077082538, "dur":2259, "ph":"X", "name": "FirstLock",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":7, "ts":1739808077084799, "dur":423, "ph":"X", "name": "EarlyStatNonGeneratedFile",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":7, "ts":1739808077085222, "dur":605, "ph":"X", "name": "EarlyStatNonGeneratedFile",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":7, "ts":1739808077085827, "dur":2528, "ph":"X", "name": "WaitingForWork", "cname":"thread_state_sleeping",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":7, "ts":1739808077088361, "dur":77, "ph":"X", "name": "CheckInputSignature",  "args": { "detail":"CopyFiles C:/Users/querx.QRXS/Desktop/Build/Research3/MonoBleedingEdge/etc/mono/mconfig/config.xml" }}
+,{ "pid":12345, "tid":7, "ts":1739808077088438, "dur":216, "ph":"X", "name": "OutputFilesMissingFor",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":7, "ts":1739808077088659, "dur":1832, "ph":"X", "name": "WaitingForWork", "cname":"thread_state_sleeping",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":7, "ts":1739808077090509, "dur":109682, "ph":"X", "name": "ComputeFileSignatureSha1",  "args": { "detail":"Library\\Bee\\artifacts\\WinPlayerBuildProgram\\ManagedStripped\\Unity.Services.QoS.dll" }}
+,{ "pid":12345, "tid":7, "ts":1739808077090491, "dur":109702, "ph":"X", "name": "CheckInputSignature",  "args": { "detail":"CopyFiles C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/Unity.Services.QoS.dll" }}
+,{ "pid":12345, "tid":7, "ts":1739808077200224, "dur":1308, "ph":"X", "name": "CopyFiles",  "args": { "detail":"C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/Unity.Services.QoS.dll" }}
+,{ "pid":12345, "tid":7, "ts":1739808077201545, "dur":23075, "ph":"X", "name": "ComputeFileSignatureSha1",  "args": { "detail":"Library\\Bee\\artifacts\\WinPlayerBuildProgram\\ManagedStripped\\UnityEngine.JSONSerializeModule.dll" }}
+,{ "pid":12345, "tid":7, "ts":1739808077201534, "dur":23088, "ph":"X", "name": "CheckInputSignature",  "args": { "detail":"CopyFiles C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/UnityEngine.JSONSerializeModule.dll" }}
+,{ "pid":12345, "tid":7, "ts":1739808077224643, "dur":1041, "ph":"X", "name": "CopyFiles",  "args": { "detail":"C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/UnityEngine.JSONSerializeModule.dll" }}
+,{ "pid":12345, "tid":7, "ts":1739808077225701, "dur":678, "ph":"X", "name": "ComputeFileSignatureSha1",  "args": { "detail":"Library\\Bee\\artifacts\\WinPlayerBuildProgram\\ManagedStripped\\Unity.RenderPipelines.Core.Runtime.Shared.dll" }}
+,{ "pid":12345, "tid":7, "ts":1739808077225687, "dur":693, "ph":"X", "name": "CheckInputSignature",  "args": { "detail":"CopyFiles C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/Unity.RenderPipelines.Core.Runtime.Shared.dll" }}
+,{ "pid":12345, "tid":7, "ts":1739808077226387, "dur":1500, "ph":"X", "name": "CopyFiles",  "args": { "detail":"C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/Unity.RenderPipelines.Core.Runtime.Shared.dll" }}
+,{ "pid":12345, "tid":7, "ts":1739808077227908, "dur":23586, "ph":"X", "name": "ComputeFileSignatureSha1",  "args": { "detail":"Library\\Bee\\artifacts\\WinPlayerBuildProgram\\ManagedStripped\\Unity.RenderPipelines.ShaderGraph.ShaderGraphLibrary.dll" }}
+,{ "pid":12345, "tid":7, "ts":1739808077227888, "dur":23608, "ph":"X", "name": "CheckInputSignature",  "args": { "detail":"CopyFiles C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/Unity.RenderPipelines.ShaderGraph.ShaderGraphLibrary.dll" }}
+,{ "pid":12345, "tid":7, "ts":1739808077251519, "dur":1363, "ph":"X", "name": "CopyFiles",  "args": { "detail":"C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/Unity.RenderPipelines.ShaderGraph.ShaderGraphLibrary.dll" }}
+,{ "pid":12345, "tid":7, "ts":1739808077252895, "dur":105745, "ph":"X", "name": "ComputeFileSignatureSha1",  "args": { "detail":"Library\\Bee\\artifacts\\WinPlayerBuildProgram\\ManagedStripped\\UnityEngine.TextCoreTextEngineModule.dll" }}
+,{ "pid":12345, "tid":7, "ts":1739808077252884, "dur":105758, "ph":"X", "name": "CheckInputSignature",  "args": { "detail":"CopyFiles C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/UnityEngine.TextCoreTextEngineModule.dll" }}
+,{ "pid":12345, "tid":7, "ts":1739808077358666, "dur":1364, "ph":"X", "name": "CopyFiles",  "args": { "detail":"C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/UnityEngine.TextCoreTextEngineModule.dll" }}
+,{ "pid":12345, "tid":7, "ts":1739808077360032, "dur":14045741, "ph":"X", "name": "WaitingForWork", "cname":"thread_state_sleeping",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":8, "ts":1739808077082405, "dur":2370, "ph":"X", "name": "FirstLock",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":8, "ts":1739808077085130, "dur":393, "ph":"X", "name": "CheckGlobSignature",  "args": { "detail":"D:/UnityNew/6000.0.37f1/Editor/Data/il2cpp/build/deploy" }}
+,{ "pid":12345, "tid":8, "ts":1739808077085524, "dur":2068, "ph":"X", "name": "CheckGlobSignature",  "args": { "detail":"D:/UnityNew/6000.0.37f1/Editor/Data/il2cpp/libil2cpp" }}
+,{ "pid":12345, "tid":8, "ts":1739808077087619, "dur":498, "ph":"X", "name": "CheckGlobSignature",  "args": { "detail":"D:/UnityNew/6000.0.37f1/Editor/Data/PlaybackEngines/WindowsStandaloneSupport/Variations/win64_player_nondevelopment_mono" }}
+,{ "pid":12345, "tid":8, "ts":1739808077088183, "dur":100, "ph":"X", "name": "CheckGlobSignature",  "args": { "detail":"Library/PlayerDataCache/Win642/Data" }}
+,{ "pid":12345, "tid":8, "ts":1739808077084777, "dur":3572, "ph":"X", "name": "CheckDagSignatures",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":8, "ts":1739808077088353, "dur":51, "ph":"X", "name": "CheckInputSignature",  "args": { "detail":"WriteResponseFile Library/Bee/artifacts/rsp/5171927660985745920.rsp" }}
+,{ "pid":12345, "tid":8, "ts":1739808077088433, "dur":886, "ph":"X", "name": "CheckInputSignature",  "args": { "detail":"UnityLinker G:/Video Sorted 2/ProjectResearch/Research3/Library/Bee/artifacts/unitylinker_dwek.traceevents" }}
+,{ "pid":12345, "tid":8, "ts":1739808077089320, "dur":608, "ph":"X", "name": "OutputFilesMissingFor",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":8, "ts":1739808077090501, "dur":83446, "ph":"X", "name": "ComputeFileSignatureSha1",  "args": { "detail":"Library\\Bee\\artifacts\\WinPlayerBuildProgram\\ManagedStripped\\Assembly-CSharp.dll" }}
+,{ "pid":12345, "tid":8, "ts":1739808077173965, "dur":473366, "ph":"X", "name": "ComputeFileSignatureSha1",  "args": { "detail":"Library\\Bee\\artifacts\\WinPlayerBuildProgram\\ManagedStripped\\Mono.Security.dll" }}
+,{ "pid":12345, "tid":8, "ts":1739808077647353, "dur":26919, "ph":"X", "name": "ComputeFileSignatureSha1",  "args": { "detail":"Library\\Bee\\artifacts\\WinPlayerBuildProgram\\ManagedStripped\\System.Security.dll" }}
+,{ "pid":12345, "tid":8, "ts":1739808077674393, "dur":95652, "ph":"X", "name": "ComputeFileSignatureSha1",  "args": { "detail":"G:\\Video Sorted 2\\ProjectResearch\\Research3\\Library\\PackageCache\\com.unity.burst@7a907cf5a459\\.Runtime\\bcl.exe" }}
+,{ "pid":12345, "tid":8, "ts":1739808077090482, "dur":679565, "ph":"X", "name": "CheckInputSignature",  "args": { "detail":"GenerateNativePluginsForAssemblies Library/Bee/artifacts/WinPlayerBuildProgram/AsyncPluginsFromLinker" }}
+,{ "pid":12345, "tid":8, "ts":1739808077770387, "dur":13635266, "ph":"X", "name": "GenerateNativePluginsForAssemblies",  "args": { "detail":"Library/Bee/artifacts/WinPlayerBuildProgram/AsyncPluginsFromLinker" }}
+,{ "pid":12345, "tid":9, "ts":1739808077082597, "dur":2221, "ph":"X", "name": "FirstLock",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":9, "ts":1739808077084825, "dur":541, "ph":"X", "name": "EarlyStatNonGeneratedFile",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":9, "ts":1739808077085366, "dur":2992, "ph":"X", "name": "WaitingForWork", "cname":"thread_state_sleeping",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":9, "ts":1739808077088395, "dur":164, "ph":"X", "name": "OutputFilesMissingFor",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":9, "ts":1739808077088566, "dur":204, "ph":"X", "name": "OutputFilesMissingFor",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":9, "ts":1739808077088770, "dur":107, "ph":"X", "name": "EmitNodeUpToDate",  "args": { "detail":"CopyFiles C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/level1" }}
+,{ "pid":12345, "tid":9, "ts":1739808077088878, "dur":1605, "ph":"X", "name": "WaitingForWork", "cname":"thread_state_sleeping",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":9, "ts":1739808077090509, "dur":160699, "ph":"X", "name": "ComputeFileSignatureSha1",  "args": { "detail":"Library\\Bee\\artifacts\\WinPlayerBuildProgram\\ManagedStripped\\System.Data.dll" }}
+,{ "pid":12345, "tid":9, "ts":1739808077090484, "dur":160725, "ph":"X", "name": "CheckInputSignature",  "args": { "detail":"CopyFiles C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/System.Data.dll" }}
+,{ "pid":12345, "tid":9, "ts":1739808077251274, "dur":2275, "ph":"X", "name": "CopyFiles",  "args": { "detail":"C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/System.Data.dll" }}
+,{ "pid":12345, "tid":9, "ts":1739808077253564, "dur":420730, "ph":"X", "name": "ComputeFileSignatureSha1",  "args": { "detail":"Library\\Bee\\artifacts\\WinPlayerBuildProgram\\ManagedStripped\\System.Security.dll" }}
+,{ "pid":12345, "tid":9, "ts":1739808077253551, "dur":420744, "ph":"X", "name": "CheckInputSignature",  "args": { "detail":"CopyFiles C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/System.Security.dll" }}
+,{ "pid":12345, "tid":9, "ts":1739808077674308, "dur":755, "ph":"X", "name": "CopyFiles",  "args": { "detail":"C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/System.Security.dll" }}
+,{ "pid":12345, "tid":9, "ts":1739808077675064, "dur":13730693, "ph":"X", "name": "WaitingForWork", "cname":"thread_state_sleeping",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":10, "ts":1739808077082635, "dur":2220, "ph":"X", "name": "FirstLock",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":10, "ts":1739808077084862, "dur":695, "ph":"X", "name": "EarlyStatNonGeneratedFile",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":10, "ts":1739808077085558, "dur":2829, "ph":"X", "name": "WaitingForWork", "cname":"thread_state_sleeping",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":10, "ts":1739808077088391, "dur":105, "ph":"X", "name": "CheckInputSignature",  "args": { "detail":"CopyFiles C:/Users/querx.QRXS/Desktop/Build/Research3/Research3.exe" }}
+,{ "pid":12345, "tid":10, "ts":1739808077088496, "dur":237, "ph":"X", "name": "OutputFilesMissingFor",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":10, "ts":1739808077088746, "dur":1740, "ph":"X", "name": "WaitingForWork", "cname":"thread_state_sleeping",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":10, "ts":1739808077090506, "dur":101956, "ph":"X", "name": "ComputeFileSignatureSha1",  "args": { "detail":"Library\\Bee\\artifacts\\WinPlayerBuildProgram\\ManagedStripped\\Unity.Burst.dll" }}
+,{ "pid":12345, "tid":10, "ts":1739808077090487, "dur":101976, "ph":"X", "name": "CheckInputSignature",  "args": { "detail":"CopyFiles C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/Unity.Burst.dll" }}
+,{ "pid":12345, "tid":10, "ts":1739808077192482, "dur":2353, "ph":"X", "name": "CopyFiles",  "args": { "detail":"C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/Unity.Burst.dll" }}
+,{ "pid":12345, "tid":10, "ts":1739808077194852, "dur":44219, "ph":"X", "name": "ComputeFileSignatureSha1",  "args": { "detail":"Library\\Bee\\artifacts\\WinPlayerBuildProgram\\ManagedStripped\\UnityEngine.VirtualTexturingModule.dll" }}
+,{ "pid":12345, "tid":10, "ts":1739808077194838, "dur":44234, "ph":"X", "name": "CheckInputSignature",  "args": { "detail":"CopyFiles C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/UnityEngine.VirtualTexturingModule.dll" }}
+,{ "pid":12345, "tid":10, "ts":1739808077239081, "dur":4014, "ph":"X", "name": "CopyFiles",  "args": { "detail":"C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/UnityEngine.VirtualTexturingModule.dll" }}
+,{ "pid":12345, "tid":10, "ts":1739808077243109, "dur":80043, "ph":"X", "name": "ComputeFileSignatureSha1",  "args": { "detail":"Library\\Bee\\artifacts\\WinPlayerBuildProgram\\ManagedStripped\\Unity.Services.Authentication.PlayerAccounts.dll" }}
+,{ "pid":12345, "tid":10, "ts":1739808077243098, "dur":80055, "ph":"X", "name": "CheckInputSignature",  "args": { "detail":"CopyFiles C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/Unity.Services.Authentication.PlayerAccounts.dll" }}
+,{ "pid":12345, "tid":10, "ts":1739808077323181, "dur":933, "ph":"X", "name": "CopyFiles",  "args": { "detail":"C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/Unity.Services.Authentication.PlayerAccounts.dll" }}
+,{ "pid":12345, "tid":10, "ts":1739808077324130, "dur":48675, "ph":"X", "name": "ComputeFileSignatureSha1",  "args": { "detail":"Library\\Bee\\artifacts\\WinPlayerBuildProgram\\ManagedStripped\\UnityEngine.GameCenterModule.dll" }}
+,{ "pid":12345, "tid":10, "ts":1739808077324116, "dur":48690, "ph":"X", "name": "CheckInputSignature",  "args": { "detail":"CopyFiles C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/UnityEngine.GameCenterModule.dll" }}
+,{ "pid":12345, "tid":10, "ts":1739808077372818, "dur":634, "ph":"X", "name": "CopyFiles",  "args": { "detail":"C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/UnityEngine.GameCenterModule.dll" }}
+,{ "pid":12345, "tid":10, "ts":1739808077373453, "dur":14032338, "ph":"X", "name": "WaitingForWork", "cname":"thread_state_sleeping",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":11, "ts":1739808077082653, "dur":2212, "ph":"X", "name": "FirstLock",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":11, "ts":1739808077084868, "dur":671, "ph":"X", "name": "EarlyStatNonGeneratedFile",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":11, "ts":1739808077085539, "dur":2845, "ph":"X", "name": "WaitingForWork", "cname":"thread_state_sleeping",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":11, "ts":1739808077088385, "dur":109, "ph":"X", "name": "CheckInputSignature",  "args": { "detail":"CopyFiles C:/Users/querx.QRXS/Desktop/Build/Research3/MonoBleedingEdge/etc/mono/2.0/web.config" }}
+,{ "pid":12345, "tid":11, "ts":1739808077088495, "dur":202, "ph":"X", "name": "OutputFilesMissingFor",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":11, "ts":1739808077088698, "dur":131, "ph":"X", "name": "EmitNodeUpToDate",  "args": { "detail":"CopyFiles C:/Users/querx.QRXS/Desktop/Build/Research3/MonoBleedingEdge/etc/mono/2.0/web.config" }}
+,{ "pid":12345, "tid":11, "ts":1739808077088830, "dur":1696, "ph":"X", "name": "WaitingForWork", "cname":"thread_state_sleeping",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":11, "ts":1739808077090572, "dur":26476, "ph":"X", "name": "ComputeFileSignatureSha1",  "args": { "detail":"Library\\Bee\\artifacts\\WinPlayerBuildProgram\\ManagedStripped\\UnityEngine.RuntimeInitializeOnLoadManagerInitializerModule.dll" }}
+,{ "pid":12345, "tid":11, "ts":1739808077090527, "dur":26523, "ph":"X", "name": "CheckInputSignature",  "args": { "detail":"CopyFiles C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/UnityEngine.RuntimeInitializeOnLoadManagerInitializerModule.dll" }}
+,{ "pid":12345, "tid":11, "ts":1739808077118630, "dur":2566, "ph":"X", "name": "CopyFiles",  "args": { "detail":"C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/UnityEngine.RuntimeInitializeOnLoadManagerInitializerModule.dll" }}
+,{ "pid":12345, "tid":11, "ts":1739808077121199, "dur":52980, "ph":"X", "name": "ComputeFileSignatureSha1",  "args": { "detail":"Library\\Bee\\artifacts\\WinPlayerBuildProgram\\ManagedStripped\\Assembly-CSharp.dll" }}
+,{ "pid":12345, "tid":11, "ts":1739808077121198, "dur":52982, "ph":"X", "name": "CheckInputSignature",  "args": { "detail":"CopyFiles C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/Assembly-CSharp.dll" }}
+,{ "pid":12345, "tid":11, "ts":1739808077174196, "dur":2522, "ph":"X", "name": "CopyFiles",  "args": { "detail":"C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/Assembly-CSharp.dll" }}
+,{ "pid":12345, "tid":11, "ts":1739808077176742, "dur":27327, "ph":"X", "name": "ComputeFileSignatureSha1",  "args": { "detail":"Library\\Bee\\artifacts\\WinPlayerBuildProgram\\ManagedStripped\\UnityEngine.VehiclesModule.dll" }}
+,{ "pid":12345, "tid":11, "ts":1739808077176722, "dur":27348, "ph":"X", "name": "CheckInputSignature",  "args": { "detail":"CopyFiles C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/UnityEngine.VehiclesModule.dll" }}
+,{ "pid":12345, "tid":11, "ts":1739808077204083, "dur":1730, "ph":"X", "name": "CopyFiles",  "args": { "detail":"C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/UnityEngine.VehiclesModule.dll" }}
+,{ "pid":12345, "tid":11, "ts":1739808077205827, "dur":23888, "ph":"X", "name": "ComputeFileSignatureSha1",  "args": { "detail":"Library\\Bee\\artifacts\\WinPlayerBuildProgram\\ManagedStripped\\Unity.Services.Core.Device.dll" }}
+,{ "pid":12345, "tid":11, "ts":1739808077205815, "dur":23901, "ph":"X", "name": "CheckInputSignature",  "args": { "detail":"CopyFiles C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/Unity.Services.Core.Device.dll" }}
+,{ "pid":12345, "tid":11, "ts":1739808077229728, "dur":1292, "ph":"X", "name": "CopyFiles",  "args": { "detail":"C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/Unity.Services.Core.Device.dll" }}
+,{ "pid":12345, "tid":11, "ts":1739808077231042, "dur":51071, "ph":"X", "name": "ComputeFileSignatureSha1",  "args": { "detail":"Library\\Bee\\artifacts\\WinPlayerBuildProgram\\ManagedStripped\\UnityEngine.VFXModule.dll" }}
+,{ "pid":12345, "tid":11, "ts":1739808077231022, "dur":51093, "ph":"X", "name": "CheckInputSignature",  "args": { "detail":"CopyFiles C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/UnityEngine.VFXModule.dll" }}
+,{ "pid":12345, "tid":11, "ts":1739808077282131, "dur":1485, "ph":"X", "name": "CopyFiles",  "args": { "detail":"C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/UnityEngine.VFXModule.dll" }}
+,{ "pid":12345, "tid":11, "ts":1739808077283631, "dur":68223, "ph":"X", "name": "ComputeFileSignatureSha1",  "args": { "detail":"Library\\Bee\\artifacts\\WinPlayerBuildProgram\\ManagedStripped\\UnityEngine.AudioModule.dll" }}
+,{ "pid":12345, "tid":11, "ts":1739808077283619, "dur":68237, "ph":"X", "name": "CheckInputSignature",  "args": { "detail":"CopyFiles C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/UnityEngine.AudioModule.dll" }}
+,{ "pid":12345, "tid":11, "ts":1739808077351876, "dur":1025, "ph":"X", "name": "CopyFiles",  "args": { "detail":"C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/UnityEngine.AudioModule.dll" }}
+,{ "pid":12345, "tid":11, "ts":1739808077352904, "dur":14052886, "ph":"X", "name": "WaitingForWork", "cname":"thread_state_sleeping",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":12, "ts":1739808077082673, "dur":2201, "ph":"X", "name": "FirstLock",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":12, "ts":1739808077084879, "dur":904, "ph":"X", "name": "EarlyStatNonGeneratedFile",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":12, "ts":1739808077085783, "dur":2573, "ph":"X", "name": "WaitingForWork", "cname":"thread_state_sleeping",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":12, "ts":1739808077088375, "dur":118, "ph":"X", "name": "OutputFilesMissingFor",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":12, "ts":1739808077088500, "dur":204, "ph":"X", "name": "OutputFilesMissingFor",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":12, "ts":1739808077088713, "dur":1767, "ph":"X", "name": "WaitingForWork", "cname":"thread_state_sleeping",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":12, "ts":1739808077090524, "dur":156184, "ph":"X", "name": "ComputeFileSignatureSha1",  "args": { "detail":"Library\\Bee\\artifacts\\WinPlayerBuildProgram\\ManagedStripped\\UnityEngine.UIElementsModule.dll" }}
+,{ "pid":12345, "tid":12, "ts":1739808077090481, "dur":156230, "ph":"X", "name": "CheckInputSignature",  "args": { "detail":"CopyFiles C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/UnityEngine.UIElementsModule.dll" }}
+,{ "pid":12345, "tid":12, "ts":1739808077246751, "dur":1923, "ph":"X", "name": "CopyFiles",  "args": { "detail":"C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/UnityEngine.UIElementsModule.dll" }}
+,{ "pid":12345, "tid":12, "ts":1739808077248698, "dur":43319, "ph":"X", "name": "ComputeFileSignatureSha1",  "args": { "detail":"Library\\Bee\\artifacts\\WinPlayerBuildProgram\\ManagedStripped\\Unity.InputSystem.ForUI.dll" }}
+,{ "pid":12345, "tid":12, "ts":1739808077248678, "dur":43341, "ph":"X", "name": "CheckInputSignature",  "args": { "detail":"CopyFiles C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/Unity.InputSystem.ForUI.dll" }}
+,{ "pid":12345, "tid":12, "ts":1739808077292034, "dur":1475, "ph":"X", "name": "CopyFiles",  "args": { "detail":"C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/Unity.InputSystem.ForUI.dll" }}
+,{ "pid":12345, "tid":12, "ts":1739808077293529, "dur":20910, "ph":"X", "name": "ComputeFileSignatureSha1",  "args": { "detail":"Library\\Bee\\artifacts\\WinPlayerBuildProgram\\ManagedStripped\\UnityEngine.CrashReportingModule.dll" }}
+,{ "pid":12345, "tid":12, "ts":1739808077293512, "dur":20928, "ph":"X", "name": "CheckInputSignature",  "args": { "detail":"CopyFiles C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/UnityEngine.CrashReportingModule.dll" }}
+,{ "pid":12345, "tid":12, "ts":1739808077314452, "dur":1246, "ph":"X", "name": "CopyFiles",  "args": { "detail":"C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/UnityEngine.CrashReportingModule.dll" }}
+,{ "pid":12345, "tid":12, "ts":1739808077315713, "dur":24529, "ph":"X", "name": "ComputeFileSignatureSha1",  "args": { "detail":"Library\\Bee\\artifacts\\WinPlayerBuildProgram\\ManagedStripped\\UnityEngine.ContentLoadModule.dll" }}
+,{ "pid":12345, "tid":12, "ts":1739808077315699, "dur":24544, "ph":"X", "name": "CheckInputSignature",  "args": { "detail":"CopyFiles C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/UnityEngine.ContentLoadModule.dll" }}
+,{ "pid":12345, "tid":12, "ts":1739808077340311, "dur":1578, "ph":"X", "name": "CopyFiles",  "args": { "detail":"C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/UnityEngine.ContentLoadModule.dll" }}
+,{ "pid":12345, "tid":12, "ts":1739808077341891, "dur":14063861, "ph":"X", "name": "WaitingForWork", "cname":"thread_state_sleeping",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":13, "ts":1739808077082709, "dur":2172, "ph":"X", "name": "FirstLock",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":13, "ts":1739808077084884, "dur":895, "ph":"X", "name": "EarlyStatNonGeneratedFile",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":13, "ts":1739808077085779, "dur":2610, "ph":"X", "name": "WaitingForWork", "cname":"thread_state_sleeping",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":13, "ts":1739808077088390, "dur":51, "ph":"X", "name": "CheckInputSignature",  "args": { "detail":"CopyFiles C:/Users/querx.QRXS/Desktop/Build/Research3/MonoBleedingEdge/EmbedRuntime/MonoPosixHelper.dll" }}
+,{ "pid":12345, "tid":13, "ts":1739808077088442, "dur":248, "ph":"X", "name": "OutputFilesMissingFor",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":13, "ts":1739808077088713, "dur":1765, "ph":"X", "name": "WaitingForWork", "cname":"thread_state_sleeping",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":13, "ts":1739808077090494, "dur":31539, "ph":"X", "name": "ComputeFileSignatureSha1",  "args": { "detail":"Library\\Bee\\artifacts\\WinPlayerBuildProgram\\ManagedStripped\\UnityEngine.AMDModule.dll" }}
+,{ "pid":12345, "tid":13, "ts":1739808077090479, "dur":31555, "ph":"X", "name": "CheckInputSignature",  "args": { "detail":"CopyFiles C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/UnityEngine.AMDModule.dll" }}
+,{ "pid":12345, "tid":13, "ts":1739808077122111, "dur":686, "ph":"X", "name": "CopyFiles",  "args": { "detail":"C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/UnityEngine.AMDModule.dll" }}
+,{ "pid":12345, "tid":13, "ts":1739808077122816, "dur":46416, "ph":"X", "name": "ComputeFileSignatureSha1",  "args": { "detail":"Library\\Bee\\artifacts\\WinPlayerBuildProgram\\ManagedStripped\\UnityEngine.SubsystemsModule.dll" }}
+,{ "pid":12345, "tid":13, "ts":1739808077122799, "dur":46435, "ph":"X", "name": "CheckInputSignature",  "args": { "detail":"CopyFiles C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/UnityEngine.SubsystemsModule.dll" }}
+,{ "pid":12345, "tid":13, "ts":1739808077169253, "dur":2490, "ph":"X", "name": "CopyFiles",  "args": { "detail":"C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/UnityEngine.SubsystemsModule.dll" }}
+,{ "pid":12345, "tid":13, "ts":1739808077171761, "dur":19207, "ph":"X", "name": "ComputeFileSignatureSha1",  "args": { "detail":"Library\\Bee\\artifacts\\WinPlayerBuildProgram\\ManagedStripped\\UnityEngine.UmbraModule.dll" }}
+,{ "pid":12345, "tid":13, "ts":1739808077171746, "dur":19224, "ph":"X", "name": "CheckInputSignature",  "args": { "detail":"CopyFiles C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/UnityEngine.UmbraModule.dll" }}
+,{ "pid":12345, "tid":13, "ts":1739808077191005, "dur":2199, "ph":"X", "name": "CopyFiles",  "args": { "detail":"C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/UnityEngine.UmbraModule.dll" }}
+,{ "pid":12345, "tid":13, "ts":1739808077193218, "dur":20185, "ph":"X", "name": "ComputeFileSignatureSha1",  "args": { "detail":"Library\\Bee\\artifacts\\WinPlayerBuildProgram\\ManagedStripped\\UnityEngine.InputModule.dll" }}
+,{ "pid":12345, "tid":13, "ts":1739808077193207, "dur":20197, "ph":"X", "name": "CheckInputSignature",  "args": { "detail":"CopyFiles C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/UnityEngine.InputModule.dll" }}
+,{ "pid":12345, "tid":13, "ts":1739808077213417, "dur":906, "ph":"X", "name": "CopyFiles",  "args": { "detail":"C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/UnityEngine.InputModule.dll" }}
+,{ "pid":12345, "tid":13, "ts":1739808077214339, "dur":15276, "ph":"X", "name": "ComputeFileSignatureSha1",  "args": { "detail":"Library\\Bee\\artifacts\\WinPlayerBuildProgram\\ManagedStripped\\Unity.Burst.Unsafe.dll" }}
+,{ "pid":12345, "tid":13, "ts":1739808077214325, "dur":15292, "ph":"X", "name": "CheckInputSignature",  "args": { "detail":"CopyFiles C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/Unity.Burst.Unsafe.dll" }}
+,{ "pid":12345, "tid":13, "ts":1739808077229630, "dur":1385, "ph":"X", "name": "CopyFiles",  "args": { "detail":"C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/Unity.Burst.Unsafe.dll" }}
+,{ "pid":12345, "tid":13, "ts":1739808077231028, "dur":147387, "ph":"X", "name": "ComputeFileSignatureSha1",  "args": { "detail":"Library\\Bee\\artifacts\\WinPlayerBuildProgram\\ManagedStripped\\System.Drawing.dll" }}
+,{ "pid":12345, "tid":13, "ts":1739808077231017, "dur":147400, "ph":"X", "name": "CheckInputSignature",  "args": { "detail":"CopyFiles C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/System.Drawing.dll" }}
+,{ "pid":12345, "tid":13, "ts":1739808077378427, "dur":918, "ph":"X", "name": "CopyFiles",  "args": { "detail":"C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/System.Drawing.dll" }}
+,{ "pid":12345, "tid":13, "ts":1739808077379349, "dur":14026465, "ph":"X", "name": "WaitingForWork", "cname":"thread_state_sleeping",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":14, "ts":1739808077082732, "dur":2174, "ph":"X", "name": "FirstLock",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":14, "ts":1739808077084914, "dur":708, "ph":"X", "name": "EarlyStatNonGeneratedFile",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":14, "ts":1739808077085622, "dur":2775, "ph":"X", "name": "WaitingForWork", "cname":"thread_state_sleeping",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":14, "ts":1739808077088401, "dur":151, "ph":"X", "name": "OutputFilesMissingFor",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":14, "ts":1739808077088561, "dur":208, "ph":"X", "name": "OutputFilesMissingFor",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":14, "ts":1739808077088791, "dur":1726, "ph":"X", "name": "WaitingForWork", "cname":"thread_state_sleeping",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":14, "ts":1739808077090565, "dur":118806, "ph":"X", "name": "ComputeFileSignatureSha1",  "args": { "detail":"Library\\Bee\\artifacts\\WinPlayerBuildProgram\\ManagedStripped\\UnityEngine.UI.dll" }}
+,{ "pid":12345, "tid":14, "ts":1739808077090522, "dur":118851, "ph":"X", "name": "CheckInputSignature",  "args": { "detail":"CopyFiles C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/UnityEngine.UI.dll" }}
+,{ "pid":12345, "tid":14, "ts":1739808077209399, "dur":1119, "ph":"X", "name": "CopyFiles",  "args": { "detail":"C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/UnityEngine.UI.dll" }}
+,{ "pid":12345, "tid":14, "ts":1739808077210539, "dur":70069, "ph":"X", "name": "ComputeFileSignatureSha1",  "args": { "detail":"Library\\Bee\\artifacts\\WinPlayerBuildProgram\\ManagedStripped\\UnityEngine.UnityAnalyticsModule.dll" }}
+,{ "pid":12345, "tid":14, "ts":1739808077210521, "dur":70088, "ph":"X", "name": "CheckInputSignature",  "args": { "detail":"CopyFiles C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/UnityEngine.UnityAnalyticsModule.dll" }}
+,{ "pid":12345, "tid":14, "ts":1739808077280627, "dur":1545, "ph":"X", "name": "CopyFiles",  "args": { "detail":"C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/UnityEngine.UnityAnalyticsModule.dll" }}
+,{ "pid":12345, "tid":14, "ts":1739808077282185, "dur":21576, "ph":"X", "name": "ComputeFileSignatureSha1",  "args": { "detail":"Library\\Bee\\artifacts\\WinPlayerBuildProgram\\ManagedStripped\\UnityEngine.ScreenCaptureModule.dll" }}
+,{ "pid":12345, "tid":14, "ts":1739808077282174, "dur":21589, "ph":"X", "name": "CheckInputSignature",  "args": { "detail":"CopyFiles C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/UnityEngine.ScreenCaptureModule.dll" }}
+,{ "pid":12345, "tid":14, "ts":1739808077303773, "dur":1048, "ph":"X", "name": "CopyFiles",  "args": { "detail":"C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/UnityEngine.ScreenCaptureModule.dll" }}
+,{ "pid":12345, "tid":14, "ts":1739808077304835, "dur":64878, "ph":"X", "name": "ComputeFileSignatureSha1",  "args": { "detail":"Library\\Bee\\artifacts\\WinPlayerBuildProgram\\ManagedStripped\\UnityEngine.Physics2DModule.dll" }}
+,{ "pid":12345, "tid":14, "ts":1739808077304822, "dur":64893, "ph":"X", "name": "CheckInputSignature",  "args": { "detail":"CopyFiles C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/UnityEngine.Physics2DModule.dll" }}
+,{ "pid":12345, "tid":14, "ts":1739808077369730, "dur":837, "ph":"X", "name": "CopyFiles",  "args": { "detail":"C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/UnityEngine.Physics2DModule.dll" }}
+,{ "pid":12345, "tid":14, "ts":1739808077370569, "dur":14035222, "ph":"X", "name": "WaitingForWork", "cname":"thread_state_sleeping",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":15, "ts":1739808077082749, "dur":2169, "ph":"X", "name": "FirstLock",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":15, "ts":1739808077084920, "dur":511, "ph":"X", "name": "EarlyStatNonGeneratedFile",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":15, "ts":1739808077085431, "dur":2922, "ph":"X", "name": "WaitingForWork", "cname":"thread_state_sleeping",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":15, "ts":1739808077088354, "dur":63, "ph":"X", "name": "CheckInputSignature",  "args": { "detail":"CopyFiles C:/Users/querx.QRXS/Desktop/Build/Research3/UnityCrashHandler64.exe" }}
+,{ "pid":12345, "tid":15, "ts":1739808077088418, "dur":298, "ph":"X", "name": "OutputFilesMissingFor",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":15, "ts":1739808077088730, "dur":1784, "ph":"X", "name": "WaitingForWork", "cname":"thread_state_sleeping",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":15, "ts":1739808077090535, "dur":93798, "ph":"X", "name": "ComputeFileSignatureSha1",  "args": { "detail":"Library\\Bee\\artifacts\\WinPlayerBuildProgram\\ManagedStripped\\Newtonsoft.Json.dll" }}
+,{ "pid":12345, "tid":15, "ts":1739808077090514, "dur":93821, "ph":"X", "name": "CheckInputSignature",  "args": { "detail":"CopyFiles C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/Newtonsoft.Json.dll" }}
+,{ "pid":12345, "tid":15, "ts":1739808077184390, "dur":1471, "ph":"X", "name": "CopyFiles",  "args": { "detail":"C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/Newtonsoft.Json.dll" }}
+,{ "pid":12345, "tid":15, "ts":1739808077185878, "dur":25776, "ph":"X", "name": "ComputeFileSignatureSha1",  "args": { "detail":"Library\\Bee\\artifacts\\WinPlayerBuildProgram\\ManagedStripped\\UnityEngine.VRModule.dll" }}
+,{ "pid":12345, "tid":15, "ts":1739808077185865, "dur":25790, "ph":"X", "name": "CheckInputSignature",  "args": { "detail":"CopyFiles C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/UnityEngine.VRModule.dll" }}
+,{ "pid":12345, "tid":15, "ts":1739808077211671, "dur":843, "ph":"X", "name": "CopyFiles",  "args": { "detail":"C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/UnityEngine.VRModule.dll" }}
+,{ "pid":12345, "tid":15, "ts":1739808077212530, "dur":232253, "ph":"X", "name": "ComputeFileSignatureSha1",  "args": { "detail":"Library\\Bee\\artifacts\\WinPlayerBuildProgram\\ManagedStripped\\UnityEngine.AndroidJNIModule.dll" }}
+,{ "pid":12345, "tid":15, "ts":1739808077212516, "dur":232269, "ph":"X", "name": "CheckInputSignature",  "args": { "detail":"CopyFiles C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/UnityEngine.AndroidJNIModule.dll" }}
+,{ "pid":12345, "tid":15, "ts":1739808077444801, "dur":847, "ph":"X", "name": "CopyFiles",  "args": { "detail":"C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/UnityEngine.AndroidJNIModule.dll" }}
+,{ "pid":12345, "tid":15, "ts":1739808077445650, "dur":13960159, "ph":"X", "name": "WaitingForWork", "cname":"thread_state_sleeping",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":16, "ts":1739808077082769, "dur":2154, "ph":"X", "name": "FirstLock",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":16, "ts":1739808077084926, "dur":890, "ph":"X", "name": "EarlyStatNonGeneratedFile",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":16, "ts":1739808077085817, "dur":2551, "ph":"X", "name": "WaitingForWork", "cname":"thread_state_sleeping",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":16, "ts":1739808077088404, "dur":178, "ph":"X", "name": "OutputFilesMissingFor",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":16, "ts":1739808077088591, "dur":189, "ph":"X", "name": "OutputFilesMissingFor",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":16, "ts":1739808077088801, "dur":1707, "ph":"X", "name": "WaitingForWork", "cname":"thread_state_sleeping",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":16, "ts":1739808077090551, "dur":93797, "ph":"X", "name": "ComputeFileSignatureSha1",  "args": { "detail":"Library\\Bee\\artifacts\\WinPlayerBuildProgram\\ManagedStripped\\Unity.InputSystem.dll" }}
+,{ "pid":12345, "tid":16, "ts":1739808077090509, "dur":93840, "ph":"X", "name": "CheckInputSignature",  "args": { "detail":"CopyFiles C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/Unity.InputSystem.dll" }}
+,{ "pid":12345, "tid":16, "ts":1739808077184390, "dur":4762, "ph":"X", "name": "CopyFiles",  "args": { "detail":"C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/Unity.InputSystem.dll" }}
+,{ "pid":12345, "tid":16, "ts":1739808077189157, "dur":458166, "ph":"X", "name": "ComputeFileSignatureSha1",  "args": { "detail":"Library\\Bee\\artifacts\\WinPlayerBuildProgram\\ManagedStripped\\Mono.Security.dll" }}
+,{ "pid":12345, "tid":16, "ts":1739808077189155, "dur":458170, "ph":"X", "name": "CheckInputSignature",  "args": { "detail":"CopyFiles C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/Mono.Security.dll" }}
+,{ "pid":12345, "tid":16, "ts":1739808077647342, "dur":799, "ph":"X", "name": "CopyFiles",  "args": { "detail":"C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/Mono.Security.dll" }}
+,{ "pid":12345, "tid":16, "ts":1739808077648142, "dur":13757664, "ph":"X", "name": "WaitingForWork", "cname":"thread_state_sleeping",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":17, "ts":1739808077082800, "dur":2136, "ph":"X", "name": "FirstLock",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":17, "ts":1739808077084941, "dur":621, "ph":"X", "name": "EarlyStatNonGeneratedFile",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":17, "ts":1739808077085563, "dur":2808, "ph":"X", "name": "WaitingForWork", "cname":"thread_state_sleeping",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":17, "ts":1739808077088390, "dur":127, "ph":"X", "name": "OutputFilesMissingFor",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":17, "ts":1739808077088534, "dur":220, "ph":"X", "name": "OutputFilesMissingFor",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":17, "ts":1739808077088782, "dur":1739, "ph":"X", "name": "WaitingForWork", "cname":"thread_state_sleeping",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":17, "ts":1739808077090547, "dur":114539, "ph":"X", "name": "ComputeFileSignatureSha1",  "args": { "detail":"Library\\Bee\\artifacts\\WinPlayerBuildProgram\\ManagedStripped\\UnityEngine.UnityWebRequestModule.dll" }}
+,{ "pid":12345, "tid":17, "ts":1739808077090522, "dur":114567, "ph":"X", "name": "CheckInputSignature",  "args": { "detail":"CopyFiles C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/UnityEngine.UnityWebRequestModule.dll" }}
+,{ "pid":12345, "tid":17, "ts":1739808077205095, "dur":209, "ph":"X", "name": "EmitNodeStart",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":17, "ts":1739808077205318, "dur":1170, "ph":"X", "name": "CopyFiles",  "args": { "detail":"C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/UnityEngine.UnityWebRequestModule.dll" }}
+,{ "pid":12345, "tid":17, "ts":1739808077206502, "dur":31603, "ph":"X", "name": "ComputeFileSignatureSha1",  "args": { "detail":"Library\\Bee\\artifacts\\WinPlayerBuildProgram\\ManagedStripped\\UnityEngine.ClothModule.dll" }}
+,{ "pid":12345, "tid":17, "ts":1739808077206489, "dur":31617, "ph":"X", "name": "CheckInputSignature",  "args": { "detail":"CopyFiles C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/UnityEngine.ClothModule.dll" }}
+,{ "pid":12345, "tid":17, "ts":1739808077238118, "dur":3556, "ph":"X", "name": "CopyFiles",  "args": { "detail":"C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/UnityEngine.ClothModule.dll" }}
+,{ "pid":12345, "tid":17, "ts":1739808077241692, "dur":71026, "ph":"X", "name": "ComputeFileSignatureSha1",  "args": { "detail":"Library\\Bee\\artifacts\\WinPlayerBuildProgram\\ManagedStripped\\sapra.InfiniteLands.dll" }}
+,{ "pid":12345, "tid":17, "ts":1739808077241676, "dur":71044, "ph":"X", "name": "CheckInputSignature",  "args": { "detail":"CopyFiles C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/sapra.InfiniteLands.dll" }}
+,{ "pid":12345, "tid":17, "ts":1739808077312743, "dur":1425, "ph":"X", "name": "CopyFiles",  "args": { "detail":"C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/sapra.InfiniteLands.dll" }}
+,{ "pid":12345, "tid":17, "ts":1739808077314184, "dur":22831, "ph":"X", "name": "ComputeFileSignatureSha1",  "args": { "detail":"Library\\Bee\\artifacts\\WinPlayerBuildProgram\\ManagedStripped\\UnityEngine.UnityWebRequestAudioModule.dll" }}
+,{ "pid":12345, "tid":17, "ts":1739808077314171, "dur":22846, "ph":"X", "name": "CheckInputSignature",  "args": { "detail":"CopyFiles C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/UnityEngine.UnityWebRequestAudioModule.dll" }}
+,{ "pid":12345, "tid":17, "ts":1739808077337035, "dur":1841, "ph":"X", "name": "CopyFiles",  "args": { "detail":"C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/UnityEngine.UnityWebRequestAudioModule.dll" }}
+,{ "pid":12345, "tid":17, "ts":1739808077338878, "dur":14066877, "ph":"X", "name": "WaitingForWork", "cname":"thread_state_sleeping",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":18, "ts":1739808077082821, "dur":2123, "ph":"X", "name": "FirstLock",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":18, "ts":1739808077084947, "dur":522, "ph":"X", "name": "EarlyStatNonGeneratedFile",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":18, "ts":1739808077085470, "dur":2880, "ph":"X", "name": "WaitingForWork", "cname":"thread_state_sleeping",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":18, "ts":1739808077088409, "dur":715, "ph":"X", "name": "CheckInputSignature",  "args": { "detail":"AddBootConfigGUID Library/Bee/artifacts/WinPlayerBuildProgram/boot.config" }}
+,{ "pid":12345, "tid":18, "ts":1739808077089191, "dur":1293, "ph":"X", "name": "WaitingForWork", "cname":"thread_state_sleeping",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":18, "ts":1739808077090502, "dur":101995, "ph":"X", "name": "ComputeFileSignatureSha1",  "args": { "detail":"Library\\Bee\\artifacts\\WinPlayerBuildProgram\\ManagedStripped\\System.Core.dll" }}
+,{ "pid":12345, "tid":18, "ts":1739808077090485, "dur":102013, "ph":"X", "name": "CheckInputSignature",  "args": { "detail":"CopyFiles C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/System.Core.dll" }}
+,{ "pid":12345, "tid":18, "ts":1739808077192514, "dur":2389, "ph":"X", "name": "CopyFiles",  "args": { "detail":"C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/System.Core.dll" }}
+,{ "pid":12345, "tid":18, "ts":1739808077194922, "dur":42683, "ph":"X", "name": "ComputeFileSignatureSha1",  "args": { "detail":"Library\\Bee\\artifacts\\WinPlayerBuildProgram\\ManagedStripped\\UnityEngine.TextRenderingModule.dll" }}
+,{ "pid":12345, "tid":18, "ts":1739808077194906, "dur":42701, "ph":"X", "name": "CheckInputSignature",  "args": { "detail":"CopyFiles C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/UnityEngine.TextRenderingModule.dll" }}
+,{ "pid":12345, "tid":18, "ts":1739808077237618, "dur":1417, "ph":"X", "name": "CopyFiles",  "args": { "detail":"C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/UnityEngine.TextRenderingModule.dll" }}
+,{ "pid":12345, "tid":18, "ts":1739808077239052, "dur":44905, "ph":"X", "name": "ComputeFileSignatureSha1",  "args": { "detail":"Library\\Bee\\artifacts\\WinPlayerBuildProgram\\ManagedStripped\\UnityEngine.UIModule.dll" }}
+,{ "pid":12345, "tid":18, "ts":1739808077239038, "dur":44921, "ph":"X", "name": "CheckInputSignature",  "args": { "detail":"CopyFiles C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/UnityEngine.UIModule.dll" }}
+,{ "pid":12345, "tid":18, "ts":1739808077283988, "dur":980, "ph":"X", "name": "CopyFiles",  "args": { "detail":"C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/UnityEngine.UIModule.dll" }}
+,{ "pid":12345, "tid":18, "ts":1739808077284981, "dur":29041, "ph":"X", "name": "ComputeFileSignatureSha1",  "args": { "detail":"Library\\Bee\\artifacts\\WinPlayerBuildProgram\\ManagedStripped\\UnityEngine.UnityWebRequestAssetBundleModule.dll" }}
+,{ "pid":12345, "tid":18, "ts":1739808077284970, "dur":29053, "ph":"X", "name": "CheckInputSignature",  "args": { "detail":"CopyFiles C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/UnityEngine.UnityWebRequestAssetBundleModule.dll" }}
+,{ "pid":12345, "tid":18, "ts":1739808077314040, "dur":1455, "ph":"X", "name": "CopyFiles",  "args": { "detail":"C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/UnityEngine.UnityWebRequestAssetBundleModule.dll" }}
+,{ "pid":12345, "tid":18, "ts":1739808077315554, "dur":20572, "ph":"X", "name": "ComputeFileSignatureSha1",  "args": { "detail":"Library\\Bee\\artifacts\\WinPlayerBuildProgram\\ManagedStripped\\UnityEngine.ShaderVariantAnalyticsModule.dll" }}
+,{ "pid":12345, "tid":18, "ts":1739808077315497, "dur":20630, "ph":"X", "name": "CheckInputSignature",  "args": { "detail":"CopyFiles C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/UnityEngine.ShaderVariantAnalyticsModule.dll" }}
+,{ "pid":12345, "tid":18, "ts":1739808077336146, "dur":1118, "ph":"X", "name": "CopyFiles",  "args": { "detail":"C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/UnityEngine.ShaderVariantAnalyticsModule.dll" }}
+,{ "pid":12345, "tid":18, "ts":1739808077337281, "dur":69146, "ph":"X", "name": "ComputeFileSignatureSha1",  "args": { "detail":"Library\\Bee\\artifacts\\WinPlayerBuildProgram\\ManagedStripped\\System.Configuration.dll" }}
+,{ "pid":12345, "tid":18, "ts":1739808077337266, "dur":69163, "ph":"X", "name": "CheckInputSignature",  "args": { "detail":"CopyFiles C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/System.Configuration.dll" }}
+,{ "pid":12345, "tid":18, "ts":1739808077406445, "dur":780, "ph":"X", "name": "CopyFiles",  "args": { "detail":"C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/System.Configuration.dll" }}
+,{ "pid":12345, "tid":18, "ts":1739808077407227, "dur":13998580, "ph":"X", "name": "WaitingForWork", "cname":"thread_state_sleeping",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":19, "ts":1739808077082843, "dur":2106, "ph":"X", "name": "FirstLock",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":19, "ts":1739808077084952, "dur":668, "ph":"X", "name": "EarlyStatNonGeneratedFile",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":19, "ts":1739808077085620, "dur":2742, "ph":"X", "name": "WaitingForWork", "cname":"thread_state_sleeping",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":19, "ts":1739808077088408, "dur":385, "ph":"X", "name": "OutputFilesMissingFor",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":19, "ts":1739808077088818, "dur":1664, "ph":"X", "name": "WaitingForWork", "cname":"thread_state_sleeping",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":19, "ts":1739808077090500, "dur":32030, "ph":"X", "name": "ComputeFileSignatureSha1",  "args": { "detail":"Library\\Bee\\artifacts\\WinPlayerBuildProgram\\ManagedStripped\\Unity.Services.Core.Configuration.dll" }}
+,{ "pid":12345, "tid":19, "ts":1739808077090483, "dur":32048, "ph":"X", "name": "CheckInputSignature",  "args": { "detail":"CopyFiles C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/Unity.Services.Core.Configuration.dll" }}
+,{ "pid":12345, "tid":19, "ts":1739808077122553, "dur":839, "ph":"X", "name": "CopyFiles",  "args": { "detail":"C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/Unity.Services.Core.Configuration.dll" }}
+,{ "pid":12345, "tid":19, "ts":1739808077123407, "dur":240400, "ph":"X", "name": "ComputeFileSignatureSha1",  "args": { "detail":"Library\\Bee\\artifacts\\WinPlayerBuildProgram\\ManagedStripped\\mscorlib.dll" }}
+,{ "pid":12345, "tid":19, "ts":1739808077123394, "dur":240414, "ph":"X", "name": "CheckInputSignature",  "args": { "detail":"CopyFiles C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/mscorlib.dll" }}
+,{ "pid":12345, "tid":19, "ts":1739808077363825, "dur":2157, "ph":"X", "name": "CopyFiles",  "args": { "detail":"C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/mscorlib.dll" }}
+,{ "pid":12345, "tid":19, "ts":1739808077365984, "dur":14039801, "ph":"X", "name": "WaitingForWork", "cname":"thread_state_sleeping",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":20, "ts":1739808077082862, "dur":2093, "ph":"X", "name": "FirstLock",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":20, "ts":1739808077084957, "dur":853, "ph":"X", "name": "EarlyStatNonGeneratedFile",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":20, "ts":1739808077085810, "dur":2581, "ph":"X", "name": "WaitingForWork", "cname":"thread_state_sleeping",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":20, "ts":1739808077088391, "dur":96, "ph":"X", "name": "CheckInputSignature",  "args": { "detail":"CopyFiles C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/StreamingAssets/UnityServicesProjectConfiguration.json" }}
+,{ "pid":12345, "tid":20, "ts":1739808077088488, "dur":259, "ph":"X", "name": "OutputFilesMissingFor",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":20, "ts":1739808077088753, "dur":1734, "ph":"X", "name": "WaitingForWork", "cname":"thread_state_sleeping",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":20, "ts":1739808077090507, "dur":32716, "ph":"X", "name": "ComputeFileSignatureSha1",  "args": { "detail":"Library\\Bee\\artifacts\\WinPlayerBuildProgram\\ManagedStripped\\UnityEngine.dll" }}
+,{ "pid":12345, "tid":20, "ts":1739808077090488, "dur":32736, "ph":"X", "name": "CheckInputSignature",  "args": { "detail":"CopyFiles C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/UnityEngine.dll" }}
+,{ "pid":12345, "tid":20, "ts":1739808077123243, "dur":814, "ph":"X", "name": "CopyFiles",  "args": { "detail":"C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/UnityEngine.dll" }}
+,{ "pid":12345, "tid":20, "ts":1739808077124070, "dur":64286, "ph":"X", "name": "ComputeFileSignatureSha1",  "args": { "detail":"Library\\Bee\\artifacts\\WinPlayerBuildProgram\\ManagedStripped\\System.Net.Http.dll" }}
+,{ "pid":12345, "tid":20, "ts":1739808077124059, "dur":64298, "ph":"X", "name": "CheckInputSignature",  "args": { "detail":"CopyFiles C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/System.Net.Http.dll" }}
+,{ "pid":12345, "tid":20, "ts":1739808077188368, "dur":1082, "ph":"X", "name": "CopyFiles",  "args": { "detail":"C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/System.Net.Http.dll" }}
+,{ "pid":12345, "tid":20, "ts":1739808077189463, "dur":57351, "ph":"X", "name": "ComputeFileSignatureSha1",  "args": { "detail":"Library\\Bee\\artifacts\\WinPlayerBuildProgram\\ManagedStripped\\UnityEngine.PhysicsModule.dll" }}
+,{ "pid":12345, "tid":20, "ts":1739808077189452, "dur":57363, "ph":"X", "name": "CheckInputSignature",  "args": { "detail":"CopyFiles C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/UnityEngine.PhysicsModule.dll" }}
+,{ "pid":12345, "tid":20, "ts":1739808077246831, "dur":1713, "ph":"X", "name": "CopyFiles",  "args": { "detail":"C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/UnityEngine.PhysicsModule.dll" }}
+,{ "pid":12345, "tid":20, "ts":1739808077248560, "dur":53316, "ph":"X", "name": "ComputeFileSignatureSha1",  "args": { "detail":"Library\\Bee\\artifacts\\WinPlayerBuildProgram\\ManagedStripped\\UnityEngine.ParticleSystemModule.dll" }}
+,{ "pid":12345, "tid":20, "ts":1739808077248546, "dur":53332, "ph":"X", "name": "CheckInputSignature",  "args": { "detail":"CopyFiles C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/UnityEngine.ParticleSystemModule.dll" }}
+,{ "pid":12345, "tid":20, "ts":1739808077301895, "dur":1131, "ph":"X", "name": "CopyFiles",  "args": { "detail":"C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/UnityEngine.ParticleSystemModule.dll" }}
+,{ "pid":12345, "tid":20, "ts":1739808077303040, "dur":36954, "ph":"X", "name": "ComputeFileSignatureSha1",  "args": { "detail":"Library\\Bee\\artifacts\\WinPlayerBuildProgram\\ManagedStripped\\UnityEngine.MarshallingModule.dll" }}
+,{ "pid":12345, "tid":20, "ts":1739808077303029, "dur":36966, "ph":"X", "name": "CheckInputSignature",  "args": { "detail":"CopyFiles C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/UnityEngine.MarshallingModule.dll" }}
+,{ "pid":12345, "tid":20, "ts":1739808077340012, "dur":1116, "ph":"X", "name": "CopyFiles",  "args": { "detail":"C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/UnityEngine.MarshallingModule.dll" }}
+,{ "pid":12345, "tid":20, "ts":1739808077341130, "dur":14064624, "ph":"X", "name": "WaitingForWork", "cname":"thread_state_sleeping",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":21, "ts":1739808077082891, "dur":2069, "ph":"X", "name": "FirstLock",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":21, "ts":1739808077084963, "dur":827, "ph":"X", "name": "EarlyStatNonGeneratedFile",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":21, "ts":1739808077085791, "dur":2568, "ph":"X", "name": "WaitingForWork", "cname":"thread_state_sleeping",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":21, "ts":1739808077088362, "dur":57, "ph":"X", "name": "CheckInputSignature",  "args": { "detail":"CopyFiles C:/Users/querx.QRXS/Desktop/Build/Research3/MonoBleedingEdge/etc/mono/4.5/web.config" }}
+,{ "pid":12345, "tid":21, "ts":1739808077088420, "dur":302, "ph":"X", "name": "OutputFilesMissingFor",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":21, "ts":1739808077088761, "dur":1729, "ph":"X", "name": "WaitingForWork", "cname":"thread_state_sleeping",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":21, "ts":1739808077090514, "dur":158633, "ph":"X", "name": "ComputeFileSignatureSha1",  "args": { "detail":"Library\\Bee\\artifacts\\WinPlayerBuildProgram\\ManagedStripped\\System.dll" }}
+,{ "pid":12345, "tid":21, "ts":1739808077090490, "dur":158659, "ph":"X", "name": "CheckInputSignature",  "args": { "detail":"CopyFiles C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/System.dll" }}
+,{ "pid":12345, "tid":21, "ts":1739808077249171, "dur":3195, "ph":"X", "name": "CopyFiles",  "args": { "detail":"C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/System.dll" }}
+,{ "pid":12345, "tid":21, "ts":1739808077252386, "dur":39923, "ph":"X", "name": "ComputeFileSignatureSha1",  "args": { "detail":"Library\\Bee\\artifacts\\WinPlayerBuildProgram\\ManagedStripped\\Unity.VisualScripting.State.dll" }}
+,{ "pid":12345, "tid":21, "ts":1739808077252367, "dur":39944, "ph":"X", "name": "CheckInputSignature",  "args": { "detail":"CopyFiles C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/Unity.VisualScripting.State.dll" }}
+,{ "pid":12345, "tid":21, "ts":1739808077292333, "dur":1235, "ph":"X", "name": "CopyFiles",  "args": { "detail":"C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/Unity.VisualScripting.State.dll" }}
+,{ "pid":12345, "tid":21, "ts":1739808077293585, "dur":21214, "ph":"X", "name": "ComputeFileSignatureSha1",  "args": { "detail":"Library\\Bee\\artifacts\\WinPlayerBuildProgram\\ManagedStripped\\UnityEngine.TerrainPhysicsModule.dll" }}
+,{ "pid":12345, "tid":21, "ts":1739808077293570, "dur":21231, "ph":"X", "name": "CheckInputSignature",  "args": { "detail":"CopyFiles C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/UnityEngine.TerrainPhysicsModule.dll" }}
+,{ "pid":12345, "tid":21, "ts":1739808077314814, "dur":2209, "ph":"X", "name": "CopyFiles",  "args": { "detail":"C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/UnityEngine.TerrainPhysicsModule.dll" }}
+,{ "pid":12345, "tid":21, "ts":1739808077317040, "dur":79382, "ph":"X", "name": "ComputeFileSignatureSha1",  "args": { "detail":"Library\\Bee\\artifacts\\WinPlayerBuildProgram\\ManagedStripped\\UnityEngine.CoreModule.dll" }}
+,{ "pid":12345, "tid":21, "ts":1739808077317026, "dur":79398, "ph":"X", "name": "CheckInputSignature",  "args": { "detail":"CopyFiles C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/UnityEngine.CoreModule.dll" }}
+,{ "pid":12345, "tid":21, "ts":1739808077396447, "dur":1201, "ph":"X", "name": "CopyFiles",  "args": { "detail":"C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/UnityEngine.CoreModule.dll" }}
+,{ "pid":12345, "tid":21, "ts":1739808077397650, "dur":14008138, "ph":"X", "name": "WaitingForWork", "cname":"thread_state_sleeping",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":22, "ts":1739808077082917, "dur":2048, "ph":"X", "name": "FirstLock",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":22, "ts":1739808077084968, "dur":655, "ph":"X", "name": "EarlyStatNonGeneratedFile",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":22, "ts":1739808077085623, "dur":2789, "ph":"X", "name": "WaitingForWork", "cname":"thread_state_sleeping",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":22, "ts":1739808077088415, "dur":341, "ph":"X", "name": "OutputFilesMissingFor",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":22, "ts":1739808077088759, "dur":1739, "ph":"X", "name": "WaitingForWork", "cname":"thread_state_sleeping",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":22, "ts":1739808077090555, "dur":75405, "ph":"X", "name": "ComputeFileSignatureSha1",  "args": { "detail":"Library\\Bee\\artifacts\\WinPlayerBuildProgram\\ManagedStripped\\UnityEngine.IMGUIModule.dll" }}
+,{ "pid":12345, "tid":22, "ts":1739808077090499, "dur":75463, "ph":"X", "name": "CheckInputSignature",  "args": { "detail":"CopyFiles C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/UnityEngine.IMGUIModule.dll" }}
+,{ "pid":12345, "tid":22, "ts":1739808077165992, "dur":2338, "ph":"X", "name": "CopyFiles",  "args": { "detail":"C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/UnityEngine.IMGUIModule.dll" }}
+,{ "pid":12345, "tid":22, "ts":1739808077168343, "dur":30784, "ph":"X", "name": "ComputeFileSignatureSha1",  "args": { "detail":"Library\\Bee\\artifacts\\WinPlayerBuildProgram\\ManagedStripped\\UnityEngine.SubstanceModule.dll" }}
+,{ "pid":12345, "tid":22, "ts":1739808077168332, "dur":30798, "ph":"X", "name": "CheckInputSignature",  "args": { "detail":"CopyFiles C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/UnityEngine.SubstanceModule.dll" }}
+,{ "pid":12345, "tid":22, "ts":1739808077199151, "dur":1363, "ph":"X", "name": "CopyFiles",  "args": { "detail":"C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/UnityEngine.SubstanceModule.dll" }}
+,{ "pid":12345, "tid":22, "ts":1739808077200528, "dur":64780, "ph":"X", "name": "ComputeFileSignatureSha1",  "args": { "detail":"Library\\Bee\\artifacts\\WinPlayerBuildProgram\\ManagedStripped\\UnityEngine.AccessibilityModule.dll" }}
+,{ "pid":12345, "tid":22, "ts":1739808077200517, "dur":64792, "ph":"X", "name": "CheckInputSignature",  "args": { "detail":"CopyFiles C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/UnityEngine.AccessibilityModule.dll" }}
+,{ "pid":12345, "tid":22, "ts":1739808077265317, "dur":441, "ph":"X", "name": "EmitNodeStart",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":22, "ts":1739808077265763, "dur":687, "ph":"X", "name": "CopyFiles",  "args": { "detail":"C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/UnityEngine.AccessibilityModule.dll" }}
+,{ "pid":12345, "tid":22, "ts":1739808077266461, "dur":77503, "ph":"X", "name": "ComputeFileSignatureSha1",  "args": { "detail":"Library\\Bee\\artifacts\\WinPlayerBuildProgram\\ManagedStripped\\UnityEngine.InputForUIModule.dll" }}
+,{ "pid":12345, "tid":22, "ts":1739808077266451, "dur":77515, "ph":"X", "name": "CheckInputSignature",  "args": { "detail":"CopyFiles C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/UnityEngine.InputForUIModule.dll" }}
+,{ "pid":12345, "tid":22, "ts":1739808077343978, "dur":983, "ph":"X", "name": "CopyFiles",  "args": { "detail":"C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/UnityEngine.InputForUIModule.dll" }}
+,{ "pid":12345, "tid":22, "ts":1739808077344962, "dur":14060807, "ph":"X", "name": "WaitingForWork", "cname":"thread_state_sleeping",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":23, "ts":1739808077082934, "dur":2037, "ph":"X", "name": "FirstLock",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":23, "ts":1739808077084972, "dur":539, "ph":"X", "name": "EarlyStatNonGeneratedFile",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":23, "ts":1739808077085511, "dur":2868, "ph":"X", "name": "WaitingForWork", "cname":"thread_state_sleeping",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":23, "ts":1739808077088433, "dur":298, "ph":"X", "name": "OutputFilesMissingFor",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":23, "ts":1739808077088736, "dur":1760, "ph":"X", "name": "WaitingForWork", "cname":"thread_state_sleeping",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":23, "ts":1739808077090522, "dur":90826, "ph":"X", "name": "ComputeFileSignatureSha1",  "args": { "detail":"Library\\Bee\\artifacts\\WinPlayerBuildProgram\\ManagedStripped\\Unity.VisualScripting.Flow.dll" }}
+,{ "pid":12345, "tid":23, "ts":1739808077090497, "dur":90852, "ph":"X", "name": "CheckInputSignature",  "args": { "detail":"CopyFiles C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/Unity.VisualScripting.Flow.dll" }}
+,{ "pid":12345, "tid":23, "ts":1739808077181380, "dur":1057, "ph":"X", "name": "CopyFiles",  "args": { "detail":"C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/Unity.VisualScripting.Flow.dll" }}
+,{ "pid":12345, "tid":23, "ts":1739808077182450, "dur":20280, "ph":"X", "name": "ComputeFileSignatureSha1",  "args": { "detail":"Library\\Bee\\artifacts\\WinPlayerBuildProgram\\ManagedStripped\\UnityEngine.ARModule.dll" }}
+,{ "pid":12345, "tid":23, "ts":1739808077182440, "dur":20292, "ph":"X", "name": "CheckInputSignature",  "args": { "detail":"CopyFiles C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/UnityEngine.ARModule.dll" }}
+,{ "pid":12345, "tid":23, "ts":1739808077202744, "dur":732, "ph":"X", "name": "CopyFiles",  "args": { "detail":"C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/UnityEngine.ARModule.dll" }}
+,{ "pid":12345, "tid":23, "ts":1739808077203487, "dur":92019, "ph":"X", "name": "ComputeFileSignatureSha1",  "args": { "detail":"Library\\Bee\\artifacts\\WinPlayerBuildProgram\\ManagedStripped\\Unity.Services.Relay.dll" }}
+,{ "pid":12345, "tid":23, "ts":1739808077203477, "dur":92031, "ph":"X", "name": "CheckInputSignature",  "args": { "detail":"CopyFiles C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/Unity.Services.Relay.dll" }}
+,{ "pid":12345, "tid":23, "ts":1739808077295522, "dur":827, "ph":"X", "name": "CopyFiles",  "args": { "detail":"C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/Unity.Services.Relay.dll" }}
+,{ "pid":12345, "tid":23, "ts":1739808077296363, "dur":17563, "ph":"X", "name": "ComputeFileSignatureSha1",  "args": { "detail":"Library\\Bee\\artifacts\\WinPlayerBuildProgram\\ManagedStripped\\UnityEngine.UnityTestProtocolModule.dll" }}
+,{ "pid":12345, "tid":23, "ts":1739808077296351, "dur":17576, "ph":"X", "name": "CheckInputSignature",  "args": { "detail":"CopyFiles C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/UnityEngine.UnityTestProtocolModule.dll" }}
+,{ "pid":12345, "tid":23, "ts":1739808077313947, "dur":1542, "ph":"X", "name": "CopyFiles",  "args": { "detail":"C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/UnityEngine.UnityTestProtocolModule.dll" }}
+,{ "pid":12345, "tid":23, "ts":1739808077315504, "dur":28972, "ph":"X", "name": "ComputeFileSignatureSha1",  "args": { "detail":"Library\\Bee\\artifacts\\WinPlayerBuildProgram\\ManagedStripped\\UnityEngine.SharedInternalsModule.dll" }}
+,{ "pid":12345, "tid":23, "ts":1739808077315491, "dur":28986, "ph":"X", "name": "CheckInputSignature",  "args": { "detail":"CopyFiles C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/UnityEngine.SharedInternalsModule.dll" }}
+,{ "pid":12345, "tid":23, "ts":1739808077344490, "dur":729, "ph":"X", "name": "CopyFiles",  "args": { "detail":"C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/UnityEngine.SharedInternalsModule.dll" }}
+,{ "pid":12345, "tid":23, "ts":1739808077345220, "dur":14060551, "ph":"X", "name": "WaitingForWork", "cname":"thread_state_sleeping",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":24, "ts":1739808077082959, "dur":2014, "ph":"X", "name": "FirstLock",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":24, "ts":1739808077084975, "dur":457, "ph":"X", "name": "EarlyStatNonGeneratedFile",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":24, "ts":1739808077085433, "dur":2918, "ph":"X", "name": "WaitingForWork", "cname":"thread_state_sleeping",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":24, "ts":1739808077088402, "dur":203, "ph":"X", "name": "OutputFilesMissingFor",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":24, "ts":1739808077088612, "dur":169, "ph":"X", "name": "OutputFilesMissingFor",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":24, "ts":1739808077088786, "dur":1729, "ph":"X", "name": "WaitingForWork", "cname":"thread_state_sleeping",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":24, "ts":1739808077090591, "dur":75952, "ph":"X", "name": "ComputeFileSignatureSha1",  "args": { "detail":"Library\\Bee\\artifacts\\WinPlayerBuildProgram\\ManagedStripped\\Unity.VisualScripting.Core.dll" }}
+,{ "pid":12345, "tid":24, "ts":1739808077090516, "dur":76028, "ph":"X", "name": "CheckInputSignature",  "args": { "detail":"CopyFiles C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/Unity.VisualScripting.Core.dll" }}
+,{ "pid":12345, "tid":24, "ts":1739808077166561, "dur":1114, "ph":"X", "name": "CopyFiles",  "args": { "detail":"C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/Unity.VisualScripting.Core.dll" }}
+,{ "pid":12345, "tid":24, "ts":1739808077167689, "dur":32203, "ph":"X", "name": "ComputeFileSignatureSha1",  "args": { "detail":"Library\\Bee\\artifacts\\WinPlayerBuildProgram\\ManagedStripped\\UnityEngine.UnityAnalyticsCommonModule.dll" }}
+,{ "pid":12345, "tid":24, "ts":1739808077167679, "dur":32214, "ph":"X", "name": "CheckInputSignature",  "args": { "detail":"CopyFiles C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/UnityEngine.UnityAnalyticsCommonModule.dll" }}
+,{ "pid":12345, "tid":24, "ts":1739808077199954, "dur":970, "ph":"X", "name": "CopyFiles",  "args": { "detail":"C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/UnityEngine.UnityAnalyticsCommonModule.dll" }}
+,{ "pid":12345, "tid":24, "ts":1739808077200937, "dur":25415, "ph":"X", "name": "ComputeFileSignatureSha1",  "args": { "detail":"Library\\Bee\\artifacts\\WinPlayerBuildProgram\\ManagedStripped\\UnityEngine.LocalizationModule.dll" }}
+,{ "pid":12345, "tid":24, "ts":1739808077200926, "dur":25427, "ph":"X", "name": "CheckInputSignature",  "args": { "detail":"CopyFiles C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/UnityEngine.LocalizationModule.dll" }}
+,{ "pid":12345, "tid":24, "ts":1739808077226380, "dur":1525, "ph":"X", "name": "CopyFiles",  "args": { "detail":"C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/UnityEngine.LocalizationModule.dll" }}
+,{ "pid":12345, "tid":24, "ts":1739808077227920, "dur":21524, "ph":"X", "name": "ComputeFileSignatureSha1",  "args": { "detail":"Library\\Bee\\artifacts\\WinPlayerBuildProgram\\ManagedStripped\\UnityEngine.HotReloadModule.dll" }}
+,{ "pid":12345, "tid":24, "ts":1739808077227907, "dur":21538, "ph":"X", "name": "CheckInputSignature",  "args": { "detail":"CopyFiles C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/UnityEngine.HotReloadModule.dll" }}
+,{ "pid":12345, "tid":24, "ts":1739808077249458, "dur":1040, "ph":"X", "name": "CopyFiles",  "args": { "detail":"C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/UnityEngine.HotReloadModule.dll" }}
+,{ "pid":12345, "tid":24, "ts":1739808077250512, "dur":30275, "ph":"X", "name": "ComputeFileSignatureSha1",  "args": { "detail":"Library\\Bee\\artifacts\\WinPlayerBuildProgram\\ManagedStripped\\UnityEngine.DSPGraphModule.dll" }}
+,{ "pid":12345, "tid":24, "ts":1739808077250500, "dur":30289, "ph":"X", "name": "CheckInputSignature",  "args": { "detail":"CopyFiles C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/UnityEngine.DSPGraphModule.dll" }}
+,{ "pid":12345, "tid":24, "ts":1739808077280815, "dur":1489, "ph":"X", "name": "CopyFiles",  "args": { "detail":"C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/UnityEngine.DSPGraphModule.dll" }}
+,{ "pid":12345, "tid":24, "ts":1739808077282325, "dur":41121, "ph":"X", "name": "ComputeFileSignatureSha1",  "args": { "detail":"Library\\Bee\\artifacts\\WinPlayerBuildProgram\\ManagedStripped\\System.Data.DataSetExtensions.dll" }}
+,{ "pid":12345, "tid":24, "ts":1739808077282308, "dur":41139, "ph":"X", "name": "CheckInputSignature",  "args": { "detail":"CopyFiles C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/System.Data.DataSetExtensions.dll" }}
+,{ "pid":12345, "tid":24, "ts":1739808077323458, "dur":1326, "ph":"X", "name": "CopyFiles",  "args": { "detail":"C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/System.Data.DataSetExtensions.dll" }}
+,{ "pid":12345, "tid":24, "ts":1739808077324798, "dur":58147, "ph":"X", "name": "ComputeFileSignatureSha1",  "args": { "detail":"Library\\Bee\\artifacts\\WinPlayerBuildProgram\\ManagedStripped\\Unity.Timeline.dll" }}
+,{ "pid":12345, "tid":24, "ts":1739808077324787, "dur":58159, "ph":"X", "name": "CheckInputSignature",  "args": { "detail":"CopyFiles C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/Unity.Timeline.dll" }}
+,{ "pid":12345, "tid":24, "ts":1739808077382956, "dur":753, "ph":"X", "name": "CopyFiles",  "args": { "detail":"C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/Unity.Timeline.dll" }}
+,{ "pid":12345, "tid":24, "ts":1739808077383710, "dur":14022089, "ph":"X", "name": "WaitingForWork", "cname":"thread_state_sleeping",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":25, "ts":1739808077082990, "dur":1988, "ph":"X", "name": "FirstLock",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":25, "ts":1739808077084980, "dur":530, "ph":"X", "name": "EarlyStatNonGeneratedFile",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":25, "ts":1739808077085510, "dur":2855, "ph":"X", "name": "WaitingForWork", "cname":"thread_state_sleeping",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":25, "ts":1739808077088397, "dur":345, "ph":"X", "name": "OutputFilesMissingFor",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":25, "ts":1739808077088748, "dur":1754, "ph":"X", "name": "WaitingForWork", "cname":"thread_state_sleeping",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":25, "ts":1739808077090539, "dur":37778, "ph":"X", "name": "ComputeFileSignatureSha1",  "args": { "detail":"Library\\Bee\\artifacts\\WinPlayerBuildProgram\\ManagedStripped\\Unity.Services.Core.Networking.dll" }}
+,{ "pid":12345, "tid":25, "ts":1739808077090502, "dur":37816, "ph":"X", "name": "CheckInputSignature",  "args": { "detail":"CopyFiles C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/Unity.Services.Core.Networking.dll" }}
+,{ "pid":12345, "tid":25, "ts":1739808077128342, "dur":938, "ph":"X", "name": "CopyFiles",  "args": { "detail":"C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/Unity.Services.Core.Networking.dll" }}
+,{ "pid":12345, "tid":25, "ts":1739808077129296, "dur":85927, "ph":"X", "name": "ComputeFileSignatureSha1",  "args": { "detail":"Library\\Bee\\artifacts\\WinPlayerBuildProgram\\ManagedStripped\\System.IO.Compression.dll" }}
+,{ "pid":12345, "tid":25, "ts":1739808077129282, "dur":85943, "ph":"X", "name": "CheckInputSignature",  "args": { "detail":"CopyFiles C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/System.IO.Compression.dll" }}
+,{ "pid":12345, "tid":25, "ts":1739808077215243, "dur":963, "ph":"X", "name": "CopyFiles",  "args": { "detail":"C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/System.IO.Compression.dll" }}
+,{ "pid":12345, "tid":25, "ts":1739808077216223, "dur":96491, "ph":"X", "name": "ComputeFileSignatureSha1",  "args": { "detail":"Library\\Bee\\artifacts\\WinPlayerBuildProgram\\ManagedStripped\\Unity.RenderPipelines.Universal.2D.Runtime.dll" }}
+,{ "pid":12345, "tid":25, "ts":1739808077216208, "dur":96508, "ph":"X", "name": "CheckInputSignature",  "args": { "detail":"CopyFiles C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/Unity.RenderPipelines.Universal.2D.Runtime.dll" }}
+,{ "pid":12345, "tid":25, "ts":1739808077313302, "dur":2254, "ph":"X", "name": "CopyFiles",  "args": { "detail":"C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/Unity.RenderPipelines.Universal.2D.Runtime.dll" }}
+,{ "pid":12345, "tid":25, "ts":1739808077315568, "dur":49566, "ph":"X", "name": "ComputeFileSignatureSha1",  "args": { "detail":"Library\\Bee\\artifacts\\WinPlayerBuildProgram\\ManagedStripped\\UnityEngine.TerrainModule.dll" }}
+,{ "pid":12345, "tid":25, "ts":1739808077315557, "dur":49579, "ph":"X", "name": "CheckInputSignature",  "args": { "detail":"CopyFiles C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/UnityEngine.TerrainModule.dll" }}
+,{ "pid":12345, "tid":25, "ts":1739808077365156, "dur":1028, "ph":"X", "name": "CopyFiles",  "args": { "detail":"C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/UnityEngine.TerrainModule.dll" }}
+,{ "pid":12345, "tid":25, "ts":1739808077366186, "dur":14039616, "ph":"X", "name": "WaitingForWork", "cname":"thread_state_sleeping",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":26, "ts":1739808077083022, "dur":1959, "ph":"X", "name": "FirstLock",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":26, "ts":1739808077084983, "dur":774, "ph":"X", "name": "EarlyStatNonGeneratedFile",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":26, "ts":1739808077085757, "dur":2625, "ph":"X", "name": "WaitingForWork", "cname":"thread_state_sleeping",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":26, "ts":1739808077088404, "dur":144, "ph":"X", "name": "OutputFilesMissingFor",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":26, "ts":1739808077088555, "dur":203, "ph":"X", "name": "OutputFilesMissingFor",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":26, "ts":1739808077088767, "dur":1740, "ph":"X", "name": "WaitingForWork", "cname":"thread_state_sleeping",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":26, "ts":1739808077090540, "dur":46867, "ph":"X", "name": "ComputeFileSignatureSha1",  "args": { "detail":"Library\\Bee\\artifacts\\WinPlayerBuildProgram\\ManagedStripped\\Unity.RenderPipeline.Universal.ShaderLibrary.dll" }}
+,{ "pid":12345, "tid":26, "ts":1739808077090511, "dur":46897, "ph":"X", "name": "CheckInputSignature",  "args": { "detail":"CopyFiles C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/Unity.RenderPipeline.Universal.ShaderLibrary.dll" }}
+,{ "pid":12345, "tid":26, "ts":1739808077137427, "dur":971, "ph":"X", "name": "CopyFiles",  "args": { "detail":"C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/Unity.RenderPipeline.Universal.ShaderLibrary.dll" }}
+,{ "pid":12345, "tid":26, "ts":1739808077138423, "dur":30491, "ph":"X", "name": "ComputeFileSignatureSha1",  "args": { "detail":"Library\\Bee\\artifacts\\WinPlayerBuildProgram\\ManagedStripped\\System.EnterpriseServices.dll" }}
+,{ "pid":12345, "tid":26, "ts":1739808077138401, "dur":30514, "ph":"X", "name": "CheckInputSignature",  "args": { "detail":"CopyFiles C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/System.EnterpriseServices.dll" }}
+,{ "pid":12345, "tid":26, "ts":1739808077168927, "dur":987, "ph":"X", "name": "CopyFiles",  "args": { "detail":"C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/System.EnterpriseServices.dll" }}
+,{ "pid":12345, "tid":26, "ts":1739808077169930, "dur":20660, "ph":"X", "name": "ComputeFileSignatureSha1",  "args": { "detail":"Library\\Bee\\artifacts\\WinPlayerBuildProgram\\ManagedStripped\\Unity.Services.Core.Analytics.dll" }}
+,{ "pid":12345, "tid":26, "ts":1739808077169917, "dur":20674, "ph":"X", "name": "CheckInputSignature",  "args": { "detail":"CopyFiles C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/Unity.Services.Core.Analytics.dll" }}
+,{ "pid":12345, "tid":26, "ts":1739808077190606, "dur":2114, "ph":"X", "name": "CopyFiles",  "args": { "detail":"C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/Unity.Services.Core.Analytics.dll" }}
+,{ "pid":12345, "tid":26, "ts":1739808077192737, "dur":21062, "ph":"X", "name": "ComputeFileSignatureSha1",  "args": { "detail":"Library\\Bee\\artifacts\\WinPlayerBuildProgram\\ManagedStripped\\Unity.Collections.LowLevel.ILSupport.dll" }}
+,{ "pid":12345, "tid":26, "ts":1739808077192722, "dur":21079, "ph":"X", "name": "CheckInputSignature",  "args": { "detail":"CopyFiles C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/Unity.Collections.LowLevel.ILSupport.dll" }}
+,{ "pid":12345, "tid":26, "ts":1739808077213812, "dur":874, "ph":"X", "name": "CopyFiles",  "args": { "detail":"C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/Unity.Collections.LowLevel.ILSupport.dll" }}
+,{ "pid":12345, "tid":26, "ts":1739808077214701, "dur":230434, "ph":"X", "name": "ComputeFileSignatureSha1",  "args": { "detail":"Library\\Bee\\artifacts\\WinPlayerBuildProgram\\ManagedStripped\\UnityEngine.AssetBundleModule.dll" }}
+,{ "pid":12345, "tid":26, "ts":1739808077214688, "dur":230448, "ph":"X", "name": "CheckInputSignature",  "args": { "detail":"CopyFiles C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/UnityEngine.AssetBundleModule.dll" }}
+,{ "pid":12345, "tid":26, "ts":1739808077445145, "dur":659, "ph":"X", "name": "CopyFiles",  "args": { "detail":"C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/UnityEngine.AssetBundleModule.dll" }}
+,{ "pid":12345, "tid":26, "ts":1739808077445805, "dur":13960003, "ph":"X", "name": "WaitingForWork", "cname":"thread_state_sleeping",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":27, "ts":1739808077083038, "dur":1948, "ph":"X", "name": "FirstLock",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":27, "ts":1739808077084989, "dur":774, "ph":"X", "name": "EarlyStatNonGeneratedFile",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":27, "ts":1739808077085763, "dur":2606, "ph":"X", "name": "WaitingForWork", "cname":"thread_state_sleeping",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":27, "ts":1739808077088370, "dur":58, "ph":"X", "name": "CheckInputSignature",  "args": { "detail":"CopyFiles C:/Users/querx.QRXS/Desktop/Build/Research3/MonoBleedingEdge/etc/mono/4.0/machine.config" }}
+,{ "pid":12345, "tid":27, "ts":1739808077088428, "dur":243, "ph":"X", "name": "OutputFilesMissingFor",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":27, "ts":1739808077088677, "dur":1802, "ph":"X", "name": "WaitingForWork", "cname":"thread_state_sleeping",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":27, "ts":1739808077090493, "dur":55579, "ph":"X", "name": "ComputeFileSignatureSha1",  "args": { "detail":"Library\\Bee\\artifacts\\WinPlayerBuildProgram\\ManagedStripped\\UnityEngine.TilemapModule.dll" }}
+,{ "pid":12345, "tid":27, "ts":1739808077090480, "dur":55594, "ph":"X", "name": "CheckInputSignature",  "args": { "detail":"CopyFiles C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/UnityEngine.TilemapModule.dll" }}
+,{ "pid":12345, "tid":27, "ts":1739808077146104, "dur":1127, "ph":"X", "name": "CopyFiles",  "args": { "detail":"C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/UnityEngine.TilemapModule.dll" }}
+,{ "pid":12345, "tid":27, "ts":1739808077147246, "dur":40886, "ph":"X", "name": "ComputeFileSignatureSha1",  "args": { "detail":"Library\\Bee\\artifacts\\WinPlayerBuildProgram\\ManagedStripped\\Unity.AI.Navigation.dll" }}
+,{ "pid":12345, "tid":27, "ts":1739808077147234, "dur":40899, "ph":"X", "name": "CheckInputSignature",  "args": { "detail":"CopyFiles C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/Unity.AI.Navigation.dll" }}
+,{ "pid":12345, "tid":27, "ts":1739808077188145, "dur":4231, "ph":"X", "name": "CopyFiles",  "args": { "detail":"C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/Unity.AI.Navigation.dll" }}
+,{ "pid":12345, "tid":27, "ts":1739808077192391, "dur":25093, "ph":"X", "name": "ComputeFileSignatureSha1",  "args": { "detail":"Library\\Bee\\artifacts\\WinPlayerBuildProgram\\ManagedStripped\\UnityEngine.WindModule.dll" }}
+,{ "pid":12345, "tid":27, "ts":1739808077192379, "dur":25107, "ph":"X", "name": "CheckInputSignature",  "args": { "detail":"CopyFiles C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/UnityEngine.WindModule.dll" }}
+,{ "pid":12345, "tid":27, "ts":1739808077217503, "dur":1535, "ph":"X", "name": "CopyFiles",  "args": { "detail":"C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/UnityEngine.WindModule.dll" }}
+,{ "pid":12345, "tid":27, "ts":1739808077219058, "dur":18960, "ph":"X", "name": "ComputeFileSignatureSha1",  "args": { "detail":"Library\\Bee\\artifacts\\WinPlayerBuildProgram\\ManagedStripped\\Unity.RenderPipelines.Universal.Config.Runtime.dll" }}
+,{ "pid":12345, "tid":27, "ts":1739808077219041, "dur":18979, "ph":"X", "name": "CheckInputSignature",  "args": { "detail":"CopyFiles C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/Unity.RenderPipelines.Universal.Config.Runtime.dll" }}
+,{ "pid":12345, "tid":27, "ts":1739808077238032, "dur":3393, "ph":"X", "name": "CopyFiles",  "args": { "detail":"C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/Unity.RenderPipelines.Universal.Config.Runtime.dll" }}
+,{ "pid":12345, "tid":27, "ts":1739808077241445, "dur":22068, "ph":"X", "name": "ComputeFileSignatureSha1",  "args": { "detail":"Library\\Bee\\artifacts\\WinPlayerBuildProgram\\ManagedStripped\\UnityEngine.GIModule.dll" }}
+,{ "pid":12345, "tid":27, "ts":1739808077241429, "dur":22086, "ph":"X", "name": "CheckInputSignature",  "args": { "detail":"CopyFiles C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/UnityEngine.GIModule.dll" }}
+,{ "pid":12345, "tid":27, "ts":1739808077263537, "dur":1800, "ph":"X", "name": "CopyFiles",  "args": { "detail":"C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/UnityEngine.GIModule.dll" }}
+,{ "pid":12345, "tid":27, "ts":1739808077265355, "dur":66575, "ph":"X", "name": "ComputeFileSignatureSha1",  "args": { "detail":"Library\\Bee\\artifacts\\WinPlayerBuildProgram\\ManagedStripped\\Unity.Mathematics.dll" }}
+,{ "pid":12345, "tid":27, "ts":1739808077265340, "dur":66592, "ph":"X", "name": "CheckInputSignature",  "args": { "detail":"CopyFiles C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/Unity.Mathematics.dll" }}
+,{ "pid":12345, "tid":27, "ts":1739808077331956, "dur":1626, "ph":"X", "name": "CopyFiles",  "args": { "detail":"C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/Unity.Mathematics.dll" }}
+,{ "pid":12345, "tid":27, "ts":1739808077333602, "dur":20891, "ph":"X", "name": "ComputeFileSignatureSha1",  "args": { "detail":"Library\\Bee\\artifacts\\WinPlayerBuildProgram\\ManagedStripped\\System.Runtime.dll" }}
+,{ "pid":12345, "tid":27, "ts":1739808077333586, "dur":20908, "ph":"X", "name": "CheckInputSignature",  "args": { "detail":"CopyFiles C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/System.Runtime.dll" }}
+,{ "pid":12345, "tid":27, "ts":1739808077354510, "dur":760, "ph":"X", "name": "CopyFiles",  "args": { "detail":"C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/System.Runtime.dll" }}
+,{ "pid":12345, "tid":27, "ts":1739808077355271, "dur":14050511, "ph":"X", "name": "WaitingForWork", "cname":"thread_state_sleeping",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":28, "ts":1739808077083063, "dur":1936, "ph":"X", "name": "FirstLock",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":28, "ts":1739808077085005, "dur":826, "ph":"X", "name": "EarlyStatNonGeneratedFile",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":28, "ts":1739808077085831, "dur":2555, "ph":"X", "name": "WaitingForWork", "cname":"thread_state_sleeping",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":28, "ts":1739808077088386, "dur":50, "ph":"X", "name": "CheckInputSignature",  "args": { "detail":"CopyFiles C:/Users/querx.QRXS/Desktop/Build/Research3/MonoBleedingEdge/EmbedRuntime/mono-2.0-bdwgc.dll" }}
+,{ "pid":12345, "tid":28, "ts":1739808077088437, "dur":363, "ph":"X", "name": "OutputFilesMissingFor",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":28, "ts":1739808077088801, "dur":73, "ph":"X", "name": "EmitNodeUpToDate",  "args": { "detail":"CopyFiles C:/Users/querx.QRXS/Desktop/Build/Research3/MonoBleedingEdge/EmbedRuntime/mono-2.0-bdwgc.dll" }}
+,{ "pid":12345, "tid":28, "ts":1739808077088874, "dur":1638, "ph":"X", "name": "WaitingForWork", "cname":"thread_state_sleeping",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":28, "ts":1739808077090547, "dur":62110, "ph":"X", "name": "ComputeFileSignatureSha1",  "args": { "detail":"Library\\Bee\\artifacts\\WinPlayerBuildProgram\\ManagedStripped\\UnityEngine.AnimationModule.dll" }}
+,{ "pid":12345, "tid":28, "ts":1739808077090514, "dur":62144, "ph":"X", "name": "CheckInputSignature",  "args": { "detail":"CopyFiles C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/UnityEngine.AnimationModule.dll" }}
+,{ "pid":12345, "tid":28, "ts":1739808077152678, "dur":822, "ph":"X", "name": "CopyFiles",  "args": { "detail":"C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/UnityEngine.AnimationModule.dll" }}
+,{ "pid":12345, "tid":28, "ts":1739808077153512, "dur":22241, "ph":"X", "name": "ComputeFileSignatureSha1",  "args": { "detail":"Library\\Bee\\artifacts\\WinPlayerBuildProgram\\ManagedStripped\\UnityEngine.ImageConversionModule.dll" }}
+,{ "pid":12345, "tid":28, "ts":1739808077153502, "dur":22253, "ph":"X", "name": "CheckInputSignature",  "args": { "detail":"CopyFiles C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/UnityEngine.ImageConversionModule.dll" }}
+,{ "pid":12345, "tid":28, "ts":1739808077175777, "dur":1065, "ph":"X", "name": "CopyFiles",  "args": { "detail":"C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/UnityEngine.ImageConversionModule.dll" }}
+,{ "pid":12345, "tid":28, "ts":1739808077176856, "dur":49888, "ph":"X", "name": "ComputeFileSignatureSha1",  "args": { "detail":"Library\\Bee\\artifacts\\WinPlayerBuildProgram\\ManagedStripped\\UnityEngine.TextCoreFontEngineModule.dll" }}
+,{ "pid":12345, "tid":28, "ts":1739808077176844, "dur":49901, "ph":"X", "name": "CheckInputSignature",  "args": { "detail":"CopyFiles C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/UnityEngine.TextCoreFontEngineModule.dll" }}
+,{ "pid":12345, "tid":28, "ts":1739808077226760, "dur":1253, "ph":"X", "name": "CopyFiles",  "args": { "detail":"C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/UnityEngine.TextCoreFontEngineModule.dll" }}
+,{ "pid":12345, "tid":28, "ts":1739808077228027, "dur":48118, "ph":"X", "name": "ComputeFileSignatureSha1",  "args": { "detail":"Library\\Bee\\artifacts\\WinPlayerBuildProgram\\ManagedStripped\\Unity.Services.Core.Internal.dll" }}
+,{ "pid":12345, "tid":28, "ts":1739808077228015, "dur":48133, "ph":"X", "name": "CheckInputSignature",  "args": { "detail":"CopyFiles C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/Unity.Services.Core.Internal.dll" }}
+,{ "pid":12345, "tid":28, "ts":1739808077276170, "dur":965, "ph":"X", "name": "CopyFiles",  "args": { "detail":"C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/Unity.Services.Core.Internal.dll" }}
+,{ "pid":12345, "tid":28, "ts":1739808077277150, "dur":97112, "ph":"X", "name": "ComputeFileSignatureSha1",  "args": { "detail":"Library\\Bee\\artifacts\\WinPlayerBuildProgram\\ManagedStripped\\System.ComponentModel.Composition.dll" }}
+,{ "pid":12345, "tid":28, "ts":1739808077277137, "dur":97126, "ph":"X", "name": "CheckInputSignature",  "args": { "detail":"CopyFiles C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/System.ComponentModel.Composition.dll" }}
+,{ "pid":12345, "tid":28, "ts":1739808077374285, "dur":673, "ph":"X", "name": "CopyFiles",  "args": { "detail":"C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/System.ComponentModel.Composition.dll" }}
+,{ "pid":12345, "tid":28, "ts":1739808077374959, "dur":14030838, "ph":"X", "name": "WaitingForWork", "cname":"thread_state_sleeping",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":29, "ts":1739808077083089, "dur":1919, "ph":"X", "name": "FirstLock",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":29, "ts":1739808077085010, "dur":794, "ph":"X", "name": "EarlyStatNonGeneratedFile",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":29, "ts":1739808077085804, "dur":2573, "ph":"X", "name": "WaitingForWork", "cname":"thread_state_sleeping",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":29, "ts":1739808077088422, "dur":344, "ph":"X", "name": "OutputFilesMissingFor",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":29, "ts":1739808077088767, "dur":89, "ph":"X", "name": "EmitNodeUpToDate",  "args": { "detail":"CopyFiles C:/Users/querx.QRXS/Desktop/Build/Research3/MonoBleedingEdge/etc/mono/2.0/settings.map" }}
+,{ "pid":12345, "tid":29, "ts":1739808077088857, "dur":1632, "ph":"X", "name": "WaitingForWork", "cname":"thread_state_sleeping",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":29, "ts":1739808077090520, "dur":39639, "ph":"X", "name": "ComputeFileSignatureSha1",  "args": { "detail":"Library\\Bee\\artifacts\\WinPlayerBuildProgram\\ManagedStripped\\netstandard.dll" }}
+,{ "pid":12345, "tid":29, "ts":1739808077090492, "dur":39668, "ph":"X", "name": "CheckInputSignature",  "args": { "detail":"CopyFiles C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/netstandard.dll" }}
+,{ "pid":12345, "tid":29, "ts":1739808077130185, "dur":873, "ph":"X", "name": "CopyFiles",  "args": { "detail":"C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/netstandard.dll" }}
+,{ "pid":12345, "tid":29, "ts":1739808077131074, "dur":20376, "ph":"X", "name": "ComputeFileSignatureSha1",  "args": { "detail":"Library\\Bee\\artifacts\\WinPlayerBuildProgram\\ManagedStripped\\Unity.RenderPipelines.Core.ShaderLibrary.dll" }}
+,{ "pid":12345, "tid":29, "ts":1739808077131061, "dur":20391, "ph":"X", "name": "CheckInputSignature",  "args": { "detail":"CopyFiles C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/Unity.RenderPipelines.Core.ShaderLibrary.dll" }}
+,{ "pid":12345, "tid":29, "ts":1739808077151470, "dur":937, "ph":"X", "name": "CopyFiles",  "args": { "detail":"C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/Unity.RenderPipelines.Core.ShaderLibrary.dll" }}
+,{ "pid":12345, "tid":29, "ts":1739808077152429, "dur":39208, "ph":"X", "name": "ComputeFileSignatureSha1",  "args": { "detail":"Library\\Bee\\artifacts\\WinPlayerBuildProgram\\ManagedStripped\\UnityEngine.DirectorModule.dll" }}
+,{ "pid":12345, "tid":29, "ts":1739808077152409, "dur":39229, "ph":"X", "name": "CheckInputSignature",  "args": { "detail":"CopyFiles C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/UnityEngine.DirectorModule.dll" }}
+,{ "pid":12345, "tid":29, "ts":1739808077191654, "dur":2157, "ph":"X", "name": "CopyFiles",  "args": { "detail":"C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/UnityEngine.DirectorModule.dll" }}
+,{ "pid":12345, "tid":29, "ts":1739808077193824, "dur":32437, "ph":"X", "name": "ComputeFileSignatureSha1",  "args": { "detail":"Library\\Bee\\artifacts\\WinPlayerBuildProgram\\ManagedStripped\\UnityEngine.UnityWebRequestWWWModule.dll" }}
+,{ "pid":12345, "tid":29, "ts":1739808077193812, "dur":32451, "ph":"X", "name": "CheckInputSignature",  "args": { "detail":"CopyFiles C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/UnityEngine.UnityWebRequestWWWModule.dll" }}
+,{ "pid":12345, "tid":29, "ts":1739808077226284, "dur":1578, "ph":"X", "name": "CopyFiles",  "args": { "detail":"C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/UnityEngine.UnityWebRequestWWWModule.dll" }}
+,{ "pid":12345, "tid":29, "ts":1739808077227878, "dur":114530, "ph":"X", "name": "ComputeFileSignatureSha1",  "args": { "detail":"Library\\Bee\\artifacts\\WinPlayerBuildProgram\\ManagedStripped\\Unity.RenderPipelines.Core.Runtime.dll" }}
+,{ "pid":12345, "tid":29, "ts":1739808077227865, "dur":114545, "ph":"X", "name": "CheckInputSignature",  "args": { "detail":"CopyFiles C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/Unity.RenderPipelines.Core.Runtime.dll" }}
+,{ "pid":12345, "tid":29, "ts":1739808077342424, "dur":1127, "ph":"X", "name": "CopyFiles",  "args": { "detail":"C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/Unity.RenderPipelines.Core.Runtime.dll" }}
+,{ "pid":12345, "tid":29, "ts":1739808077343553, "dur":14062208, "ph":"X", "name": "WaitingForWork", "cname":"thread_state_sleeping",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":30, "ts":1739808077083117, "dur":1894, "ph":"X", "name": "FirstLock",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":30, "ts":1739808077085013, "dur":797, "ph":"X", "name": "EarlyStatNonGeneratedFile",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":30, "ts":1739808077085811, "dur":2570, "ph":"X", "name": "WaitingForWork", "cname":"thread_state_sleeping",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":30, "ts":1739808077088408, "dur":295, "ph":"X", "name": "OutputFilesMissingFor",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":30, "ts":1739808077088718, "dur":1800, "ph":"X", "name": "WaitingForWork", "cname":"thread_state_sleeping",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":30, "ts":1739808077090577, "dur":27201, "ph":"X", "name": "ComputeFileSignatureSha1",  "args": { "detail":"Library\\Bee\\artifacts\\WinPlayerBuildProgram\\ManagedStripped\\Unity.Services.Core.Telemetry.dll" }}
+,{ "pid":12345, "tid":30, "ts":1739808077090520, "dur":27259, "ph":"X", "name": "CheckInputSignature",  "args": { "detail":"CopyFiles C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/Unity.Services.Core.Telemetry.dll" }}
+,{ "pid":12345, "tid":30, "ts":1739808077118306, "dur":2656, "ph":"X", "name": "CopyFiles",  "args": { "detail":"C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/Unity.Services.Core.Telemetry.dll" }}
+,{ "pid":12345, "tid":30, "ts":1739808077120978, "dur":49210, "ph":"X", "name": "ComputeFileSignatureSha1",  "args": { "detail":"Library\\Bee\\artifacts\\WinPlayerBuildProgram\\ManagedStripped\\Unity.VisualScripting.Antlr3.Runtime.dll" }}
+,{ "pid":12345, "tid":30, "ts":1739808077120964, "dur":49225, "ph":"X", "name": "CheckInputSignature",  "args": { "detail":"CopyFiles C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/Unity.VisualScripting.Antlr3.Runtime.dll" }}
+,{ "pid":12345, "tid":30, "ts":1739808077170204, "dur":1067, "ph":"X", "name": "CopyFiles",  "args": { "detail":"C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/Unity.VisualScripting.Antlr3.Runtime.dll" }}
+,{ "pid":12345, "tid":30, "ts":1739808077171288, "dur":32431, "ph":"X", "name": "ComputeFileSignatureSha1",  "args": { "detail":"Library\\Bee\\artifacts\\WinPlayerBuildProgram\\ManagedStripped\\Unity.Services.Core.dll" }}
+,{ "pid":12345, "tid":30, "ts":1739808077171273, "dur":32447, "ph":"X", "name": "CheckInputSignature",  "args": { "detail":"CopyFiles C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/Unity.Services.Core.dll" }}
+,{ "pid":12345, "tid":30, "ts":1739808077203739, "dur":1734, "ph":"X", "name": "CopyFiles",  "args": { "detail":"C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/Unity.Services.Core.dll" }}
+,{ "pid":12345, "tid":30, "ts":1739808077205489, "dur":114872, "ph":"X", "name": "ComputeFileSignatureSha1",  "args": { "detail":"Library\\Bee\\artifacts\\WinPlayerBuildProgram\\ManagedStripped\\System.Runtime.Serialization.dll" }}
+,{ "pid":12345, "tid":30, "ts":1739808077205475, "dur":114887, "ph":"X", "name": "CheckInputSignature",  "args": { "detail":"CopyFiles C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/System.Runtime.Serialization.dll" }}
+,{ "pid":12345, "tid":30, "ts":1739808077320374, "dur":1314, "ph":"X", "name": "CopyFiles",  "args": { "detail":"C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/System.Runtime.Serialization.dll" }}
+,{ "pid":12345, "tid":30, "ts":1739808077321703, "dur":20844, "ph":"X", "name": "ComputeFileSignatureSha1",  "args": { "detail":"Library\\Bee\\artifacts\\WinPlayerBuildProgram\\ManagedStripped\\Unity.Services.Core.Environments.Internal.dll" }}
+,{ "pid":12345, "tid":30, "ts":1739808077321690, "dur":20859, "ph":"X", "name": "CheckInputSignature",  "args": { "detail":"CopyFiles C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/Unity.Services.Core.Environments.Internal.dll" }}
+,{ "pid":12345, "tid":30, "ts":1739808077342563, "dur":941, "ph":"X", "name": "CopyFiles",  "args": { "detail":"C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/Unity.Services.Core.Environments.Internal.dll" }}
+,{ "pid":12345, "tid":30, "ts":1739808077343505, "dur":14062259, "ph":"X", "name": "WaitingForWork", "cname":"thread_state_sleeping",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":31, "ts":1739808077083136, "dur":1890, "ph":"X", "name": "FirstLock",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":31, "ts":1739808077085032, "dur":805, "ph":"X", "name": "EarlyStatNonGeneratedFile",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":31, "ts":1739808077085838, "dur":2549, "ph":"X", "name": "WaitingForWork", "cname":"thread_state_sleeping",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":31, "ts":1739808077088421, "dur":344, "ph":"X", "name": "OutputFilesMissingFor",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":31, "ts":1739808077088765, "dur":84, "ph":"X", "name": "EmitNodeUpToDate",  "args": { "detail":"CopyFiles C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Resources/unity default resources" }}
+,{ "pid":12345, "tid":31, "ts":1739808077088849, "dur":1643, "ph":"X", "name": "WaitingForWork", "cname":"thread_state_sleeping",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":31, "ts":1739808077090536, "dur":27185, "ph":"X", "name": "ComputeFileSignatureSha1",  "args": { "detail":"Library\\Bee\\artifacts\\WinPlayerBuildProgram\\ManagedStripped\\UnityEngine.TLSModule.dll" }}
+,{ "pid":12345, "tid":31, "ts":1739808077090493, "dur":27229, "ph":"X", "name": "CheckInputSignature",  "args": { "detail":"CopyFiles C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/UnityEngine.TLSModule.dll" }}
+,{ "pid":12345, "tid":31, "ts":1739808077118342, "dur":2937, "ph":"X", "name": "CopyFiles",  "args": { "detail":"C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/UnityEngine.TLSModule.dll" }}
+,{ "pid":12345, "tid":31, "ts":1739808077121292, "dur":106010, "ph":"X", "name": "ComputeFileSignatureSha1",  "args": { "detail":"Library\\Bee\\artifacts\\WinPlayerBuildProgram\\ManagedStripped\\Unity.Networking.Transport.dll" }}
+,{ "pid":12345, "tid":31, "ts":1739808077121280, "dur":106023, "ph":"X", "name": "CheckInputSignature",  "args": { "detail":"CopyFiles C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/Unity.Networking.Transport.dll" }}
+,{ "pid":12345, "tid":31, "ts":1739808077227316, "dur":1664, "ph":"X", "name": "CopyFiles",  "args": { "detail":"C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/Unity.Networking.Transport.dll" }}
+,{ "pid":12345, "tid":31, "ts":1739808077228993, "dur":91092, "ph":"X", "name": "ComputeFileSignatureSha1",  "args": { "detail":"Library\\Bee\\artifacts\\WinPlayerBuildProgram\\ManagedStripped\\Unity.RenderPipelines.GPUDriven.Runtime.dll" }}
+,{ "pid":12345, "tid":31, "ts":1739808077228982, "dur":91105, "ph":"X", "name": "CheckInputSignature",  "args": { "detail":"CopyFiles C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/Unity.RenderPipelines.GPUDriven.Runtime.dll" }}
+,{ "pid":12345, "tid":31, "ts":1739808077320106, "dur":1283, "ph":"X", "name": "CopyFiles",  "args": { "detail":"C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/Unity.RenderPipelines.GPUDriven.Runtime.dll" }}
+,{ "pid":12345, "tid":31, "ts":1739808077321408, "dur":807, "ph":"X", "name": "ComputeFileSignatureSha1",  "args": { "detail":"Library\\Bee\\artifacts\\WinPlayerBuildProgram\\ManagedStripped\\Unity.Services.Core.Environments.dll" }}
+,{ "pid":12345, "tid":31, "ts":1739808077321393, "dur":823, "ph":"X", "name": "CheckInputSignature",  "args": { "detail":"CopyFiles C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/Unity.Services.Core.Environments.dll" }}
+,{ "pid":12345, "tid":31, "ts":1739808077322230, "dur":651, "ph":"X", "name": "CopyFiles",  "args": { "detail":"C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/Unity.Services.Core.Environments.dll" }}
+,{ "pid":12345, "tid":31, "ts":1739808077322894, "dur":56305, "ph":"X", "name": "ComputeFileSignatureSha1",  "args": { "detail":"Library\\Bee\\artifacts\\WinPlayerBuildProgram\\ManagedStripped\\System.Numerics.dll" }}
+,{ "pid":12345, "tid":31, "ts":1739808077322882, "dur":56318, "ph":"X", "name": "CheckInputSignature",  "args": { "detail":"CopyFiles C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/System.Numerics.dll" }}
+,{ "pid":12345, "tid":31, "ts":1739808077379210, "dur":744, "ph":"X", "name": "CopyFiles",  "args": { "detail":"C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/System.Numerics.dll" }}
+,{ "pid":12345, "tid":31, "ts":1739808077379955, "dur":14025842, "ph":"X", "name": "WaitingForWork", "cname":"thread_state_sleeping",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":32, "ts":1739808077083158, "dur":1887, "ph":"X", "name": "FirstLock",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":32, "ts":1739808077085045, "dur":782, "ph":"X", "name": "EarlyStatNonGeneratedFile",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":32, "ts":1739808077085827, "dur":2547, "ph":"X", "name": "WaitingForWork", "cname":"thread_state_sleeping",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":32, "ts":1739808077088409, "dur":352, "ph":"X", "name": "OutputFilesMissingFor",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":32, "ts":1739808077088766, "dur":1733, "ph":"X", "name": "WaitingForWork", "cname":"thread_state_sleeping",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":32, "ts":1739808077090573, "dur":188520, "ph":"X", "name": "ComputeFileSignatureSha1",  "args": { "detail":"Library\\Bee\\artifacts\\WinPlayerBuildProgram\\ManagedStripped\\Unity.TextMeshPro.dll" }}
+,{ "pid":12345, "tid":32, "ts":1739808077090500, "dur":188594, "ph":"X", "name": "CheckInputSignature",  "args": { "detail":"CopyFiles C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/Unity.TextMeshPro.dll" }}
+,{ "pid":12345, "tid":32, "ts":1739808077279122, "dur":1691, "ph":"X", "name": "CopyFiles",  "args": { "detail":"C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/Unity.TextMeshPro.dll" }}
+,{ "pid":12345, "tid":32, "ts":1739808077280833, "dur":20537, "ph":"X", "name": "ComputeFileSignatureSha1",  "args": { "detail":"Library\\Bee\\artifacts\\WinPlayerBuildProgram\\ManagedStripped\\UnityEngine.PerformanceReportingModule.dll" }}
+,{ "pid":12345, "tid":32, "ts":1739808077280817, "dur":20555, "ph":"X", "name": "CheckInputSignature",  "args": { "detail":"CopyFiles C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/UnityEngine.PerformanceReportingModule.dll" }}
+,{ "pid":12345, "tid":32, "ts":1739808077301397, "dur":1223, "ph":"X", "name": "CopyFiles",  "args": { "detail":"C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/UnityEngine.PerformanceReportingModule.dll" }}
+,{ "pid":12345, "tid":32, "ts":1739808077302641, "dur":80946, "ph":"X", "name": "ComputeFileSignatureSha1",  "args": { "detail":"Library\\Bee\\artifacts\\WinPlayerBuildProgram\\ManagedStripped\\Unity.Services.Authentication.dll" }}
+,{ "pid":12345, "tid":32, "ts":1739808077302623, "dur":80965, "ph":"X", "name": "CheckInputSignature",  "args": { "detail":"CopyFiles C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/Unity.Services.Authentication.dll" }}
+,{ "pid":12345, "tid":32, "ts":1739808077383603, "dur":898, "ph":"X", "name": "CopyFiles",  "args": { "detail":"C:/Users/querx.QRXS/Desktop/Build/Research3/Research3_Data/Managed/Unity.Services.Authentication.dll" }}
+,{ "pid":12345, "tid":32, "ts":1739808077384503, "dur":14021277, "ph":"X", "name": "WaitingForWork", "cname":"thread_state_sleeping",  "args": { "detail":"" }}
+,{ "pid":12345, "tid":0, "ts":1739808091411330, "dur":748, "ph":"X", "name": "ProfilerWriteOutput" }
+,
