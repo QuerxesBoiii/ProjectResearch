@@ -15,7 +15,12 @@ MonoBehaviour:
   IsDefault: 1
   List:
   - Override: 0
+<<<<<<< HEAD:Research3/Assets/DefaultNetworkPrefabs.asset
     Prefab: {fileID: 8680324063092050409, guid: 8ce847d76a8100042880b8eec91ebbaf, type: 3}
+=======
+    Prefab: {fileID: 8680324063092050409, guid: 8ce847d76a8100042880b8eec91ebbaf,
+      type: 3}
+>>>>>>> 32c5524968baf1ecc9dcd4020e5c894b49d31892:Unity-Matchmaking-main - Copy (2)/Assets/NGO_Minimal_Setup/NetworkPrefabsList.asset
     SourcePrefabToOverride: {fileID: 0}
     SourceHashToOverride: 0
     OverridingTargetPrefab: {fileID: 0}
