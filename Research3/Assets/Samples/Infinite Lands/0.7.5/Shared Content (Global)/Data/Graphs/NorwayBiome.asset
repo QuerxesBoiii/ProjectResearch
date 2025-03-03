@@ -43,7 +43,7 @@ MonoBehaviour:
     providerPortName: HeightData
     inputPortName: Input
   generateTexture: 1
-  Range: {x: 0.27446276, y: 0.58140934}
+  Range: {x: 0.2870414, y: 0.53109485}
   BlendFactor: 0.172
   Input: {fileID: -7937672190180163563}
 --- !u!114 &-8569741904714203547
@@ -104,7 +104,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   guid: ba799519767cacd49ab5e805d6b3ad6c
   expanded: 1
-  position: {x: 1726.5602, y: -600}
+  position: {x: 1583.3922, y: -869.14307}
   connections:
   - provider: {fileID: 5152516252496122081}
     providerPortName: HeightData
@@ -226,12 +226,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   guid: 3db1814f723370f469a89717abc737b5
   expanded: 1
-  position: {x: 45.670662, y: -1141}
+  position: {x: -97.6078, y: -1410.1431}
   connections: []
   generateTexture: 0
   NoiseType: 0
-  MinMaxHeight: {x: -150, y: 800}
-  TileSize: 2000
+  MinMaxHeight: {x: -150, y: 500}
+  TileSize: 2250
   Octaves: 1
   Rotation: {x: 0, y: 90, z: 0}
   Lacunarity: 2
@@ -254,16 +254,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   guid: 0bf0ab9322dd4bc48b3e9d41a5a5173c
   expanded: 1
-  position: {x: 45.999977, y: -291}
+  position: {x: -97.6078, y: -548.14307}
   connections: []
-  generateTexture: 0
+  generateTexture: 1
   NoiseType: 1
-  MinMaxHeight: {x: -75, y: 105.7}
-  TileSize: 200
-  Octaves: 3
+  MinMaxHeight: {x: -75, y: 70}
+  TileSize: 275
+  Octaves: 2
   Rotation: {x: 0, y: 0, z: 0}
-  Lacunarity: 2
-  Persistence: 0.5
+  Lacunarity: 3
+  Persistence: 0.35
   RidgeMode: 0
 --- !u!114 &-6764432240039057739
 MonoBehaviour:
@@ -279,7 +279,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   guid: 472a69d583927154b9841aa6f7b513a7
   expanded: 1
-  position: {x: 3168.8267, y: -854.49994}
+  position: {x: 3025.392, y: -1123.1431}
   connections:
   - provider: {fileID: -1924233372200193775}
     providerPortName: HeightData
@@ -299,12 +299,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   guid: 8c29adfdc2961e442b0a3123bc237ca8
   expanded: 1
-  position: {x: 45.999977, y: -839}
+  position: {x: -97.6078, y: -1108.1431}
   connections: []
   generateTexture: 0
   NoiseType: 1
-  MinMaxHeight: {x: -75, y: 75}
-  TileSize: 200
+  MinMaxHeight: {x: -75, y: 60}
+  TileSize: 275
   Octaves: 1
   Rotation: {x: 0, y: 0, z: 0}
   Lacunarity: 2
@@ -360,7 +360,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   guid: d218b40c420339d46b3e99b3ad0efada
   expanded: 1
-  position: {x: 2452, y: -665.0696}
+  position: {x: 2308.392, y: -934.14307}
   connections: []
   generateTexture: 0
   NoiseType: 1
@@ -389,7 +389,7 @@ MonoBehaviour:
   connections: []
   generateTexture: 0
   NoiseType: 1
-  MinMaxHeight: {x: -0.56, y: -0.19}
+  MinMaxHeight: {x: -0.56, y: -0.18}
   TileSize: 2
   Octaves: 1
   Rotation: {x: 0, y: 0, z: 0}
@@ -453,7 +453,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   guid: dc9a021df271ac94388c0393816cc26d
   expanded: 1
-  position: {x: 1005.0001, y: -1042}
+  position: {x: 861.3922, y: -1311.1431}
   connections: []
   generateTexture: 0
   NoiseType: 1
@@ -478,7 +478,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   guid: 1fa38178360179544b1e1b5094296521
   expanded: 1
-  position: {x: 2698, y: -481}
+  position: {x: 2544.392, y: -750.14307}
   connections:
   - provider: {fileID: -6411995040109166619}
     providerPortName: HeightData
@@ -670,7 +670,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   guid: 7e5d01327fbd0ba42be6cdcbf337b3c8
   expanded: 1
-  position: {x: 3168.8267, y: -756.49994}
+  position: {x: 3025.392, y: -1025.1431}
   connections:
   - provider: {fileID: -1924233372200193775}
     providerPortName: HeightData
@@ -691,7 +691,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   guid: 0ee48bf9352eabc439fc836c5d688345
   expanded: 1
-  position: {x: 1245.0001, y: -600}
+  position: {x: 1101.3922, y: -869.14307}
   connections: []
   generateTexture: 0
   NoiseType: 1
@@ -757,7 +757,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   guid: e36ac45c35beb8b48b81030bc141121b
   expanded: 1
-  position: {x: 3188.0876, y: -532.3914}
+  position: {x: 3044.392, y: -801.14307}
   connections:
   - provider: {fileID: -1924233372200193775}
     providerPortName: HeightData
@@ -811,7 +811,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   guid: d56dfe935ea21fd4c85e06e403a49ceb
   expanded: 1
-  position: {x: 2923.8696, y: -514.82605}
+  position: {x: 2780.392, y: -787.14307}
   connections:
   - provider: {fileID: -4838198472294623697}
     providerPortName: HeightData
@@ -861,11 +861,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   guid: 54cbcfdc8414a0044bce75e77dc82387
   expanded: 1
-  position: {x: 1005.0001, y: -665.99994}
+  position: {x: 861.3922, y: -935.14307}
   connections: []
   generateTexture: 0
   NoiseType: 1
-  MinMaxHeight: {x: 0, y: 4.2}
+  MinMaxHeight: {x: 0, y: 4.42}
   TileSize: 20
   Octaves: 2
   Rotation: {x: 0, y: 0, z: 0}
@@ -908,7 +908,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   guid: 70cc07b99520c3a4195a7cb7fdae2a78
   expanded: 1
-  position: {x: 773.7502, y: -742.0001}
+  position: {x: 630.3922, y: -1011.14307}
   connections:
   - provider: {fileID: -580066008073043102}
     providerPortName: HeightData
@@ -916,7 +916,7 @@ MonoBehaviour:
   - provider: {fileID: -318701308841874620}
     providerPortName: HeightData
     inputPortName: HeightMaps
-  generateTexture: 0
+  generateTexture: 1
   operation: 1
   HeightMaps:
   - {fileID: -580066008073043102}
@@ -936,7 +936,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   guid: 8a8d286171e96694aa3815d0d2a119cf
   expanded: 1
-  position: {x: 500.65927, y: -513.54407}
+  position: {x: 357.3922, y: -783.14307}
   connections:
   - provider: {fileID: 6186391987688348904}
     providerPortName: HeightData
@@ -1028,7 +1028,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   guid: db7ab274092983d438a83034da651467
   expanded: 1
-  position: {x: 534.14764, y: -941.99994}
+  position: {x: 390.3922, y: -1211.1431}
   connections:
   - provider: {fileID: -110974260002748802}
     providerPortName: HeightData
@@ -1101,7 +1101,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   guid: 650a39c6caa06b543974b09a0b4da54f
   expanded: 1
-  position: {x: 3337.0005, y: -634.6087}
+  position: {x: 3193.392, y: -904.14307}
   connections:
   - provider: {fileID: -1979677247729726278}
     providerPortName: HeightData
@@ -1122,7 +1122,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   guid: 6c2be5a22c6947344886877f868fb213
   expanded: 1
-  position: {x: 294.00003, y: -969.7379}
+  position: {x: 150.3922, y: -1239.1431}
   connections:
   - provider: {fileID: -6544286248316372917}
     providerPortName: HeightData
@@ -1130,7 +1130,7 @@ MonoBehaviour:
   - provider: {fileID: -7134441039617129285}
     providerPortName: HeightData
     inputPortName: HeightMap
-  generateTexture: 0
+  generateTexture: 1
   HeightMap: {fileID: -7134441039617129285}
   Warp: {fileID: -6544286248316372917}
   Mask: {fileID: 0}
@@ -1147,8 +1147,8 @@ MonoBehaviour:
   m_Name: NorwayBiome
   m_EditorClassIdentifier: 
   AutoUpdate: 1
-  position: {x: -1602, y: 131}
-  scale: {x: 0.8695652, y: 0.8695652}
+  position: {x: -425, y: -30}
+  scale: {x: 1, y: 1}
   output: {fileID: -6764432240039057739}
   nodes:
   - {fileID: -6764432240039057739}
@@ -1243,7 +1243,7 @@ MonoBehaviour:
   groups:
   - guid: 924fe0092a6cf434592afa2c78cd8bda
     Name: Norway
-    position: {x: 78.659256, y: -928.54407}
+    position: {x: -122.60779, y: -1479.1428}
     elementGuids:
     - 472a69d583927154b9841aa6f7b513a7
     - 70cc07b99520c3a4195a7cb7fdae2a78
@@ -1271,6 +1271,8 @@ MonoBehaviour:
     - 3011d3592dfc37a44810de7b286bef99
     - d218b40c420339d46b3e99b3ad0efada
     - e36ac45c35beb8b48b81030bc141121b
+    - d56dfe935ea21fd4c85e06e403a49ceb
+    - 1fa38178360179544b1e1b5094296521
   - guid: 8fa323c4e72786942b82602aaba5eb3f
     Name: Vegetation
     position: {x: 1320, y: 304}
@@ -1405,7 +1407,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   guid: 8708ed268e1ced94da0355055887d90d
   expanded: 1
-  position: {x: 2221.4783, y: -480.86957}
+  position: {x: 2077.392, y: -750.14307}
   connections:
   - provider: {fileID: 7686928943762053135}
     providerPortName: HeightData
@@ -1500,12 +1502,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   guid: 1efbc2e6bdd21a046a1f604bd4271913
   expanded: 1
-  position: {x: 45.999977, y: -593}
+  position: {x: -97.6078, y: -862.14307}
   connections: []
-  generateTexture: 0
+  generateTexture: 1
   NoiseType: 0
-  MinMaxHeight: {x: -150, y: 700}
-  TileSize: 2000
+  MinMaxHeight: {x: -150, y: 500}
+  TileSize: 2250
   Octaves: 1
   Rotation: {x: 0, y: 0, z: 0}
   Lacunarity: 2
@@ -1556,7 +1558,7 @@ MonoBehaviour:
   generateTexture: 0
   NoiseType: 1
   MinMaxHeight: {x: 0, y: 1}
-  TileSize: 245.9
+  TileSize: 190
   Octaves: 1
   Rotation: {x: 0, y: 0, z: 0}
   Lacunarity: 2
@@ -1849,7 +1851,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   guid: 1fca2a8688877584ca956ddbfcef4fcb
   expanded: 1
-  position: {x: 1472.2328, y: -600}
+  position: {x: 1328.3922, y: -869.14307}
   connections:
   - provider: {fileID: -2603136270002381058}
     providerPortName: HeightData
@@ -1894,7 +1896,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   guid: b11f09fe1a08ee54fa5233cff3c1f4a3
   expanded: 1
-  position: {x: 1472, y: -463.00003}
+  position: {x: 1328.3922, y: -732.14307}
   connections: []
   generateTexture: 0
   NoiseType: 1
@@ -1966,7 +1968,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   guid: 81999dc857117e044bf64eb6632827d1
   expanded: 1
-  position: {x: 286.65927, y: -513.54407}
+  position: {x: 143.3922, y: -783.14307}
   connections:
   - provider: {fileID: 1588581266090566823}
     providerPortName: HeightData
@@ -1974,7 +1976,7 @@ MonoBehaviour:
   - provider: {fileID: -6968730665183892330}
     providerPortName: HeightData
     inputPortName: Warp
-  generateTexture: 0
+  generateTexture: 1
   HeightMap: {fileID: 1588581266090566823}
   Warp: {fileID: -6968730665183892330}
   Mask: {fileID: 0}
@@ -2059,7 +2061,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   guid: 9f40e1b5eedf57d4c8fa3694b45f1007
   expanded: 1
-  position: {x: 1778, y: 1223.0001}
+  position: {x: 1778, y: 1223}
   connections:
   - provider: {fileID: 367586737658656945}
     providerPortName: HeightData
@@ -2087,16 +2089,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   guid: a226a5723e8d5de4facda8e089c85b92
   expanded: 1
-  position: {x: 1537, y: 629}
+  position: {x: 1537, y: 627}
   connections: []
   generateTexture: 0
   NoiseType: 1
   MinMaxHeight: {x: 0, y: 1}
-  TileSize: 279.66
-  Octaves: 2
+  TileSize: 226.6
+  Octaves: 10
   Rotation: {x: 0, y: 0, z: 0}
   Lacunarity: 2
-  Persistence: 0.5
+  Persistence: 0.449
   RidgeMode: 1
 --- !u!114 &7479135169265305556
 MonoBehaviour:
@@ -2134,7 +2136,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   guid: ea85539c1a7717f44a4709da698c2806
   expanded: 1
-  position: {x: 1970.6553, y: -720.0002}
+  position: {x: 1827.3922, y: -989.14307}
   connections:
   - provider: {fileID: -7991434285966405479}
     providerPortName: HeightData
@@ -2184,14 +2186,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   guid: 3011d3592dfc37a44810de7b286bef99
   expanded: 1
-  position: {x: 2452.4783, y: -408.21738}
+  position: {x: 2308.392, y: -677.14307}
   connections:
   - provider: {fileID: 714246969519256362}
     providerPortName: HeightData
     inputPortName: Input
   generateTexture: 1
-  Range: {x: 0.5277362, y: 1}
-  BlendFactor: 0.258
+  Range: {x: 0.59117615, y: 1}
+  BlendFactor: 0.375
   Input: {fileID: 714246969519256362}
 --- !u!114 &7987300104626887211
 MonoBehaviour:
@@ -2280,8 +2282,8 @@ MonoBehaviour:
     providerPortName: localInput
     inputPortName: Input
   generateTexture: 0
-  Range: {x: 0, y: 0.34580538}
-  BlendFactor: 0.066
+  Range: {x: 0, y: 0.15958714}
+  BlendFactor: 0.081
   Input: {fileID: -6456736082829565002}
 --- !u!114 &8365513131990813944
 MonoBehaviour:
@@ -2340,7 +2342,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   guid: 1279fe384787c134cac361eaa3db8157
   expanded: 1
-  position: {x: 1244.6, y: -742.0002}
+  position: {x: 1101.3922, y: -1011.14307}
   connections:
   - provider: {fileID: -707715789858157233}
     providerPortName: HeightData
@@ -2469,6 +2471,6 @@ MonoBehaviour:
     providerPortName: localInput
     inputPortName: Input
   generateTexture: 0
-  MinMaxHeight: {x: 10, y: 45}
+  MinMaxHeight: {x: 10, y: 34.5}
   BlendFactor: 5
   Input: {fileID: 5041102379481724515}

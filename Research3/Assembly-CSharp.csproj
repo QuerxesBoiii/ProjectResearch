@@ -66,6 +66,7 @@
     <Analyzer Include="D:\UnityNew\6000.0.37f1\Editor\Data\Tools\Unity.SourceGenerators\Unity.UIToolkit.SourceGenerator.dll" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\CameraRigEnabler.cs" />
     <Compile Include="Assets\SourceMovement\Movement\ISurfControllable.cs" />
     <Compile Include="Assets\RelayManager.cs" />
     <Compile Include="Assets\SourceMovement\CameraWaterCheck.cs" />
@@ -73,12 +74,13 @@
     <Compile Include="Assets\SourceMovement\Movement\SurfCharacter.cs" />
     <Compile Include="Assets\SourceMovement\Movement\SurfPhysics.cs" />
     <Compile Include="Assets\ClientNetworkTransform.cs" />
+    <Compile Include="Assets\CameraController.cs" />
+    <Compile Include="Assets\Samples\Infinite Lands\0.7.5\Shared Content (Global)\TOP SECRET\Follow code.cs" />
     <Compile Include="Assets\SourceMovement\Water.cs" />
     <Compile Include="Assets\SourceMovement\PlayerAiming.cs" />
     <Compile Include="Assets\SourceMovement\TraceUtil\Trace.cs" />
     <Compile Include="Assets\SourceMovement\Ladder.cs" />
     <Compile Include="Assets\SourceMovement\TraceUtil\Tracer.cs" />
-    <Compile Include="Assets\CameraFollow.cs" />
     <Compile Include="Assets\SourceMovement\Movement\SurfController.cs" />
     <Compile Include="Assets\SourceMovement\Movement\MovementConfig.cs" />
     <Compile Include="Assets\SourceMovement\Extensions\VectorExtensions.cs" />

@@ -189,14 +189,13 @@ namespace sapra.InfiniteLands{
         // Update is called once per frame
         private void Update()
         {
-            // Only search if the reference is missing
+            // Only search if the references are missing
             if (Player == null)
             {
                 GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
                 if (playerObj != null)
                 {
                     Player = playerObj.transform;
-                    // Optionally log to confirm
                     Debug.Log("Player found and assigned.");
                 }
             }
@@ -211,16 +210,27 @@ namespace sapra.InfiniteLands{
                 }
             }
 
-            if (!CanGenerate)
+            // If either Camera or Player is still null, skip terrain updates to avoid errors
+            if (Camera == null || Player == null)
+            {
                 return;
+            }
 
-            // Rest of your update logic...
+            // If there's no valid generator, skip
+            if (!CanGenerate)
+            {
+                return;
+            }
+
+            // Now that we have a camera & player, do the usual chunk updates
             UpdateVisibleChunks();
             UpdateScheduledJobs();
             CheckFinishedJobs();
+
             if (GenerationCalls.Count <= 0)
                 watch.Stop();
         }
+
 
         #region Chunk Generation
 

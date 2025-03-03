@@ -15,7 +15,7 @@ MonoBehaviour:
   _skipRendering: 0
   DistanceBetweenItems: 100
   MinimumScale: 1
-  MaximumScale: 1
+  MaximumScale: 1.5
   VerticalPosition: 0
   AlignToGround: 0
   DensityAffectsHeight: 0

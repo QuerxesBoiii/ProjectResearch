@@ -124,45 +124,9 @@
             "m_Id": 10,
             "m_ChildrenIds": [
                 11,
-                12
-            ],
-            "m_Name": "Biome",
-            "m_Help": "",
-            "m_Synonyms": [],
-            "m_Icon": {
-                "instanceID": 0
-            },
-            "m_CollapseEmptyIcon": true
-        },
-        {
-            "m_Id": 11,
-            "m_ChildrenIds": [],
-            "m_Name": "Biome Combiner",
-            "m_Help": "",
-            "m_Synonyms": [],
-            "m_Icon": {
-                "instanceID": 0
-            },
-            "m_CollapseEmptyIcon": true
-        },
-        {
-            "m_Id": 12,
-            "m_ChildrenIds": [],
-            "m_Name": "Biome Output",
-            "m_Help": "",
-            "m_Synonyms": [],
-            "m_Icon": {
-                "instanceID": 0
-            },
-            "m_CollapseEmptyIcon": true
-        },
-        {
-            "m_Id": 13,
-            "m_ChildrenIds": [
-                14,
-                15,
-                16,
-                17
+                12,
+                13,
+                14
             ],
             "m_Name": "Filter",
             "m_Help": "",
@@ -173,7 +137,7 @@
             "m_CollapseEmptyIcon": true
         },
         {
-            "m_Id": 14,
+            "m_Id": 11,
             "m_ChildrenIds": [],
             "m_Name": "Blur",
             "m_Help": "",
@@ -184,7 +148,7 @@
             "m_CollapseEmptyIcon": true
         },
         {
-            "m_Id": 15,
+            "m_Id": 12,
             "m_ChildrenIds": [],
             "m_Name": "Directional Warp",
             "m_Help": "",
@@ -195,7 +159,7 @@
             "m_CollapseEmptyIcon": true
         },
         {
-            "m_Id": 16,
+            "m_Id": 13,
             "m_ChildrenIds": [],
             "m_Name": "Step",
             "m_Help": "",
@@ -206,7 +170,7 @@
             "m_CollapseEmptyIcon": true
         },
         {
-            "m_Id": 17,
+            "m_Id": 14,
             "m_ChildrenIds": [],
             "m_Name": "Warp",
             "m_Help": "",
@@ -217,14 +181,14 @@
             "m_CollapseEmptyIcon": true
         },
         {
-            "m_Id": 18,
+            "m_Id": 15,
             "m_ChildrenIds": [
+                16,
+                17,
+                18,
                 19,
                 20,
-                21,
-                22,
-                23,
-                24
+                21
             ],
             "m_Name": "Input",
             "m_Help": "",
@@ -235,7 +199,7 @@
             "m_CollapseEmptyIcon": true
         },
         {
-            "m_Id": 19,
+            "m_Id": 16,
             "m_ChildrenIds": [],
             "m_Name": "Constant",
             "m_Help": "",
@@ -246,7 +210,7 @@
             "m_CollapseEmptyIcon": true
         },
         {
-            "m_Id": 20,
+            "m_Id": 17,
             "m_ChildrenIds": [],
             "m_Name": "Function",
             "m_Help": "",
@@ -257,7 +221,7 @@
             "m_CollapseEmptyIcon": true
         },
         {
-            "m_Id": 21,
+            "m_Id": 18,
             "m_ChildrenIds": [],
             "m_Name": "Local Input",
             "m_Help": "",
@@ -268,7 +232,7 @@
             "m_CollapseEmptyIcon": true
         },
         {
-            "m_Id": 22,
+            "m_Id": 19,
             "m_ChildrenIds": [],
             "m_Name": "Perlin Noise",
             "m_Help": "",
@@ -279,7 +243,7 @@
             "m_CollapseEmptyIcon": true
         },
         {
-            "m_Id": 23,
+            "m_Id": 20,
             "m_ChildrenIds": [],
             "m_Name": "Simplex Noise",
             "m_Help": "",
@@ -290,7 +254,7 @@
             "m_CollapseEmptyIcon": true
         },
         {
-            "m_Id": 24,
+            "m_Id": 21,
             "m_ChildrenIds": [],
             "m_Name": "Voronoi Noise",
             "m_Help": "",
@@ -301,11 +265,11 @@
             "m_CollapseEmptyIcon": true
         },
         {
-            "m_Id": 25,
+            "m_Id": 22,
             "m_ChildrenIds": [
-                26,
-                27,
-                28
+                23,
+                24,
+                25
             ],
             "m_Name": "Mask",
             "m_Help": "",
@@ -316,7 +280,7 @@
             "m_CollapseEmptyIcon": true
         },
         {
-            "m_Id": 26,
+            "m_Id": 23,
             "m_ChildrenIds": [],
             "m_Name": "Gate",
             "m_Help": "",
@@ -327,7 +291,7 @@
             "m_CollapseEmptyIcon": true
         },
         {
-            "m_Id": 27,
+            "m_Id": 24,
             "m_ChildrenIds": [],
             "m_Name": "Range Mask",
             "m_Help": "",
@@ -338,7 +302,7 @@
             "m_CollapseEmptyIcon": true
         },
         {
-            "m_Id": 28,
+            "m_Id": 25,
             "m_ChildrenIds": [],
             "m_Name": "Select Mask",
             "m_Help": "",
@@ -349,11 +313,11 @@
             "m_CollapseEmptyIcon": true
         },
         {
-            "m_Id": 29,
+            "m_Id": 26,
             "m_ChildrenIds": [
-                30,
-                31,
-                32
+                27,
+                28,
+                29
             ],
             "m_Name": "Features",
             "m_Help": "",
@@ -364,7 +328,7 @@
             "m_CollapseEmptyIcon": true
         },
         {
-            "m_Id": 30,
+            "m_Id": 27,
             "m_ChildrenIds": [],
             "m_Name": "Get Cavity",
             "m_Help": "",
@@ -375,7 +339,7 @@
             "m_CollapseEmptyIcon": true
         },
         {
-            "m_Id": 31,
+            "m_Id": 28,
             "m_ChildrenIds": [],
             "m_Name": "Get Slope",
             "m_Help": "",
@@ -386,7 +350,7 @@
             "m_CollapseEmptyIcon": true
         },
         {
-            "m_Id": 32,
+            "m_Id": 29,
             "m_ChildrenIds": [],
             "m_Name": "Only pass Data",
             "m_Help": "",
@@ -397,11 +361,11 @@
             "m_CollapseEmptyIcon": true
         },
         {
-            "m_Id": 33,
+            "m_Id": 30,
             "m_ChildrenIds": [
-                34,
-                35,
-                36
+                31,
+                32,
+                33
             ],
             "m_Name": "Output",
             "m_Help": "",
@@ -412,7 +376,7 @@
             "m_CollapseEmptyIcon": true
         },
         {
-            "m_Id": 34,
+            "m_Id": 31,
             "m_ChildrenIds": [],
             "m_Name": "Local Output",
             "m_Help": "",
@@ -423,7 +387,7 @@
             "m_CollapseEmptyIcon": true
         },
         {
-            "m_Id": 35,
+            "m_Id": 32,
             "m_ChildrenIds": [],
             "m_Name": "Texture Output",
             "m_Help": "",
@@ -434,7 +398,7 @@
             "m_CollapseEmptyIcon": true
         },
         {
-            "m_Id": 36,
+            "m_Id": 33,
             "m_ChildrenIds": [],
             "m_Name": "Vegetation Output",
             "m_Help": "",
@@ -445,9 +409,9 @@
             "m_CollapseEmptyIcon": true
         },
         {
-            "m_Id": 37,
+            "m_Id": 34,
             "m_ChildrenIds": [
-                38
+                35
             ],
             "m_Name": "DEPRECATED",
             "m_Help": "",
@@ -458,7 +422,7 @@
             "m_CollapseEmptyIcon": true
         },
         {
-            "m_Id": 38,
+            "m_Id": 35,
             "m_ChildrenIds": [],
             "m_Name": "Noise [DEPRECATED]",
             "m_Help": "",
