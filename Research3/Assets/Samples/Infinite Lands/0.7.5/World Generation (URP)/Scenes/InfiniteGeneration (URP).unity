@@ -1477,7 +1477,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   meshSettings:
-    Seed: 4
+    Seed: 169
     Resolution: 254
     CustomTextureResolution: 0
     _textureResolution: 254
@@ -1490,7 +1490,7 @@ MonoBehaviour:
   Camera: {fileID: 0}
   Player: {fileID: 0}
   ChunkPrefab: {fileID: 0}
-  _GenerationMode: 0
+  _GenerationMode: 1
   DecimatedForNonCloseLOD: 1
   DecimatedLOD: 2
   GenerationDistance: 50000
@@ -2290,7 +2290,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b3eb4eb5f88b24d46a47260d3a0c608d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spawnHeight: 800
 --- !u!114 &1988867782
 MonoBehaviour:
   m_ObjectHideFlags: 0

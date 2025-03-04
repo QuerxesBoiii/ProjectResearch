@@ -1,5 +1,29 @@
-Research3/Library/
-/Research3/Library/
+# Ignore common folder types inside Research3
 Research3/Temp/
-/Research3/Temp/
+Research3/Logs/
+Research3/Obj/
+Research3/Build/
+Research3/Builds/
+Research3/MemoryCaptures/
+Research3/Library/
+[Ll]ibrary/
+
+# Ignore common binary file types
 *.dylib
+*.so
+*.dll
+*.exe
+*.csproj
+*.sln
+*.user
+*.userprefs
+*.pidb
+*.suo
+*.tmp
+*.unityproj
+*.booproj
+
+# Ignore specific files with no extension
+ArtifactDB
+dsymutil
+SourceAssetDB
