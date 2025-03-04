@@ -1,0 +1,143 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-6186633378671206274
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0b745bb0016ca8943abae535bef506a8, type: 3}
+  m_Name: BiomeCombinerNode
+  m_EditorClassIdentifier: 
+  guid: f33cb11bca350144ea052edeecf5bec9
+  expanded: 1
+  position: {x: 727.65216, y: -18.999983}
+  connections:
+  - provider: {fileID: 2310207650395300840}
+    providerPortName: BiomeData
+    inputPortName: Biomes
+  generateTexture: 0
+  operation: 0
+  Biomes:
+  - {fileID: 2310207650395300840}
+  HeightBlending: 0
+  WeightBlending: 0.001
+  TextureSmoothing: 0
+  VegetationSmoothing: 0
+--- !u!114 &-5606681138098711538
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1fcf5caf87e518f4cb0376b216b2e639, type: 3}
+  m_Name: NormalizeNode
+  m_EditorClassIdentifier: 
+  guid: 7687d538e5334b44eba914625cfdfd5b
+  expanded: 1
+  position: {x: 199, y: -119}
+  connections:
+  - provider: {fileID: 346741912676150619}
+    providerPortName: HeightData
+    inputPortName: Input
+  generateTexture: 0
+  Input: {fileID: 346741912676150619}
+--- !u!114 &-3470824992651652032
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 906554316c986004795fcc727b70c356, type: 3}
+  m_Name: HeightOutputNode
+  m_EditorClassIdentifier: 
+  guid: d625e40f4c0cde841be34fb69e7c17a0
+  expanded: 1
+  position: {x: 1014.6243, y: -19.000122}
+  connections:
+  - provider: {fileID: -6186633378671206274}
+    providerPortName: HeightData
+    inputPortName: HeightMap
+  HeightMap: {fileID: -6186633378671206274}
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3a11e3c0087717a4e9f7535909651365, type: 3}
+  m_Name: Research Lands Infinite
+  m_EditorClassIdentifier: 
+  AutoUpdate: 0
+  position: {x: 55, y: 750}
+  scale: {x: 0.8695652, y: 0.8695652}
+  output: {fileID: -3470824992651652032}
+  nodes:
+  - {fileID: -3470824992651652032}
+  - {fileID: -6186633378671206274}
+  - {fileID: 2310207650395300840}
+  - {fileID: 346741912676150619}
+  - {fileID: -5606681138098711538}
+  groups: []
+  stickyNotes: []
+  PreviouslyConnected:
+  - {fileID: 11400000, guid: 7b195cb63c7879b4d8a757625510a030, type: 2}
+  - {fileID: 11400000, guid: 4925169ff4d8c4a44af0f1ef57cb3ad8, type: 2}
+--- !u!114 &346741912676150619
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b7b938e39cb4f554aa6312d209656fd2, type: 3}
+  m_Name: SimplexNoiseNode
+  m_EditorClassIdentifier: 
+  guid: 70be9df4d65be7843a8162eefbc3a38e
+  expanded: 1
+  position: {x: -34.56523, y: -362.52182}
+  connections: []
+  generateTexture: 1
+  NoiseType: 1
+  MinMaxHeight: {x: 0, y: 200}
+  TileSize: 200
+  Octaves: 3
+  Rotation: {x: 0, y: 0, z: 0}
+  Lacunarity: 2
+  Persistence: 0.5
+  RidgeMode: 0
+--- !u!114 &2310207650395300840
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 38e9ec560402eac4e915273da0d2920a, type: 3}
+  m_Name: BiomeNode
+  m_EditorClassIdentifier: 
+  guid: 8fdb9ca889b56004abd0f44c27f453a8
+  expanded: 1
+  position: {x: 447, y: -19}
+  connections:
+  - provider: {fileID: -5606681138098711538}
+    providerPortName: HeightData
+    inputPortName: DensityLayer
+  biome: {fileID: 11400000, guid: 7b195cb63c7879b4d8a757625510a030, type: 2}
+  DensityLayer: {fileID: -5606681138098711538}
