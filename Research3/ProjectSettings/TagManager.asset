@@ -4,12 +4,13 @@
 TagManager:
   serializedVersion: 3
   tags:
-  - BerryBush
+  - Apple
+  - Creature
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - Food Layer
+  - Discoverable
   - Water
   - UI
   - 
