@@ -4,80 +4,83 @@ using System.Collections.Generic;
 
 public class CreatureBehavior : MonoBehaviour
 {
-    // State enum visible in Inspector
     public enum State { Idle, SearchingForFood, Eating }
     public State currentState = State.Idle;
 
-    // Components
     private NavMeshAgent agent;
+    private Renderer creatureRenderer; // For changing color
 
-    // Hunger system (foodLevel: 10 is full, 0 is empty)
     [SerializeField] private float foodLevel = 10f; // 0 to 10 scale
     private float hungerTimer = 0f;
-    private float hungerDecreaseInterval = 10f; // Decrease by 1 every 10 seconds
+    private float hungerDecreaseInterval = 10f;
 
-    // Vision and targeting
-    public List<Transform> visibleBushes = new List<Transform>(); // List of bushes in range, visible in Inspector
+    public List<Transform> visibleBushes = new List<Transform>();
     private BerryBush targetBush;
-    [SerializeField] private float eatingDistance = 1f; // Distance to start eating
-    [SerializeField] private float detectionRadius = 5f; // Detection range for bushes
-    [SerializeField] private LayerMask foodLayer; // Layer mask for berry bushes
+    [SerializeField] private float eatingDistance = 1f;
+    [SerializeField] private float detectionRadius = 5f;
+    [SerializeField] private LayerMask foodLayer;
 
-    // Movement speeds
-    [SerializeField] private float walkingSpeed = 4f; // Base speed for Idle and Eating
-    private float sprintSpeed => walkingSpeed * 1.5f; // 50% more than walking speed for SearchingForFood
+    [SerializeField] private float walkingSpeed = 4f;
+    private float sprintSpeed => walkingSpeed * 1.5f;
 
-    // Wandering in Idle
-    private float wanderInterval = 5f; // Move every 5 seconds
+    private float wanderInterval = 5f;
     private float wanderTimer = 0f;
-    private float wanderRadius = 20f; // Max distance for random points
+    private float wanderRadius = 20f;
 
-    // Eating timing
     private float eatTimer = 0f;
+
+    // Colors for food level visualization
+    private readonly Color fullColor = Color.green; // 10/10 food
+    private readonly Color emptyColor = Color.red;  // 0/10 food
 
     void Start()
     {
         agent = GetComponent<NavMeshAgent>();
-        agent.speed = walkingSpeed; // Set initial speed to walking
+        agent.speed = walkingSpeed;
         currentState = State.Idle;
+
+        // Get the renderer for color changes
+        creatureRenderer = GetComponent<Renderer>();
+        if (creatureRenderer == null)
+        {
+            Debug.LogError($"{name}: No Renderer found! Color changes won’t work.");
+        }
+        UpdateColor(); // Set initial color
     }
 
     void Update()
     {
-        // Update bush detection
         UpdateBushDetection();
 
-        // Decrease food level over time
         hungerTimer += Time.deltaTime;
         if (hungerTimer >= hungerDecreaseInterval)
         {
             foodLevel -= 1;
             if (foodLevel < 0) foodLevel = 0;
             hungerTimer = 0f;
+            UpdateColor(); // Update color when food decreases
         }
 
-        // Switch to SearchingForFood when food level is 5 or less
         if (foodLevel <= 5 && currentState == State.Idle)
         {
             currentState = State.SearchingForFood;
-            agent.speed = sprintSpeed; // Switch to sprint speed
+            agent.speed = sprintSpeed;
         }
 
-        // State machine
         switch (currentState)
         {
             case State.Idle:
-                if (agent.speed != walkingSpeed) agent.speed = walkingSpeed; // Ensure walking speed
+                if (agent.speed != walkingSpeed) agent.speed = walkingSpeed;
                 Wander();
                 break;
 
             case State.SearchingForFood:
-                if (agent.speed != sprintSpeed) agent.speed = sprintSpeed; // Ensure sprint speed
+                if (agent.speed != sprintSpeed) agent.speed = sprintSpeed;
                 SearchForFood();
                 break;
 
             case State.Eating:
-                if (agent.speed != walkingSpeed) agent.speed = walkingSpeed; // Revert to walking speed
+                if (agent.speed != walkingSpeed) agent.speed = walkingSpeed;
                 Eat();
                 break;
         }
@@ -85,35 +88,36 @@ public class CreatureBehavior : MonoBehaviour
 
     void UpdateBushDetection()
     {
-        // Check for berry bushes within the detection radius
         Collider[] hits = Physics.OverlapSphere(transform.position, detectionRadius, foodLayer);
         List<Transform> currentBushes = new List<Transform>();
 
-        // Process all detected colliders
         foreach (Collider hit in hits)
         {
             if (hit.CompareTag("BerryBush"))
             {
-                Transform bushTransform = hit.transform;
-                currentBushes.Add(bushTransform);
-
-                // Add new bushes to the list
-                if (!visibleBushes.Contains(bushTransform))
+                BerryBush bush = hit.GetComponent<BerryBush>();
+                if (bush != null && bush.HasFood)
                 {
-                    visibleBushes.Add(bushTransform);
-                    Debug.Log("BerryBush entered range: " + bushTransform.name);
+                    Transform bushTransform = hit.transform;
+                    currentBushes.Add(bushTransform);
+                    if (!visibleBushes.Contains(bushTransform))
+                    {
+                        visibleBushes.Add(bushTransform);
+                        Debug.Log("BerryBush entered range: " + bushTransform.name);
+                    }
                 }
             }
         }
 
-        // Remove bushes that are no longer in range
         for (int i = visibleBushes.Count - 1; i >= 0; i--)
         {
             Transform bush = visibleBushes[i];
-            if (!currentBushes.Contains(bush))
+            BerryBush bushComponent = bush.GetComponent<BerryBush>();
+            if (!currentBushes.Contains(bush) || (bushComponent != null && !bushComponent.HasFood))
             {
                 visibleBushes.Remove(bush);
-                Debug.Log("BerryBush exited range: " + bush.name);
+                if (bush == targetBush?.transform) targetBush = null;
+                Debug.Log("BerryBush exited range or has no food: " + bush.name);
             }
         }
     }
@@ -138,7 +142,6 @@ public class CreatureBehavior : MonoBehaviour
     {
         if (visibleBushes.Count > 0)
         {
-            // Find closest bush
             Transform closestTransform = null;
             float minDist = float.MaxValue;
             foreach (var bushTransform in visibleBushes)
@@ -150,12 +153,10 @@ public class CreatureBehavior : MonoBehaviour
                     closestTransform = bushTransform;
                 }
             }
-            targetBush = closestTransform.GetComponent<BerryBush>(); // Get BerryBush component
-            if (targetBush != null)
+            targetBush = closestTransform.GetComponent<BerryBush>();
+            if (targetBush != null && targetBush.HasFood)
             {
                 agent.SetDestination(closestTransform.position);
-
-                // Check if close enough to eat
                 if (Vector3.Distance(transform.position, targetBush.transform.position) <= eatingDistance)
                 {
                     currentState = State.Eating;
@@ -163,10 +164,13 @@ public class CreatureBehavior : MonoBehaviour
                     eatTimer = 0f;
                 }
             }
+            else
+            {
+                targetBush = null;
+            }
         }
         else
         {
-            // No bushes visible, wander randomly
             if (!agent.pathPending && agent.remainingDistance <= agent.stoppingDistance)
             {
                 Vector3 randomDirection = Random.insideUnitSphere * wanderRadius;
@@ -183,24 +187,27 @@ public class CreatureBehavior : MonoBehaviour
     void Eat()
     {
         eatTimer += Time.deltaTime;
-        if (eatTimer >= 1f) // Eat every second
+        if (eatTimer >= 1f)
         {
-            if (targetBush != null && targetBush.currentFood > 0 && foodLevel < 10)
+            if (targetBush != null && targetBush.HasFood && targetBush.CurrentFood > 0 && foodLevel < 10)
             {
-                targetBush.currentFood--;
+                targetBush.CurrentFood--;
                 foodLevel += 1;
                 if (foodLevel > 10) foodLevel = 10;
+                UpdateColor(); // Update color when food increases
+                Debug.Log($"{name}: Ate from {targetBush.name}, foodLevel now {foodLevel}");
             }
             else
             {
-                // Bush empty, missing component, or food level full
                 if (foodLevel >= 10)
                 {
                     currentState = State.Idle;
+                    Debug.Log($"{name}: Full, reverting to Idle");
                 }
-                else // Bush has no food or is invalid
+                else
                 {
                     currentState = State.SearchingForFood;
+                    Debug.Log($"{name}: Bush empty or invalid, searching for another");
                 }
                 agent.isStopped = false;
             }
@@ -208,9 +215,20 @@ public class CreatureBehavior : MonoBehaviour
         }
     }
 
+    // Update creature color based on foodLevel
+    private void UpdateColor()
+    {
+        if (creatureRenderer != null)
+        {
+            float t = foodLevel / 10f; // Normalize foodLevel to 0-1 (0 = empty, 1 = full)
+            Color newColor = Color.Lerp(emptyColor, fullColor, t);
+            creatureRenderer.material.color = newColor;
+            Debug.Log($"{name}: Updated color to {newColor} (foodLevel: {foodLevel}/10)");
+        }
+    }
+
     void OnDrawGizmos()
     {
-        // Visualize the detection sphere in the editor
         Gizmos.color = Color.green;
         Gizmos.DrawWireSphere(transform.position, detectionRadius);
     }

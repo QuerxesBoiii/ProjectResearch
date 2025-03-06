@@ -7,6 +7,7 @@ public class BerryBush : MonoBehaviour
     [SerializeField] public int currentFood = 10; // Current food available
     [SerializeField] private float replenishInterval = 30f; // Time to replenish 1 food unit
     private float replenishTimer = 0f;
+    [SerializeField] private bool hasFood = true; // Tracks if bush has usable food
 
     // List of child GameObjects (e.g., apples) to toggle visibility
     [SerializeField] private List<GameObject> foodObjects = new List<GameObject>();
@@ -26,8 +27,9 @@ public class BerryBush : MonoBehaviour
             maxFood = foodObjects.Count;
         }
 
-        // Clamp currentFood and update visibility
+        // Clamp currentFood and update state
         currentFood = Mathf.Clamp(currentFood, 0, maxFood);
+        UpdateFoodState();
         UpdateFoodVisibility();
     }
 
@@ -38,9 +40,10 @@ public class BerryBush : MonoBehaviour
         if (replenishTimer >= replenishInterval && currentFood < maxFood)
         {
             currentFood++;
+            UpdateFoodState();
             UpdateFoodVisibility();
             replenishTimer = 0f;
-            Debug.Log($"{name}: Food replenished to {currentFood}/{maxFood}");
+            Debug.Log($"{name}: Food replenished to {currentFood}/{maxFood}, hasFood: {hasFood}");
         }
     }
 
@@ -78,6 +81,20 @@ public class BerryBush : MonoBehaviour
         }
     }
 
+    // Update hasFood based on currentFood
+    private void UpdateFoodState()
+    {
+        if (currentFood == 0)
+        {
+            hasFood = false;
+        }
+        else if (currentFood >= maxFood * 0.3f) // 30% of maxFood
+        {
+            hasFood = true;
+        }
+        // If 0 < currentFood < 30%, hasFood remains false until it reaches 30%
+    }
+
     // Public property for currentFood (used by CreatureBehavior)
     public int CurrentFood
     {
@@ -85,8 +102,12 @@ public class BerryBush : MonoBehaviour
         set
         {
             currentFood = Mathf.Clamp(value, 0, maxFood);
+            UpdateFoodState();
             UpdateFoodVisibility();
-            Debug.Log($"{name}: CurrentFood set to {currentFood}/{maxFood}");
+            Debug.Log($"{name}: CurrentFood set to {currentFood}/{maxFood}, hasFood: {hasFood}");
         }
     }
+
+    // Public getter for hasFood (used by CreatureBehavior)
+    public bool HasFood => hasFood;
 }
