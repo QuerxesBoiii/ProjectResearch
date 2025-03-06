@@ -4,13 +4,12 @@
 TagManager:
   serializedVersion: 3
   tags:
-  - Terrain
   - BerryBush
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Food Layer
   - Water
   - UI
   - 
