@@ -65,32 +65,30 @@
     <Analyzer Include="C:\Program Files\Unity\Hub\Editor\6000.0.37f1\Editor\Data\Tools\Unity.SourceGenerators\Unity.UIToolkit.SourceGenerator.dll" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\CameraRigEnabler.cs" />
     <Compile Include="Assets\SourceMovement\Movement\ISurfControllable.cs" />
     <Compile Include="Assets\Samples\Infinite Lands\0.7.5\Shared Content (Global)\TOP SECRET\Stats.cs" />
-    <Compile Include="Assets\CreatureBehavior.cs" />
-    <Compile Include="Assets\TeleportUpOnP.cs" />
-    <Compile Include="Assets\RelayManager.cs" />
-    <Compile Include="Assets\TerrainEnabler.cs" />
+    <Compile Include="Assets\Scripts\RelayManager.cs" />
+    <Compile Include="Assets\Scripts\CreatureBehavior.cs" />
     <Compile Include="Assets\SourceMovement\CameraWaterCheck.cs" />
     <Compile Include="Assets\SourceMovement\Extensions\IntExtensions.cs" />
     <Compile Include="Assets\SourceMovement\Movement\SurfCharacter.cs" />
     <Compile Include="Assets\SourceMovement\Movement\SurfPhysics.cs" />
     <Compile Include="Assets\FoodSource.cs" />
-    <Compile Include="Assets\ClientNetworkTransform.cs" />
-    <Compile Include="Assets\CameraController.cs" />
     <Compile Include="Assets\Samples\Infinite Lands\0.7.5\Shared Content (Global)\TOP SECRET\Follow code.cs" />
+    <Compile Include="Assets\Scripts\ClientNetworkTransform.cs" />
     <Compile Include="Assets\SourceMovement\Water.cs" />
     <Compile Include="Assets\SourceMovement\PlayerAiming.cs" />
     <Compile Include="Assets\SourceMovement\TraceUtil\Trace.cs" />
     <Compile Include="Assets\SourceMovement\Ladder.cs" />
-    <Compile Include="Assets\ThirdPersonDisabler.cs" />
     <Compile Include="Assets\SourceMovement\TraceUtil\Tracer.cs" />
     <Compile Include="Assets\Samples\Infinite Lands\0.7.5\Shared Content (Global)\TOP SECRET\NoHead.cs" />
+    <Compile Include="Assets\Scripts\CameraRigEnabler.cs" />
+    <Compile Include="Assets\Scripts\ThirdPersonDisabler.cs" />
     <Compile Include="Assets\SourceMovement\Movement\SurfController.cs" />
     <Compile Include="Assets\SourceMovement\Movement\MovementConfig.cs" />
     <Compile Include="Assets\SourceMovement\Extensions\VectorExtensions.cs" />
     <Compile Include="Assets\SourceMovement\Movement\InputButtons.cs" />
+    <Compile Include="Assets\Scripts\CameraController.cs" />
     <Compile Include="Assets\SourceMovement\Movement\MoveData.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -111,6 +109,7 @@
     <None Include="Assets\TextMesh Pro\Shaders\TMPro_Properties.cginc" />
     <None Include="Assets\TextMesh Pro\Shaders\TMPro_Surface.cginc" />
     <None Include="Assets\TextMesh Pro\Resources\LineBreaking Following Characters.txt" />
+    <None Include="Assets\Shaders\TintedCreature.shader" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile Masking.shader" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF Overlay.shader" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_Bitmap-Mobile.shader" />
@@ -1119,6 +1118,10 @@
       <HintPath>Library\ScriptAssemblies\Unity.Networking.Editor.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="Unity.Animation.Rigging.Editor">
+      <HintPath>Library\ScriptAssemblies\Unity.Animation.Rigging.Editor.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="Unity.RenderPipeline.Universal.ShaderLibrary">
       <HintPath>Library\ScriptAssemblies\Unity.RenderPipeline.Universal.ShaderLibrary.dll</HintPath>
       <Private>False</Private>
@@ -1221,6 +1224,10 @@
     </Reference>
     <Reference Include="Unity.Collections.Editor">
       <HintPath>Library\ScriptAssemblies\Unity.Collections.Editor.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Unity.Animation.Rigging">
+      <HintPath>Library\ScriptAssemblies\Unity.Animation.Rigging.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Unity.RenderPipelines.ShaderGraph.ShaderGraphLibrary">
