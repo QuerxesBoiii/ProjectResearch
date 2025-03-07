@@ -2,11 +2,11 @@ using UnityEngine;
 using UnityEngine.AI;
 using System.Collections.Generic;
 
-// DO NOT REMOVE THIS COMMENT: Code is using Unity 6 (6000.0.37f1)
-// DO NOT REMOVE THIS COMMENT: Make sure the code is easy to understand, and isn't inefficient. Make the code slightly more efficient.
-// DO NOT REMOVE THIS COMMENT: This script controls the behavior of a creature in a simulation, including movement, eating, reproduction, and herd mentality.
-// DO NOT REMOVE THIS COMMENT: Can you add any additional comments to clarify the functionality of certain parts of the code? - Added below.
-// DO NOT REMOVE THIS COMMENT: Code should work with multiplayer netcode for gameobjects (currently simplified, Netcode can be re-added).
+// DO NOT REMOVE OR EDIT THIS COMMENT: Code is using Unity 6 (6000.0.37f1)
+// DO NOT REMOVE OR EDIT THIS COMMENT: Make sure the code is easy to understand, and isn't inefficient. Make the code slightly more efficient.
+// DO NOT REMOVE OR EDIT THIS COMMENT: This script controls the behavior of a creature in a simulation, including movement, eating, reproduction, and herd mentality.
+// DO NOT REMOVE OR EDIT THIS COMMENT: Can you add any additional comments to clarify the functionality of certain parts of the code?
+// DO NOT REMOVE OR EDIT THIS COMMENT: Code should work with multiplayer netcode for gameobjects
 
 public class CreatureBehavior : MonoBehaviour
 {
@@ -32,6 +32,7 @@ public class CreatureBehavior : MonoBehaviour
     [Header("Physical Attributes")]
     [SerializeField] private float size = 1f;
     [SerializeField] private float walkingSpeed = 4f;
+    [SerializeField] private bool canClimb = false; // Trait to determine if creature can use Climb areas
     private float newWalkingSpeed => 
         Mathf.Round(walkingSpeed * 
         (size < 1f 
@@ -95,17 +96,23 @@ public class CreatureBehavior : MonoBehaviour
     private readonly Color emptyColor = Color.red;
 
     [Header("Info (Read-Only Debug Stats)")]
-    [SerializeField] [Tooltip("Current walking speed adjusted by size")] private float _newWalkingSpeedDisplay => newWalkingSpeed;
-    [SerializeField] [Tooltip("Current sprint speed")] private float _sprintSpeedDisplay => sprintSpeed;
-    [SerializeField] [Tooltip("Maximum food capacity")] private float _maxFoodLevelDisplay => maxFoodLevel;
-    [SerializeField] [Tooltip("Time since last hunger decrease")] private float _hungerTimerDisplay => hungerTimer;
-    [SerializeField] [Tooltip("Interval between hunger decreases")] private float _hungerDecreaseIntervalDisplay => hungerDecreaseInterval;
-    [SerializeField] [Tooltip("Current detection radius based on size")] private float _detectionRadiusDisplay => detectionRadius;
-    [SerializeField] [Tooltip("Current physical size with age scaling")] private float _currentSizeDisplay => size * ageSize;
-    [SerializeField] [Tooltip("Time since last reproduction")] private float _timeSinceLastReproduction => Time.time - lastReproductionTime;
+    [SerializeField] private float _newWalkingSpeedDisplay => newWalkingSpeed;
+    [SerializeField] private float _sprintSpeedDisplay => sprintSpeed;
+    [SerializeField] private float _maxFoodLevelDisplay => maxFoodLevel;
+    [SerializeField] private float _hungerTimerDisplay => hungerTimer;
+    [SerializeField] private float _hungerDecreaseIntervalDisplay => hungerDecreaseInterval;
+    [SerializeField] private float _detectionRadiusDisplay => detectionRadius;
+    [SerializeField] private float _currentSizeDisplay => size * ageSize;
+    [SerializeField] private float _timeSinceLastReproduction => Time.time - lastReproductionTime;
 
     // ---- Static Counter for Unique IDs ----
     private static int nextAvailableId = 0; // Increments for each new type
+
+    // ---- NavMesh Area Masks ----
+    private const int WalkableArea = 1 << 0; // Area 0: Walkable
+    private const int NotWalkableArea = 1 << 1; // Area 1: Not Walkable
+    private const int JumpArea = 1 << 2; // Area 2: Jump
+    private const int ClimbArea = 1 << 3; // Area 3: Climb
 
     void Start()
     {
@@ -119,6 +126,15 @@ public class CreatureBehavior : MonoBehaviour
         size = Mathf.Round(size * 100f) / 100f;
         walkingSpeed = Mathf.Round(walkingSpeed * 100f) / 100f;
 
+        // Configure NavMeshAgent area mask based on climbing ability
+        // Default areas: Walkable and Jump (excluding NotWalkable)
+        int areaMask = WalkableArea | JumpArea;
+        if (canClimb)
+        {
+            areaMask |= ClimbArea; // Add Climb area if creature can climb
+        }
+        agent.areaMask = areaMask;
+
         // Set initial stats
         lastReproductionTime = Time.time;
         UpdateSizeAndStats();
@@ -126,7 +142,7 @@ public class CreatureBehavior : MonoBehaviour
         agent.speed = newWalkingSpeed;
 
         // Assign RANDOM wander interval
-        wanderInterval = Random.Range(2.5f, 12.5f);
+        wanderInterval = Random.Range(2.5f, 10f);
 
         // Assign ID if not set (e.g., manually placed creatures)
         if (creatureTypeId == -1)
@@ -144,7 +160,7 @@ public class CreatureBehavior : MonoBehaviour
         }
 
         UpdateColor();
-        Debug.Log($"{name}: Initialized - Type: {creatureTypeId}, Size: {size}, Age: {age}, Detection Radius: {detectionRadius}");
+        Debug.Log($"{name}: Initialized - Type: {creatureTypeId}, Size: {size}, Age: {age}, Detection Radius: {detectionRadius}, Can Climb: {canClimb}");
     }
 
     void Update()
@@ -271,8 +287,7 @@ public class CreatureBehavior : MonoBehaviour
     {
         transform.localScale = Vector3.one * size * ageSize;
         health = Mathf.Ceil(size * 10f); // Health rounded up to nearest whole number
-        maxFoodLevel = Mathf.Ceil(size * 10f);
-        
+        maxFoodLevel = Mathf.Ceil(6f + (size * 4f));
         hungerDecreaseInterval = Mathf.Round(
             60f *
             (size < 1f 
@@ -282,6 +297,14 @@ public class CreatureBehavior : MonoBehaviour
         ) / 100f;
     }
 
+    // Checks if a path exists to the target position using the agent's area mask
+    private bool IsNavigable(Vector3 targetPosition)
+    {
+        NavMeshPath path = new NavMeshPath();
+        bool pathValid = agent.CalculatePath(targetPosition, path);
+        return pathValid && path.status == NavMeshPathStatus.PathComplete;
+    }
+
     private void Wander()
     {
         if (agent.speed != newWalkingSpeed) agent.speed = newWalkingSpeed;
@@ -289,8 +312,10 @@ public class CreatureBehavior : MonoBehaviour
         if (wanderTimer >= wanderInterval)
         {
             Vector3 pos = transform.position + Random.insideUnitSphere * wanderRadius;
-            if (NavMesh.SamplePosition(pos, out NavMeshHit hit, wanderRadius, NavMesh.AllAreas))
+            if (NavMesh.SamplePosition(pos, out NavMeshHit hit, wanderRadius, agent.areaMask) && IsNavigable(hit.position))
+            {
                 agent.SetDestination(hit.position);
+            }
             wanderTimer = 0f;
             wanderInterval = Random.Range(2.5f, 10f); // Randomize interval between 2.5 and 10 seconds
         }
@@ -300,6 +325,7 @@ public class CreatureBehavior : MonoBehaviour
     {
         if (agent.speed != sprintSpeed) agent.speed = sprintSpeed;
         if (visibleDiscoverables.Count == 0) { PanicWander(); return; }
+
         Transform closest = null;
         float minDist = float.MaxValue;
         foreach (var obj in visibleDiscoverables)
@@ -307,10 +333,19 @@ public class CreatureBehavior : MonoBehaviour
             if (obj.CompareTag("Apple"))
             {
                 float dist = Vector3.Distance(transform.position, obj.position);
-                if (dist < minDist) { minDist = dist; closest = obj; }
+                if (dist < minDist)
+                {
+                    // Only consider this food source if it’s navigable
+                    if (IsNavigable(obj.position))
+                    {
+                        minDist = dist;
+                        closest = obj;
+                    }
+                }
             }
         }
-        if (closest)
+
+        if (closest != null)
         {
             targetFoodSource = closest.GetComponent<FoodSource>();
             if (targetFoodSource?.HasFood ?? false)
@@ -323,9 +358,16 @@ public class CreatureBehavior : MonoBehaviour
                     eatTimer = 0f;
                 }
             }
-            else { targetFoodSource = null; PanicWander(); }
+            else
+            {
+                targetFoodSource = null;
+                PanicWander();
+            }
         }
-        else PanicWander();
+        else
+        {
+            PanicWander(); // No navigable food found
+        }
     }
 
     private void HandlePanic()
@@ -345,9 +387,19 @@ public class CreatureBehavior : MonoBehaviour
         if (agent.speed != sprintSpeed) agent.speed = sprintSpeed;
         if (reproductionTarget)
         {
-            agent.SetDestination(reproductionTarget.position);
-            if (Vector3.Distance(transform.position, reproductionTarget.position) <= reproductionDistance)
-                AttemptReproduction();
+            // Only pursue mate if the position is navigable
+            if (IsNavigable(reproductionTarget.position))
+            {
+                agent.SetDestination(reproductionTarget.position);
+                if (Vector3.Distance(transform.position, reproductionTarget.position) <= reproductionDistance)
+                    AttemptReproduction();
+            }
+            else
+            {
+                reproductionTarget = null;
+                currentState = State.Idle;
+                Debug.Log($"{name}: Mate unreachable");
+            }
         }
         else
         {
@@ -361,7 +413,7 @@ public class CreatureBehavior : MonoBehaviour
         if (!agent.pathPending && agent.remainingDistance <= agent.stoppingDistance)
         {
             Vector3 pos = transform.position + Random.insideUnitSphere * panicWanderRadius;
-            if (NavMesh.SamplePosition(pos, out NavMeshHit hit, panicWanderRadius, NavMesh.AllAreas))
+            if (NavMesh.SamplePosition(pos, out NavMeshHit hit, panicWanderRadius, agent.areaMask) && IsNavigable(hit.position))
                 agent.SetDestination(hit.position);
         }
     }
@@ -386,7 +438,7 @@ public class CreatureBehavior : MonoBehaviour
         if (nearest && minDist <= isolationRadius)
         {
             Vector3 away = (transform.position - nearest.position).normalized * (isolationRadius + 1f);
-            if (NavMesh.SamplePosition(transform.position + away, out NavMeshHit hit, panicWanderRadius, NavMesh.AllAreas))
+            if (NavMesh.SamplePosition(transform.position + away, out NavMeshHit hit, panicWanderRadius, agent.areaMask) && IsNavigable(hit.position))
                 agent.SetDestination(hit.position);
         }
         else currentState = State.Idle;
@@ -424,9 +476,18 @@ public class CreatureBehavior : MonoBehaviour
             reproductionTarget = FindNearestCreatureOfSameTypeInReproductionRange();
             if (reproductionTarget)
             {
-                currentState = State.SeekingMate;
-                agent.SetDestination(reproductionTarget.position);
-                Debug.Log($"{name}: Seeking mate {reproductionTarget.name}");
+                // Only set state to SeekingMate if mate is navigable
+                if (IsNavigable(reproductionTarget.position))
+                {
+                    currentState = State.SeekingMate;
+                    agent.SetDestination(reproductionTarget.position);
+                    Debug.Log($"{name}: Seeking mate {reproductionTarget.name}");
+                }
+                else
+                {
+                    reproductionTarget = null;
+                    Debug.Log($"{name}: Mate unreachable, skipping reproduction");
+                }
             }
             else Debug.Log($"{name}: No mate found");
         }
@@ -485,6 +546,7 @@ public class CreatureBehavior : MonoBehaviour
         float avgSpeed = Mathf.Round((walkingSpeed + partner.walkingSpeed) / 2f * 100f) / 100f;
         childBehavior.size = Mathf.Round((avgSize + Random.Range(-mutationRate, mutationRate) * avgSize) * 100f) / 100f;
         childBehavior.walkingSpeed = Mathf.Round((avgSpeed + Random.Range(-mutationRate, mutationRate) * avgSpeed) * 100f) / 100f;
+        childBehavior.canClimb = canClimb || partner.canClimb; // Child inherits climbing if either parent can climb
 
         childBehavior.age = 0;
         childBehavior.foodLevel = (int)childBehavior.maxFoodLevel;
@@ -501,6 +563,7 @@ public class CreatureBehavior : MonoBehaviour
         childBehavior.size = Mathf.Round((size + sizeVar) * 100f) / 100f;
         float speedVar = Random.Range(-mutationRate, mutationRate) * walkingSpeed;
         childBehavior.walkingSpeed = Mathf.Round((walkingSpeed + speedVar) * 100f) / 100f;
+        childBehavior.canClimb = canClimb; // Child inherits climbing from single parent
 
         childBehavior.age = startingAge;
         childBehavior.foodLevel = (int)childBehavior.maxFoodLevel;
