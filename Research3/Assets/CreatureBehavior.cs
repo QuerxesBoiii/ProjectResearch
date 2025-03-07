@@ -2,503 +2,452 @@ using UnityEngine;
 using UnityEngine.AI;
 using System.Collections.Generic;
 
+// DO NOT REMOVE THIS COMMENT: Code is using Unity 6 (6000.0.37f1)
+// DO NOT REMOVE THIS COMMENT: Make sure the code is easy to understand, and isn't inefficient. Make the code slightly more efficient.
+// DO NOT REMOVE THIS COMMENT: This script controls the behavior of a creature in a simulation, including movement, eating, reproduction, and herd mentality.
+// DO NOT REMOVE THIS COMMENT: Can you add any additional comments to clarify the functionality of certain parts of the code? - Added below.
+// DO NOT REMOVE THIS COMMENT: Code should work with multiplayer netcode for gameobjects (currently simplified, Netcode can be re-added).
+
 public class CreatureBehavior : MonoBehaviour
 {
-    public enum State { Idle, SearchingForFood, Panic, Eating, SeekingMate }
-    public State currentState = State.Idle;
-
-    public enum HerdMentalityType { Herd, Ignores, Isolation }
-    [SerializeField] private HerdMentalityType herdMentality = HerdMentalityType.Ignores;
-
+    // ---- Core Components ----
     private NavMeshAgent agent;
     private Renderer creatureRenderer;
 
-    [SerializeField] private float size = 1.00f; // 2 decimals
-    [SerializeField] private float walkingSpeed = 4.00f; // 2 decimals
-    private float newWalkingSpeed;
-    private float sprintSpeed => Mathf.Round(newWalkingSpeed * 1.50f * 100f) / 100f; // 2 decimals
+    // ---- Inspector Groups ----
 
-    [SerializeField] private int foodLevel; // Integer
-    private float maxFoodLevel; // Will be rounded up to an integer
-    [SerializeField] private float health; // 2 decimals
-    private float hungerTimer = 0.00f; // 2 decimals
-    private float hungerDecreaseInterval; // 2 decimals
-    private float damageTimer = 0.00f; // 2 decimals
-    private float healTimer = 0.00f; // 2 decimals
+    // Creature states enum (no header here, as it's invalid on enum)
+    public enum State { Idle, SearchingForFood, Panic, Eating, SeekingMate }
+    [Header("Creature States")]
+    [SerializeField] private State currentState = State.Idle;
+
+    // Herd mentality enum (no header here)
+    public enum HerdMentalityType { Herd, Ignores, Isolation }
+    [Header("Herd Mentality")]
+    [SerializeField] private HerdMentalityType herdMentality = HerdMentalityType.Ignores;
+
+    [Header("Creature Type")]
+    [SerializeField] private int creatureTypeId = -1; // Unique ID (0-9999), assigned at spawn
+
+    [Header("Physical Attributes")]
+    [SerializeField] private float size = 1f;
+    [SerializeField] private float walkingSpeed = 4f;
+    private float newWalkingSpeed => 
+        Mathf.Round(walkingSpeed * 
+        (size < 1f 
+            ? (2f - size) 
+            : Mathf.Pow(size, -0.252f)
+        ) * 100f) / 100f;
+
+    private float sprintSpeed => Mathf.Round(newWalkingSpeed * 2.0f * 100f) / 100f;
+
+    [Header("Health and Hunger")]
+    [SerializeField] private float health; // Now rounded up to whole numbers
+    [SerializeField] private int foodLevel;
+    private float maxFoodLevel;
+    private float hungerTimer = 0f;
+    private float hungerDecreaseInterval;
+    private float damageTimer = 0f;
+    private float healTimer = 0f;
     private bool isHealing = false;
 
-    private float mentalityCheckTimer = 0.00f; // 2 decimals
-    private const float mentalityCheckInterval = 60.00f; // 2 decimals
+    [Header("Age and Growth")]
+    [SerializeField] private int age = 0;
+    private float ageTimer = 0f;
+    private const float ageIncreaseInterval = 30f; // Seconds per age increment
+    private float ageSize => Mathf.Round(Mathf.Lerp(0.3f, 1f, Mathf.Min(age / adultAge, 1f)) * 100f) / 100f;
+    private const float adultAge = 10f;
 
-    private float reproductionTimer = 0.00f; // 2 decimals
-    private const float reproductionCheckInterval = 40.00f; // 2 decimals
-    [SerializeField] private float lastReproductionTime = 0.00f; // 2 decimals
-    private const float reproductionCooldown = 120.00f; // 2 decimals
+    [Header("Reproduction")]
+    [SerializeField] private float lastReproductionTime = 0f;
+    private float reproductionTimer = 0f;
+    private const float reproductionCheckInterval = 40f; // How often to check for reproduction
+    private const float reproductionCooldown = 120f; // Cooldown between reproductions
     private Transform reproductionTarget;
+    private const float reproductionDistance = 5f; // Distance to initiate reproduction
+    [SerializeField] private float mutationRate = 0.1f;
 
-    [SerializeField] private int age = 0; // Integer
-    private float ageTimer = 0.00f; // 2 decimals
-    private const float ageIncreaseInterval = 30.00f; // 2 decimals
-    private float ageSize => Mathf.Round(Mathf.Lerp(0.30f, 1.00f, Mathf.Min(age / adultAge, 1.00f)) * 100f) / 100f; // 2 decimals
-    private const float adultAge = 10.00f; // 2 decimals
-
-    public List<Transform> visibleDiscoverables = new List<Transform>();
+    [Header("Detection and Interaction")]
+    [SerializeField] private List<Transform> visibleDiscoverables = new(); // Vision list in Inspector
     private FoodSource targetFoodSource;
-    [SerializeField] private float eatingDistance = 1.00f; // 2 decimals
-    [SerializeField] private float detectionRadius = 5.00f; // 2 decimals
+    [SerializeField] private float baseDetectionRadius = 50f; // Default detection radius at size 1.0, now adjustable
+    private float detectionRadius => baseDetectionRadius + (Mathf.Floor(size - 1f) * (baseDetectionRadius / 5f)); // Scales with size
     [SerializeField] private LayerMask discoverableLayer;
+    [SerializeField] private float eatingDistance = 1f;
 
-    private float wanderInterval = 5.00f; // 2 decimals
-    private float wanderTimer = 0.00f; // 2 decimals
-    [SerializeField] private float wanderRadius = 20.00f; // 2 decimals
-    private float panicWanderRadius => Mathf.Round(wanderRadius * 1.50f * 100f) / 100f; // 2 decimals
+    [Header("Movement and Wandering")]
+    [SerializeField] private float wanderRadius = 20f;
+    private float wanderInterval = 5f; // Initial value, will be randomized in Wander()
+    private float wanderTimer = 0f;
+    private float panicWanderRadius => Mathf.Round(wanderRadius * 2.0f * 100f) / 100f;
+    private float navigationTimer = 0f;
+    private const float navigationTimeout = 10f; // Timeout for path reset
 
-    private float eatTimer = 0.00f; // 2 decimals
-    private float navigationTimer = 0.00f; // 2 decimals
-    private const float navigationTimeout = 10.00f; // 2 decimals
-    private const float reproductionDistance = 5.00f; // 2 decimals
+    [Header("Eating Mechanics")]
+    private float eatTimer = 0f;
 
+    [Header("Herd Mentality Timing")]
+    private float mentalityCheckTimer = 0f;
+    private const float mentalityCheckInterval = 60f; // How often to check herd mentality
+
+    [Header("Visual Feedback")]
     private readonly Color fullColor = Color.green;
     private readonly Color emptyColor = Color.red;
 
+    [Header("Info (Read-Only Debug Stats)")]
+    [SerializeField] [Tooltip("Current walking speed adjusted by size")] private float _newWalkingSpeedDisplay => newWalkingSpeed;
+    [SerializeField] [Tooltip("Current sprint speed")] private float _sprintSpeedDisplay => sprintSpeed;
+    [SerializeField] [Tooltip("Maximum food capacity")] private float _maxFoodLevelDisplay => maxFoodLevel;
+    [SerializeField] [Tooltip("Time since last hunger decrease")] private float _hungerTimerDisplay => hungerTimer;
+    [SerializeField] [Tooltip("Interval between hunger decreases")] private float _hungerDecreaseIntervalDisplay => hungerDecreaseInterval;
+    [SerializeField] [Tooltip("Current detection radius based on size")] private float _detectionRadiusDisplay => detectionRadius;
+    [SerializeField] [Tooltip("Current physical size with age scaling")] private float _currentSizeDisplay => size * ageSize;
+    [SerializeField] [Tooltip("Time since last reproduction")] private float _timeSinceLastReproduction => Time.time - lastReproductionTime;
+
+    // ---- Static Counter for Unique IDs ----
+    private static int nextAvailableId = 0; // Increments for each new type
+
     void Start()
     {
+        // Initialize components
         agent = GetComponent<NavMeshAgent>();
+        if (!agent) { Debug.LogError($"{name}: No NavMeshAgent! Disabling."); enabled = false; return; }
         creatureRenderer = GetComponent<Renderer>();
-        if (creatureRenderer == null)
-        {
-            Debug.LogError($"{name}: No Renderer found! Color changes won’t work.");
-        }
+        if (!creatureRenderer) Debug.LogWarning($"{name}: No Renderer! Color won’t update.");
 
-        size = Mathf.Round(size * 100f) / 100f; // Ensure 2 decimals
-        walkingSpeed = Mathf.Round(walkingSpeed * 100f) / 100f; // Ensure 2 decimals
-        lastReproductionTime = Time.time; // Start with current time to enforce initial cooldown
+        // Round attributes for consistency
+        size = Mathf.Round(size * 100f) / 100f;
+        walkingSpeed = Mathf.Round(walkingSpeed * 100f) / 100f;
+
+        // Set initial stats
+        lastReproductionTime = Time.time;
         UpdateSizeAndStats();
-        foodLevel = (int)maxFoodLevel; // Set initial foodLevel to maxFoodLevel (now rounded up)
+        foodLevel = (int)maxFoodLevel;
         agent.speed = newWalkingSpeed;
 
-        UpdateColor();
-        Debug.Log($"{name}: Initialized with size {size}, age {age}, ageSize {ageSize}, speed {newWalkingSpeed}, health {health}, maxFood {maxFoodLevel}, hunger interval {hungerDecreaseInterval}");
+        // Assign RANDOM wander interval
+        wanderInterval = Random.Range(2.5f, 12.5f);
 
-        // Check if this is the only creature and trigger asexual reproduction with age adjustments
-        if (IsOnlyCreature())
+        // Assign ID if not set (e.g., manually placed creatures)
+        if (creatureTypeId == -1)
         {
-            age = 10; // Set original creature to adult age (10 years)
-            UpdateSizeAndStats(); // Update size to reflect adult age
-            int cloneAge = 8; // Starting age for first clone
+            creatureTypeId = nextAvailableId++;
+            age = 10; // Start as adult
+            UpdateSizeAndStats();
+            int cloneAge = 8;
             for (int i = 0; i < 3; i++)
             {
                 AsexualReproduction(cloneAge);
-                cloneAge -= 2; // Decrease age by 2 for each subsequent clone
+                cloneAge -= 2;
             }
-            Debug.Log($"{name}: Only creature detected, asexually reproduced 3 times with ages 10 (self), 8, 6, 4");
+            Debug.Log($"{name}: Assigned type {creatureTypeId}, spawned clones (ages 10, 8, 6, 4)");
         }
+
+        UpdateColor();
+        Debug.Log($"{name}: Initialized - Type: {creatureTypeId}, Size: {size}, Age: {age}, Detection Radius: {detectionRadius}");
     }
 
     void Update()
     {
+        // Cache Time.deltaTime for efficiency (reduces multiple property accesses)
+        float deltaTime = Time.deltaTime;
+
         UpdateDiscoverablesDetection();
 
-        ageTimer += Time.deltaTime;
+        // Age progression
+        ageTimer += deltaTime;
         if (ageTimer >= ageIncreaseInterval)
         {
-            age += 1; // Integer increment
-            ageTimer = 0.00f;
+            age++;
+            ageTimer = 0f;
             UpdateSizeAndStats();
-            if (age == adultAge)
-            {
-                Debug.Log($"{name}: Age increased to {age}, creature is now an adult");
-            }
+            if (age == adultAge) Debug.Log($"{name}: Now adult at age {age}");
         }
 
-        float currentHungerInterval = isHealing ? hungerDecreaseInterval / 2.00f : hungerDecreaseInterval;
-        hungerTimer += Time.deltaTime;
-        if (hungerTimer >= currentHungerInterval)
+        // Hunger management
+        float hungerInterval = isHealing ? hungerDecreaseInterval / 2f : hungerDecreaseInterval;
+        hungerTimer += deltaTime;
+        if (hungerTimer >= hungerInterval)
         {
-            foodLevel -= 1; // Integer decrement
-            if (foodLevel < 0) foodLevel = 0;
-            hungerTimer = 0.00f;
+            foodLevel = Mathf.Max(foodLevel - 1, 0);
+            hungerTimer = 0f;
             UpdateColor();
         }
 
+        // Starvation damage
         if (foodLevel <= 0)
         {
-            damageTimer += Time.deltaTime;
-            if (damageTimer >= 5.00f)
+            damageTimer += deltaTime;
+            if (damageTimer >= 5f)
             {
-                health -= 1.00f;
-                damageTimer = 0.00f;
-                Debug.Log($"{name}: No food, health decreased to {health}");
-                if (health <= 0.00f)
-                {
-                    Debug.Log($"{name}: Health reached 0, creature destroyed");
-                    Destroy(gameObject);
-                    return;
-                }
+                health = Mathf.Ceil(health - 1); // Round up after decrement
+                damageTimer = 0f;
+                Debug.Log($"{name}: Starving, health: {health}");
+                if (health <= 0) { Debug.Log($"{name}: Died"); Destroy(gameObject); }
             }
         }
-        else
-        {
-            damageTimer = 0.00f;
-        }
+        else damageTimer = 0f;
 
-        if (foodLevel > 0 && health < size * 10.00f)
+        // Healing
+        if (foodLevel > 0 && health < Mathf.Ceil(size * 10f))
         {
             isHealing = true;
-            healTimer += Time.deltaTime;
-            if (healTimer >= 10.00f)
+            healTimer += deltaTime;
+            if (healTimer >= 10f)
             {
-                health += 1.00f;
-                healTimer = 0.00f;
-                if (health >= size * 10.00f) isHealing = false;
+                health = Mathf.Ceil(health + 1); // Round up after increment
+                healTimer = 0f;
+                if (health >= Mathf.Ceil(size * 10f)) isHealing = false;
             }
         }
-        else if (health >= size * 10.00f)
-        {
-            isHealing = false;
-            healTimer = 0.00f;
-        }
+        else if (health >= Mathf.Ceil(size * 10f)) { isHealing = false; healTimer = 0f; }
 
-        if (foodLevel <= Mathf.Round(maxFoodLevel * 0.50f * 100f) / 100f && currentState == State.Idle)
+        // Trigger food search at 50% hunger
+        if (foodLevel <= maxFoodLevel * 0.5f && currentState == State.Idle)
         {
             currentState = State.SearchingForFood;
             agent.speed = sprintSpeed;
-            Debug.Log($"{name}: Hunger triggered SearchingForFood");
+            Debug.Log($"{name}: Hungry, searching");
         }
 
+        // Herd mentality check
         if (herdMentality != HerdMentalityType.Ignores)
         {
-            mentalityCheckTimer += Time.deltaTime;
+            mentalityCheckTimer += deltaTime;
             if (mentalityCheckTimer >= mentalityCheckInterval)
             {
                 CheckMentality();
-                mentalityCheckTimer = 0.00f;
+                mentalityCheckTimer = 0f;
             }
         }
 
+        // Reproduction check
         if (age >= adultAge)
         {
-            reproductionTimer += Time.deltaTime;
+            reproductionTimer += deltaTime;
             if (reproductionTimer >= reproductionCheckInterval && currentState != State.Eating && currentState != State.SeekingMate)
             {
                 CheckReproduction();
-                reproductionTimer = 0.00f;
+                reproductionTimer = 0f;
             }
         }
 
+        // Navigation timeout to prevent getting stuck
         if (agent.hasPath)
         {
-            navigationTimer += Time.deltaTime;
+            navigationTimer += deltaTime;
             if (navigationTimer >= navigationTimeout)
             {
                 agent.ResetPath();
-                navigationTimer = 0.00f;
-                Debug.Log($"{name}: Navigation timeout, resetting path");
+                navigationTimer = 0f;
+                Debug.Log($"{name}: Navigation timeout");
             }
         }
-        else
-        {
-            navigationTimer = 0.00f;
-        }
+        else navigationTimer = 0f;
 
+        // State machine
         switch (currentState)
         {
-            case State.Idle:
-                if (agent.speed != newWalkingSpeed) agent.speed = newWalkingSpeed;
-                Wander();
-                break;
-
-            case State.SearchingForFood:
-                if (agent.speed != sprintSpeed) agent.speed = sprintSpeed;
-                SearchForFood();
-                break;
-
-            case State.Panic:
-                if (agent.speed != sprintSpeed) agent.speed = sprintSpeed;
-                HandlePanic();
-                break;
-
-            case State.Eating:
-                if (agent.speed != newWalkingSpeed) agent.speed = newWalkingSpeed;
-                Eat();
-                break;
-
-            case State.SeekingMate:
-                if (agent.speed != sprintSpeed) agent.speed = sprintSpeed;
-                SeekMate();
-                break;
+            case State.Idle: Wander(); break;
+            case State.SearchingForFood: SearchForFood(); break;
+            case State.Panic: HandlePanic(); break;
+            case State.Eating: Eat(); break;
+            case State.SeekingMate: SeekMate(); break;
         }
     }
 
-    void UpdateDiscoverablesDetection()
+    // Updates the list of visible objects within detection radius
+    private void UpdateDiscoverablesDetection()
     {
         Collider[] hits = Physics.OverlapSphere(transform.position, detectionRadius, discoverableLayer);
-        List<Transform> currentDiscoverables = new List<Transform>();
-
-        foreach (Collider hit in hits)
-        {
-            if (hit.transform == transform) continue;
-
-            Transform discoverableTransform = hit.transform;
-            currentDiscoverables.Add(discoverableTransform);
-            if (!visibleDiscoverables.Contains(discoverableTransform))
-            {
-                visibleDiscoverables.Add(discoverableTransform);
-                string tag = hit.CompareTag("Apple") ? "Apple" :
-                            hit.CompareTag("Creature") ? "Creature" :
-                            hit.CompareTag("Player") ? "Player" : "Unknown";
-            }
-        }
-
-        for (int i = visibleDiscoverables.Count - 1; i >= 0; i--)
-        {
-            Transform discoverable = visibleDiscoverables[i];
-            if (!currentDiscoverables.Contains(discoverable))
-            {
-                visibleDiscoverables.Remove(discoverable);
-                if (discoverable == targetFoodSource?.transform) targetFoodSource = null;
-                if (discoverable == reproductionTarget) reproductionTarget = null;
-            }
-        }
+        visibleDiscoverables.Clear();
+        foreach (var hit in hits)
+            if (hit.transform != transform) // Exclude self
+                visibleDiscoverables.Add(hit.transform);
     }
 
-    void UpdateSizeAndStats()
+    // Updates stats based on size and age, ensuring health is a whole number
+    private void UpdateSizeAndStats()
     {
         transform.localScale = Vector3.one * size * ageSize;
-        newWalkingSpeed = Mathf.Round((walkingSpeed / size) * 100f) / 100f;
-        health = Mathf.Round(size * 10.00f * 100f) / 100f;
-        maxFoodLevel = Mathf.Ceil(size * 10.00f); // Round up to next whole number
-        hungerDecreaseInterval = Mathf.Round((20.00f / size) * 100f) / 100f;
+        health = Mathf.Ceil(size * 10f); // Health rounded up to nearest whole number
+        maxFoodLevel = Mathf.Ceil(size * 10f);
+        
+        hungerDecreaseInterval = Mathf.Round(
+            60f *
+            (size < 1f 
+                ? (1f + (2f / 3f) * (1f - size))    // For sizes below 1: 0.75 → ~70, 0.5 → ~80
+                : (1f / (1f + 0.2f * (size - 1f)))   // For sizes 1 or above: 2 → ~50, 3 → ~42.5, 4 → ~37.5
+            ) * 100f
+        ) / 100f;
     }
 
-    void Wander()
+    private void Wander()
     {
+        if (agent.speed != newWalkingSpeed) agent.speed = newWalkingSpeed;
         wanderTimer += Time.deltaTime;
         if (wanderTimer >= wanderInterval)
         {
-            float currentWanderRadius = wanderRadius;
-            Vector3 randomDirection = Random.insideUnitSphere * currentWanderRadius;
-            randomDirection += transform.position;
-            NavMeshHit hit;
-            if (NavMesh.SamplePosition(randomDirection, out hit, currentWanderRadius, NavMesh.AllAreas))
-            {
+            Vector3 pos = transform.position + Random.insideUnitSphere * wanderRadius;
+            if (NavMesh.SamplePosition(pos, out NavMeshHit hit, wanderRadius, NavMesh.AllAreas))
                 agent.SetDestination(hit.position);
-            }
-            wanderTimer = 0.00f;
+            wanderTimer = 0f;
+            wanderInterval = Random.Range(2.5f, 10f); // Randomize interval between 2.5 and 10 seconds
         }
     }
 
-    void SearchForFood()
+    private void SearchForFood()
     {
-        if (visibleDiscoverables.Count > 0)
+        if (agent.speed != sprintSpeed) agent.speed = sprintSpeed;
+        if (visibleDiscoverables.Count == 0) { PanicWander(); return; }
+        Transform closest = null;
+        float minDist = float.MaxValue;
+        foreach (var obj in visibleDiscoverables)
         {
-            Transform closestFoodSource = null;
-            float minDist = float.MaxValue;
-            foreach (var discoverableTransform in visibleDiscoverables)
+            if (obj.CompareTag("Apple"))
             {
-                if (discoverableTransform.CompareTag("Apple"))
-                {
-                    float dist = Vector3.Distance(transform.position, discoverableTransform.position);
-                    if (dist < minDist)
-                    {
-                        minDist = dist;
-                        closestFoodSource = discoverableTransform;
-                    }
-                }
-            }
-
-            if (closestFoodSource != null)
-            {
-                targetFoodSource = closestFoodSource.GetComponent<FoodSource>();
-                if (targetFoodSource != null && targetFoodSource.HasFood)
-                {
-                    agent.SetDestination(closestFoodSource.position);
-                    if (Vector3.Distance(transform.position, targetFoodSource.transform.position) <= eatingDistance)
-                    {
-                        currentState = State.Eating;
-                        agent.isStopped = true;
-                        eatTimer = 0.00f;
-                    }
-                }
-                else
-                {
-                    targetFoodSource = null;
-                    PanicWander();
-                }
-            }
-            else
-            {
-                PanicWander();
+                float dist = Vector3.Distance(transform.position, obj.position);
+                if (dist < minDist) { minDist = dist; closest = obj; }
             }
         }
-        else
+        if (closest)
         {
-            PanicWander();
+            targetFoodSource = closest.GetComponent<FoodSource>();
+            if (targetFoodSource?.HasFood ?? false)
+            {
+                agent.SetDestination(closest.position);
+                if (minDist <= eatingDistance)
+                {
+                    currentState = State.Eating;
+                    agent.isStopped = true;
+                    eatTimer = 0f;
+                }
+            }
+            else { targetFoodSource = null; PanicWander(); }
         }
+        else PanicWander();
     }
 
-    void HandlePanic()
+    private void HandlePanic()
     {
-        if (herdMentality == HerdMentalityType.Herd)
+        if (agent.speed != sprintSpeed) agent.speed = sprintSpeed;
+        if (herdMentality == HerdMentalityType.Herd && HasCreaturesOfSameTypeInRange())
         {
-            bool hasCreaturesNearby = HasCreaturesInRange();
-            if (hasCreaturesNearby)
-            {
-                currentState = State.Idle;
-                Debug.Log($"{name}: Herd creature found others, reverting to Idle");
-            }
-            else
-            {
-                PanicWander();
-            }
+            currentState = State.Idle;
+            Debug.Log($"{name}: Herd calmed (type {creatureTypeId})");
         }
-        else if (herdMentality == HerdMentalityType.Isolation)
-        {
-            AvoidCreatures();
-        }
+        else if (herdMentality == HerdMentalityType.Isolation) AvoidCreaturesOfSameType();
+        else PanicWander();
     }
 
-    void SeekMate()
+    private void SeekMate()
     {
-        if (reproductionTarget != null)
+        if (agent.speed != sprintSpeed) agent.speed = sprintSpeed;
+        if (reproductionTarget)
         {
             agent.SetDestination(reproductionTarget.position);
-            float distanceToTarget = Vector3.Distance(transform.position, reproductionTarget.position);
-            if (distanceToTarget <= reproductionDistance)
-            {
+            if (Vector3.Distance(transform.position, reproductionTarget.position) <= reproductionDistance)
                 AttemptReproduction();
-            }
         }
         else
         {
             currentState = State.Idle;
-            Debug.Log($"{name}: Reproduction target lost, reverting to Idle");
+            Debug.Log($"{name}: Mate lost");
         }
     }
 
     private void PanicWander()
     {
-        float currentWanderRadius = panicWanderRadius;
         if (!agent.pathPending && agent.remainingDistance <= agent.stoppingDistance)
         {
-            Vector3 randomDirection = Random.insideUnitSphere * currentWanderRadius;
-            randomDirection += transform.position;
-            NavMeshHit hit;
-            if (NavMesh.SamplePosition(randomDirection, out hit, currentWanderRadius, NavMesh.AllAreas))
-            {
+            Vector3 pos = transform.position + Random.insideUnitSphere * panicWanderRadius;
+            if (NavMesh.SamplePosition(pos, out NavMeshHit hit, panicWanderRadius, NavMesh.AllAreas))
                 agent.SetDestination(hit.position);
-            }
         }
     }
 
-    private void AvoidCreatures()
+    private void AvoidCreaturesOfSameType()
     {
-        float isolationRadius = Mathf.Round(detectionRadius / 2.00f * 100f) / 100f;
-        Transform nearestCreature = null;
+        float isolationRadius = detectionRadius / 1.7f;
+        Transform nearest = null;
         float minDist = float.MaxValue;
-
-        foreach (var discoverable in visibleDiscoverables)
+        foreach (var obj in visibleDiscoverables)
         {
-            if (discoverable.CompareTag("Creature"))
+            if (obj.CompareTag("Creature"))
             {
-                float dist = Vector3.Distance(transform.position, discoverable.position);
-                if (dist < minDist)
+                CreatureBehavior other = obj.GetComponent<CreatureBehavior>();
+                if (other?.creatureTypeId == creatureTypeId)
                 {
-                    minDist = dist;
-                    nearestCreature = discoverable;
+                    float dist = Vector3.Distance(transform.position, obj.position);
+                    if (dist < minDist) { minDist = dist; nearest = obj; }
                 }
             }
         }
-
-        if (nearestCreature != null && minDist <= isolationRadius)
+        if (nearest && minDist <= isolationRadius)
         {
-            Vector3 directionAway = (transform.position - nearestCreature.position).normalized;
-            Vector3 targetPosition = transform.position + directionAway * (isolationRadius + 1.00f);
-            NavMeshHit hit;
-            if (NavMesh.SamplePosition(targetPosition, out hit, panicWanderRadius, NavMesh.AllAreas))
-            {
+            Vector3 away = (transform.position - nearest.position).normalized * (isolationRadius + 1f);
+            if (NavMesh.SamplePosition(transform.position + away, out NavMeshHit hit, panicWanderRadius, NavMesh.AllAreas))
                 agent.SetDestination(hit.position);
-                Debug.Log($"{name}: Isolation creature moving away from {nearestCreature.name}");
-            }
         }
-        else
-        {
-            currentState = State.Idle;
-            Debug.Log($"{name}: Isolation creature alone, reverting to Idle");
-        }
+        else currentState = State.Idle;
     }
 
     private void CheckMentality()
     {
-        bool hasCreaturesNearby = HasCreaturesInRange();
-        if (herdMentality == HerdMentalityType.Herd)
+        bool nearby = HasCreaturesOfSameTypeInRange();
+        if (herdMentality == HerdMentalityType.Herd && !nearby && currentState != State.Eating && currentState != State.SearchingForFood)
         {
-            if (!hasCreaturesNearby && currentState != State.Eating && currentState != State.SearchingForFood)
-            {
-                currentState = State.Panic;
-                agent.speed = sprintSpeed;
-                Debug.Log($"{name}: Herd creature alone, entering Panic mode");
-            }
+            currentState = State.Panic;
+            agent.speed = sprintSpeed;
+            Debug.Log($"{name}: Herd alone, panicking");
         }
-        else if (herdMentality == HerdMentalityType.Isolation)
+        else if (herdMentality == HerdMentalityType.Isolation && nearby && currentState != State.Eating && currentState != State.SearchingForFood)
         {
-            if (hasCreaturesNearby && currentState != State.Eating && currentState != State.SearchingForFood)
-            {
-                currentState = State.Panic;
-                agent.speed = sprintSpeed;
-                Debug.Log($"{name}: Isolation creature near others, entering Panic mode");
-            }
+            currentState = State.Panic;
+            agent.speed = sprintSpeed;
+            Debug.Log($"{name}: Isolation crowded, panicking");
         }
     }
 
-    private bool HasCreaturesInRange()
+    private bool HasCreaturesOfSameTypeInRange()
     {
-        foreach (var discoverable in visibleDiscoverables)
-        {
-            if (discoverable.CompareTag("Creature"))
-            {
+        foreach (var obj in visibleDiscoverables)
+            if (obj.CompareTag("Creature") && obj.GetComponent<CreatureBehavior>()?.creatureTypeId == creatureTypeId)
                 return true;
-            }
-        }
         return false;
     }
 
     private void CheckReproduction()
     {
-        if (CanReproduce() && Random.value < 1.00f / 3.00f)
+        if (CanReproduce() && Random.value < 0.333f)
         {
-            Transform nearestCreature = FindNearestCreatureInReproductionRange();
-            if (nearestCreature != null)
+            reproductionTarget = FindNearestCreatureOfSameTypeInReproductionRange();
+            if (reproductionTarget)
             {
-                reproductionTarget = nearestCreature;
                 currentState = State.SeekingMate;
                 agent.SetDestination(reproductionTarget.position);
-                Debug.Log($"{name}: Reproduction triggered, seeking {reproductionTarget.name}");
+                Debug.Log($"{name}: Seeking mate {reproductionTarget.name}");
             }
-            else
-            {
-                Debug.Log($"{name}: Reproduction triggered, but no creature within range");
-            }
+            else Debug.Log($"{name}: No mate found");
         }
     }
 
-    private Transform FindNearestCreatureInReproductionRange()
+    private Transform FindNearestCreatureOfSameTypeInReproductionRange()
     {
-        float reproductionRange = Mathf.Round(detectionRadius * 1.50f * 100f) / 100f;
+        float range = detectionRadius * 1.5f;
         Transform nearest = null;
         float minDist = float.MaxValue;
-
-        Collider[] hits = Physics.OverlapSphere(transform.position, reproductionRange, discoverableLayer);
-        foreach (Collider hit in hits)
+        Collider[] hits = Physics.OverlapSphere(transform.position, range, discoverableLayer);
+        foreach (var hit in hits)
         {
             if (hit.transform == transform) continue;
             if (hit.CompareTag("Creature"))
             {
-                float dist = Vector3.Distance(transform.position, hit.transform.position);
-                if (dist < minDist)
+                CreatureBehavior other = hit.GetComponent<CreatureBehavior>();
+                if (other?.creatureTypeId == creatureTypeId)
                 {
-                    minDist = dist;
-                    nearest = hit.transform;
+                    float dist = Vector3.Distance(transform.position, hit.transform.position);
+                    if (dist < minDist) { minDist = dist; nearest = hit.transform; }
                 }
             }
         }
@@ -507,116 +456,86 @@ public class CreatureBehavior : MonoBehaviour
 
     private void AttemptReproduction()
     {
-        CreatureBehavior partner = reproductionTarget.GetComponent<CreatureBehavior>();
-        if (partner != null && partner.CanReproduce())
+        CreatureBehavior partner = reproductionTarget?.GetComponent<CreatureBehavior>();
+        if (partner?.CanReproduce() ?? false && partner.creatureTypeId == creatureTypeId)
         {
             SpawnChild(partner);
             lastReproductionTime = Time.time;
             partner.lastReproductionTime = Time.time;
             reproductionTarget = null;
             currentState = State.Idle;
-            Debug.Log($"{name}: Successfully reproduced with {partner.name}");
+            Debug.Log($"{name}: Reproduced with {partner.name}");
         }
         else
         {
             reproductionTarget = null;
             currentState = State.Idle;
-            Debug.Log($"{name}: Partner declined reproduction");
+            Debug.Log($"{name}: Reproduction failed");
         }
     }
 
-    private bool CanReproduce()
-    {
-        return foodLevel >= Mathf.Round(maxFoodLevel * 0.80f * 100f) / 100f && (Time.time - lastReproductionTime) >= reproductionCooldown && age >= adultAge;
-    }
+    private bool CanReproduce() => foodLevel >= maxFoodLevel * 0.8f && (Time.time - lastReproductionTime) >= reproductionCooldown && age >= adultAge;
 
     private void SpawnChild(CreatureBehavior partner)
     {
-        GameObject child = Instantiate(gameObject, transform.position + Vector3.right * 2.00f, Quaternion.identity);
+        GameObject child = Instantiate(gameObject, transform.position + Vector3.right * 2f, Quaternion.identity);
         CreatureBehavior childBehavior = child.GetComponent<CreatureBehavior>();
 
-        float avgSize = Mathf.Round(((size + partner.size) / 2.00f) * 100f) / 100f;
-        float avgWalkingSpeed = Mathf.Round(((walkingSpeed + partner.walkingSpeed) / 2.00f) * 100f) / 100f;
-
-        float sizeVariation = Mathf.Round(Random.Range(-0.10f, 0.10f) * avgSize * 100f) / 100f;
-        float speedVariation = Mathf.Round(Random.Range(-0.10f, 0.10f) * avgWalkingSpeed * 100f) / 100f;
-
-        childBehavior.size = Mathf.Round((avgSize + sizeVariation) * 100f) / 100f;
-        childBehavior.walkingSpeed = Mathf.Round((avgWalkingSpeed + speedVariation) * 100f) / 100f;
+        float avgSize = Mathf.Round((size + partner.size) / 2f * 100f) / 100f;
+        float avgSpeed = Mathf.Round((walkingSpeed + partner.walkingSpeed) / 2f * 100f) / 100f;
+        childBehavior.size = Mathf.Round((avgSize + Random.Range(-mutationRate, mutationRate) * avgSize) * 100f) / 100f;
+        childBehavior.walkingSpeed = Mathf.Round((avgSpeed + Random.Range(-mutationRate, mutationRate) * avgSpeed) * 100f) / 100f;
 
         childBehavior.age = 0;
         childBehavior.foodLevel = (int)childBehavior.maxFoodLevel;
-        childBehavior.reproductionTimer = 0.00f;
         childBehavior.lastReproductionTime = Time.time;
-
-        Debug.Log($"{name}: Spawned child with size {childBehavior.size}, walkingSpeed {childBehavior.walkingSpeed}, age {childBehavior.age}");
+        childBehavior.creatureTypeId = creatureTypeId;
     }
 
     private void AsexualReproduction(int startingAge)
     {
-        GameObject child = Instantiate(gameObject, transform.position + Vector3.right * 2.00f, Quaternion.identity);
+        GameObject child = Instantiate(gameObject, transform.position + Vector3.right * 2f, Quaternion.identity);
         CreatureBehavior childBehavior = child.GetComponent<CreatureBehavior>();
 
-        float avgSize = size; // Use own size as base
-        float avgWalkingSpeed = walkingSpeed; // Use own walking speed as base
+        float sizeVar = Random.Range(-mutationRate, mutationRate) * size;
+        childBehavior.size = Mathf.Round((size + sizeVar) * 100f) / 100f;
+        float speedVar = Random.Range(-mutationRate, mutationRate) * walkingSpeed;
+        childBehavior.walkingSpeed = Mathf.Round((walkingSpeed + speedVar) * 100f) / 100f;
 
-        float sizeVariation = Mathf.Round(Random.Range(-0.10f, 0.10f) * avgSize * 100f) / 100f;
-        float speedVariation = Mathf.Round(Random.Range(-0.10f, 0.10f) * avgWalkingSpeed * 100f) / 100f;
-
-        childBehavior.size = Mathf.Round((avgSize + sizeVariation) * 100f) / 100f;
-        childBehavior.walkingSpeed = Mathf.Round((avgWalkingSpeed + speedVariation) * 100f) / 100f;
-
-        childBehavior.age = startingAge; // Set the specified starting age
+        childBehavior.age = startingAge;
         childBehavior.foodLevel = (int)childBehavior.maxFoodLevel;
-        childBehavior.reproductionTimer = 0.00f;
         childBehavior.lastReproductionTime = Time.time;
-
-        Debug.Log($"{name}: Asexually spawned child with size {childBehavior.size}, walkingSpeed {childBehavior.walkingSpeed}, age {childBehavior.age}");
+        childBehavior.creatureTypeId = creatureTypeId;
     }
 
-    private bool IsOnlyCreature()
+    private void Eat()
     {
-        GameObject[] creatures = GameObject.FindGameObjectsWithTag("Creature");
-        return creatures.Length == 1 && creatures[0] == gameObject; // Only this creature exists
-    }
-
-    void Eat()
-    {
+        if (agent.speed != newWalkingSpeed) agent.speed = newWalkingSpeed;
         eatTimer += Time.deltaTime;
-        if (eatTimer >= 1.00f)
+        if (eatTimer >= 1f)
         {
-            if (targetFoodSource != null && targetFoodSource.HasFood && targetFoodSource.CurrentFood > 0 && foodLevel < maxFoodLevel)
+            if (targetFoodSource?.HasFood ?? false && targetFoodSource.CurrentFood > 0 && foodLevel < maxFoodLevel)
             {
                 targetFoodSource.CurrentFood--;
-                foodLevel += (int)targetFoodSource.FoodSatiety;
-                if (foodLevel > (int)maxFoodLevel) foodLevel = (int)maxFoodLevel;
+                foodLevel = Mathf.Min(foodLevel + (int)targetFoodSource.FoodSatiety, (int)maxFoodLevel);
                 UpdateColor();
             }
             else
             {
-                if (foodLevel >= (int)maxFoodLevel)
-                {
-                    currentState = State.Idle;
-                    Debug.Log($"{name}: Full, reverting to Idle");
-                }
-                else
-                {
-                    currentState = State.SearchingForFood;
-                    Debug.Log($"{name}: Food source empty or invalid, searching for food");
-                }
+                currentState = foodLevel >= maxFoodLevel ? State.Idle : State.SearchingForFood;
                 agent.isStopped = false;
+                Debug.Log($"{name}: {(foodLevel >= maxFoodLevel ? "Full" : "Food gone")}");
             }
-            eatTimer = 0.00f;
+            eatTimer = 0f;
         }
     }
 
     private void UpdateColor()
     {
-        if (creatureRenderer != null)
+        if (creatureRenderer)
         {
             float t = foodLevel / maxFoodLevel;
-            Color newColor = Color.Lerp(emptyColor, fullColor, t);
-            creatureRenderer.material.color = newColor;
+            creatureRenderer.material.color = Color.Lerp(emptyColor, fullColor, t);
         }
     }
 
@@ -624,11 +543,10 @@ public class CreatureBehavior : MonoBehaviour
     {
         Gizmos.color = Color.green;
         Gizmos.DrawWireSphere(transform.position, detectionRadius);
-
         if (herdMentality == HerdMentalityType.Isolation)
         {
             Gizmos.color = Color.yellow;
-            Gizmos.DrawWireSphere(transform.position, detectionRadius / 2.00f);
+            Gizmos.DrawWireSphere(transform.position, detectionRadius / 1.7f);
         }
     }
 }
