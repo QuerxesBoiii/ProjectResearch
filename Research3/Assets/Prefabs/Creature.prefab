@@ -349,6 +349,7 @@ MonoBehaviour:
   canClimb: 0
   health: 10
   foodLevel: 0
+  hungerDecreaseInterval: 0
   age: 0
   lastReproductionTime: 0
   mutationRate: 0.1
