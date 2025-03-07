@@ -47,7 +47,7 @@ public class CreatureBehavior : MonoBehaviour
     [SerializeField] private int foodLevel;
     private float maxFoodLevel;
     private float hungerTimer = 0f;
-    private float hungerDecreaseInterval;
+    [SerializeField] private float hungerDecreaseInterval;
     private float damageTimer = 0f;
     private float healTimer = 0f;
     private bool isHealing = false;
@@ -65,14 +65,14 @@ public class CreatureBehavior : MonoBehaviour
     private const float reproductionCheckInterval = 40f; // How often to check for reproduction
     private const float reproductionCooldown = 120f; // Cooldown between reproductions
     private Transform reproductionTarget;
-    private const float reproductionDistance = 5f; // Distance to initiate reproduction
+    [SerializeField] private const float reproductionDistance = 8f; // Distance to initiate reproduction
     [SerializeField] private float mutationRate = 0.1f;
 
     [Header("Detection and Interaction")]
     [SerializeField] private List<Transform> visibleDiscoverables = new(); // Vision list in Inspector
     private FoodSource targetFoodSource;
     [SerializeField] private float baseDetectionRadius = 50f; // Default detection radius at size 1.0, now adjustable
-    private float detectionRadius => baseDetectionRadius + (Mathf.Floor(size - 1f) * (baseDetectionRadius / 5f)); // Scales with size
+    [SerializeField] private float detectionRadius => baseDetectionRadius + (Mathf.Floor(size - 1f) * (baseDetectionRadius / 5f)); // Scales with size
     [SerializeField] private LayerMask discoverableLayer;
     [SerializeField] private float eatingDistance = 1f;
 
@@ -289,7 +289,7 @@ public class CreatureBehavior : MonoBehaviour
         health = Mathf.Ceil(size * 10f); // Health rounded up to nearest whole number
         maxFoodLevel = Mathf.Ceil(6f + (size * 4f));
         hungerDecreaseInterval = Mathf.Round(
-            60f *
+            30f *
             (size < 1f 
                 ? (1f + (2f / 3f) * (1f - size))    // For sizes below 1: 0.75 → ~70, 0.5 → ~80
                 : (1f / (1f + 0.2f * (size - 1f)))   // For sizes 1 or above: 2 → ~50, 3 → ~42.5, 4 → ~37.5
