@@ -7,6 +7,7 @@ Research3/Builds/
 Research3/MemoryCaptures/
 Research3/Library/
 [Ll]ibrary/
+Research3/UserSettings/
 
 # Ignore common binary file types
 *.dylib
@@ -22,6 +23,7 @@ Research3/Library/
 *.tmp
 *.unityproj
 *.booproj
+*.dwlt
 
 # Ignore specific files with no extension
 ArtifactDB
