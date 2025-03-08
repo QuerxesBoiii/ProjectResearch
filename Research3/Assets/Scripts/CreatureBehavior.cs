@@ -2,37 +2,34 @@ using UnityEngine;
 using UnityEngine.AI;
 using System.Collections.Generic;
 
-// DO NOT REMOVE OR EDIT THIS COMMENT: Code is using Unity 6 (6000.0.37f1)
-// DO NOT REMOVE OR EDIT THIS COMMENT: Make sure the code is easy to understand, and isn't inefficient. Make the code slightly more efficient.
-// DO NOT REMOVE OR EDIT THIS COMMENT: This script controls the behavior of a creature in a simulation, including movement, eating, reproduction, and herd mentality.
-// DO NOT REMOVE OR EDIT THIS COMMENT: Can you add any additional comments to clarify the functionality of certain parts of the code?
-// DO NOT REMOVE OR EDIT THIS COMMENT: Code should work with multiplayer netcode for gameobjects
-
 public class CreatureBehavior : MonoBehaviour
 {
     // ---- Core Components ----
     private NavMeshAgent agent;
     private Renderer creatureRenderer;
+    private CreatureCombat creatureCombat;
+
+    // Public accessor for agent to allow CreatureCombat to use it
+    public NavMeshAgent Agent => agent;
 
     // ---- Inspector Groups ----
 
-    // Creature states enum (no header here, as it's invalid on enum)
-    public enum State { Idle, SearchingForFood, Panic, Eating, SeekingMate }
+    public enum State { Idle, SearchingForFood, Panic, Eating, SeekingMate, Attacking, Fleeing }
     [Header("Creature States")]
-    [SerializeField] private State currentState = State.Idle;
+    [SerializeField] public State currentState = State.Idle;
 
-    // Herd mentality enum (no header here)
     public enum HerdMentalityType { Herd, Ignores, Isolation }
     [Header("Herd Mentality")]
     [SerializeField] private HerdMentalityType herdMentality = HerdMentalityType.Ignores;
 
     [Header("Creature Type")]
-    [SerializeField] private int creatureTypeId = -1; // Unique ID (0-9999), assigned at spawn
+    [SerializeField] private int creatureTypeId = -1;
 
     [Header("Physical Attributes")]
     [SerializeField] private float size = 1f;
     [SerializeField] private float walkingSpeed = 4f;
-    [SerializeField] private bool canClimb = false; // Trait to determine if creature can use Climb areas
+    [SerializeField] private bool canClimb = false;
+    [SerializeField] private GameObject meatPrefab; // Prefab with fixed food values
     private float newWalkingSpeed => 
         Mathf.Round(walkingSpeed * 
         (size < 1f 
@@ -43,7 +40,7 @@ public class CreatureBehavior : MonoBehaviour
     private float sprintSpeed => Mathf.Round(newWalkingSpeed * 2.0f * 100f) / 100f;
 
     [Header("Health and Hunger")]
-    [SerializeField] private float health; // Now rounded up to whole numbers
+    [SerializeField] private float health;
     [SerializeField] private int foodLevel;
     private float maxFoodLevel;
     private float hungerTimer = 0f;
@@ -55,41 +52,41 @@ public class CreatureBehavior : MonoBehaviour
     [Header("Age and Growth")]
     [SerializeField] private int age = 0;
     private float ageTimer = 0f;
-    private const float ageIncreaseInterval = 30f; // Seconds per age increment
+    private const float ageIncreaseInterval = 30f;
     private float ageSize => Mathf.Round(Mathf.Lerp(0.3f, 1f, Mathf.Min(age / adultAge, 1f)) * 100f) / 100f;
     private const float adultAge = 10f;
 
     [Header("Reproduction")]
     [SerializeField] private float lastReproductionTime = 0f;
     private float reproductionTimer = 0f;
-    private const float reproductionCheckInterval = 40f; // How often to check for reproduction
-    private const float reproductionCooldown = 120f; // Cooldown between reproductions
+    private const float reproductionCheckInterval = 40f;
+    private const float reproductionCooldown = 120f;
     private Transform reproductionTarget;
-    [SerializeField] private const float reproductionDistance = 8f; // Distance to initiate reproduction
+    [SerializeField] private const float reproductionDistance = 8f;
     [SerializeField] private float mutationRate = 0.1f;
 
     [Header("Detection and Interaction")]
-    [SerializeField] private List<Transform> visibleDiscoverables = new(); // Vision list in Inspector
+    [SerializeField] private List<Transform> visibleDiscoverables = new();
     private FoodSource targetFoodSource;
-    [SerializeField] private float baseDetectionRadius = 50f; // Default detection radius at size 1.0, now adjustable
-    [SerializeField] private float detectionRadius => baseDetectionRadius + (Mathf.Floor(size - 1f) * (baseDetectionRadius / 5f)); // Scales with size
+    [SerializeField] private float baseDetectionRadius = 50f;
+    [SerializeField] private float detectionRadius => baseDetectionRadius + (Mathf.Floor(size - 1f) * (baseDetectionRadius / 5f));
     [SerializeField] private LayerMask discoverableLayer;
     [SerializeField] private float eatingDistance = 1f;
 
     [Header("Movement and Wandering")]
     [SerializeField] private float wanderRadius = 20f;
-    private float wanderInterval = 5f; // Initial value, will be randomized in Wander()
+    private float wanderInterval = 5f;
     private float wanderTimer = 0f;
     private float panicWanderRadius => Mathf.Round(wanderRadius * 2.0f * 100f) / 100f;
     private float navigationTimer = 0f;
-    private const float navigationTimeout = 10f; // Timeout for path reset
+    private const float navigationTimeout = 10f;
 
     [Header("Eating Mechanics")]
     private float eatTimer = 0f;
 
     [Header("Herd Mentality Timing")]
     private float mentalityCheckTimer = 0f;
-    private const float mentalityCheckInterval = 60f; // How often to check herd mentality
+    private const float mentalityCheckInterval = 60f;
 
     [Header("Visual Feedback")]
     private readonly Color fullColor = Color.green;
@@ -105,50 +102,48 @@ public class CreatureBehavior : MonoBehaviour
     [SerializeField] private float _currentSizeDisplay => size * ageSize;
     [SerializeField] private float _timeSinceLastReproduction => Time.time - lastReproductionTime;
 
-    // ---- Static Counter for Unique IDs ----
-    private static int nextAvailableId = 0; // Increments for each new type
+    private static int nextAvailableId = 0;
 
-    // ---- NavMesh Area Masks ----
-    private const int WalkableArea = 1 << 0; // Area 0: Walkable
-    private const int NotWalkableArea = 1 << 1; // Area 1: Not Walkable
-    private const int JumpArea = 1 << 2; // Area 2: Jump
-    private const int ClimbArea = 1 << 3; // Area 3: Climb
+    private const int WalkableArea = 1 << 0;
+    private const int NotWalkableArea = 1 << 1;
+    private const int JumpArea = 1 << 2;
+    private const int ClimbArea = 1 << 3;
+
+    public enum FoodType { Apple, Berry, Meat }
+    [Header("Food Preferences")]
+    [SerializeField] private List<FoodType> foodPreferences = new List<FoodType> { FoodType.Apple };
 
     void Start()
     {
-        // Initialize components
         agent = GetComponent<NavMeshAgent>();
         if (!agent) { Debug.LogError($"{name}: No NavMeshAgent! Disabling."); enabled = false; return; }
         creatureRenderer = GetComponent<Renderer>();
         if (!creatureRenderer) Debug.LogWarning($"{name}: No Renderer! Color won’t update.");
+        creatureCombat = GetComponent<CreatureCombat>();
+        if (!creatureCombat) Debug.LogWarning($"{name}: No CreatureCombat component found!");
+        if (!meatPrefab) Debug.LogWarning($"{name}: No meatPrefab assigned!");
 
-        // Round attributes for consistency
         size = Mathf.Round(size * 100f) / 100f;
         walkingSpeed = Mathf.Round(walkingSpeed * 100f) / 100f;
 
-        // Configure NavMeshAgent area mask based on climbing ability
-        // Default areas: Walkable and Jump (excluding NotWalkable)
         int areaMask = WalkableArea | JumpArea;
         if (canClimb)
         {
-            areaMask |= ClimbArea; // Add Climb area if creature can climb
+            areaMask |= ClimbArea;
         }
         agent.areaMask = areaMask;
 
-        // Set initial stats
         lastReproductionTime = Time.time;
         UpdateSizeAndStats();
         foodLevel = (int)maxFoodLevel;
         agent.speed = newWalkingSpeed;
 
-        // Assign RANDOM wander interval
         wanderInterval = Random.Range(2.5f, 10f);
 
-        // Assign ID if not set (e.g., manually placed creatures)
         if (creatureTypeId == -1)
         {
             creatureTypeId = nextAvailableId++;
-            age = 10; // Start as adult
+            age = 10;
             UpdateSizeAndStats();
             int cloneAge = 8;
             for (int i = 0; i < 3; i++)
@@ -165,12 +160,10 @@ public class CreatureBehavior : MonoBehaviour
 
     void Update()
     {
-        // Cache Time.deltaTime for efficiency (reduces multiple property accesses)
         float deltaTime = Time.deltaTime;
 
         UpdateDiscoverablesDetection();
 
-        // Age progression
         ageTimer += deltaTime;
         if (ageTimer >= ageIncreaseInterval)
         {
@@ -180,7 +173,6 @@ public class CreatureBehavior : MonoBehaviour
             if (age == adultAge) Debug.Log($"{name}: Now adult at age {age}");
         }
 
-        // Hunger management
         float hungerInterval = isHealing ? hungerDecreaseInterval / 2f : hungerDecreaseInterval;
         hungerTimer += deltaTime;
         if (hungerTimer >= hungerInterval)
@@ -190,43 +182,40 @@ public class CreatureBehavior : MonoBehaviour
             UpdateColor();
         }
 
-        // Starvation damage
         if (foodLevel <= 0)
         {
             damageTimer += deltaTime;
             if (damageTimer >= 5f)
             {
-                health = Mathf.Ceil(health - 1); // Round up after decrement
+                health = Mathf.Ceil(health - 1);
                 damageTimer = 0f;
                 Debug.Log($"{name}: Starving, health: {health}");
-                if (health <= 0) { Debug.Log($"{name}: Died"); Destroy(gameObject); }
+                if (health <= 0) Die();
             }
         }
         else damageTimer = 0f;
 
-        // Healing
         if (foodLevel > 0 && health < Mathf.Ceil(size * 10f))
         {
             isHealing = true;
             healTimer += deltaTime;
             if (healTimer >= 10f)
             {
-                health = Mathf.Ceil(health + 1); // Round up after increment
+                health = Mathf.Ceil(health + 1);
                 healTimer = 0f;
                 if (health >= Mathf.Ceil(size * 10f)) isHealing = false;
             }
         }
         else if (health >= Mathf.Ceil(size * 10f)) { isHealing = false; healTimer = 0f; }
 
-        // Trigger food search at 50% hunger
-        if (foodLevel <= maxFoodLevel * 0.5f && currentState == State.Idle)
+        // Changed from 0.5f to 0.4f
+        if (foodLevel <= maxFoodLevel * 0.4f && currentState == State.Idle)
         {
             currentState = State.SearchingForFood;
             agent.speed = sprintSpeed;
             Debug.Log($"{name}: Hungry, searching");
         }
 
-        // Herd mentality check
         if (herdMentality != HerdMentalityType.Ignores)
         {
             mentalityCheckTimer += deltaTime;
@@ -237,7 +226,6 @@ public class CreatureBehavior : MonoBehaviour
             }
         }
 
-        // Reproduction check
         if (age >= adultAge)
         {
             reproductionTimer += deltaTime;
@@ -248,7 +236,6 @@ public class CreatureBehavior : MonoBehaviour
             }
         }
 
-        // Navigation timeout to prevent getting stuck
         if (agent.hasPath)
         {
             navigationTimer += deltaTime;
@@ -261,7 +248,8 @@ public class CreatureBehavior : MonoBehaviour
         }
         else navigationTimer = 0f;
 
-        // State machine
+        creatureCombat?.HandleCombatReactions();
+
         switch (currentState)
         {
             case State.Idle: Wander(); break;
@@ -269,35 +257,34 @@ public class CreatureBehavior : MonoBehaviour
             case State.Panic: HandlePanic(); break;
             case State.Eating: Eat(); break;
             case State.SeekingMate: SeekMate(); break;
+            case State.Attacking: creatureCombat.PerformAttack(); break;
+            case State.Fleeing: creatureCombat.PerformFlee(); break;
         }
     }
 
-    // Updates the list of visible objects within detection radius
     private void UpdateDiscoverablesDetection()
     {
         Collider[] hits = Physics.OverlapSphere(transform.position, detectionRadius, discoverableLayer);
         visibleDiscoverables.Clear();
         foreach (var hit in hits)
-            if (hit.transform != transform) // Exclude self
+            if (hit.transform != transform)
                 visibleDiscoverables.Add(hit.transform);
     }
 
-    // Updates stats based on size and age, ensuring health is a whole number
     private void UpdateSizeAndStats()
     {
         transform.localScale = Vector3.one * size * ageSize;
-        health = Mathf.Ceil(size * 10f); // Health rounded up to nearest whole number
+        health = Mathf.Ceil(size * 10f);
         maxFoodLevel = Mathf.Ceil(6f + (size * 4f));
         hungerDecreaseInterval = Mathf.Round(
             30f *
             (size < 1f 
-                ? (1f + (2f / 3f) * (1f - size))    // For sizes below 1: 0.75 → ~70, 0.5 → ~80
-                : (1f / (1f + 0.2f * (size - 1f)))   // For sizes 1 or above: 2 → ~50, 3 → ~42.5, 4 → ~37.5
+                ? (1f + (2f / 3f) * (1f - size))
+                : (1f / (1f + 0.2f * (size - 1f)))
             ) * 100f
         ) / 100f;
     }
 
-    // Checks if a path exists to the target position using the agent's area mask
     private bool IsNavigable(Vector3 targetPosition)
     {
         NavMeshPath path = new NavMeshPath();
@@ -317,26 +304,106 @@ public class CreatureBehavior : MonoBehaviour
                 agent.SetDestination(hit.position);
             }
             wanderTimer = 0f;
-            wanderInterval = Random.Range(2.5f, 10f); // Randomize interval between 2.5 and 10 seconds
+            wanderInterval = Random.Range(2.5f, 10f);
         }
     }
 
     private void SearchForFood()
     {
         if (agent.speed != sprintSpeed) agent.speed = sprintSpeed;
-        if (visibleDiscoverables.Count == 0) { PanicWander(); return; }
 
+        // Step 1: Check for meat first with extended radius
+        if (foodPreferences.Contains(FoodType.Meat))
+        {
+            Transform closestMeat = FindClosestFood("Meat", detectionRadius * 1.5f);
+            if (closestMeat != null)
+            {
+                targetFoodSource = closestMeat.GetComponent<FoodSource>();
+                if (targetFoodSource?.HasFood ?? false)
+                {
+                    agent.SetDestination(closestMeat.position);
+                    if (Vector3.Distance(transform.position, closestMeat.position) <= eatingDistance)
+                    {
+                        currentState = State.Eating;
+                        agent.isStopped = true;
+                        eatTimer = 0f;
+                    }
+                    return; // Exit early to prioritize meat
+                }
+            }
+        }
+
+        // Step 2: Check other preferred food types
+        foreach (var preferredType in foodPreferences)
+        {
+            if (preferredType == FoodType.Meat) continue; // Already checked
+            string tag = GetTagFromFoodType(preferredType);
+            Transform closest = FindClosestFood(tag, detectionRadius);
+            if (closest != null)
+            {
+                targetFoodSource = closest.GetComponent<FoodSource>();
+                if (targetFoodSource?.HasFood ?? false)
+                {
+                    agent.SetDestination(closest.position);
+                    if (Vector3.Distance(transform.position, closest.position) <= eatingDistance)
+                    {
+                        currentState = State.Eating;
+                        agent.isStopped = true;
+                        eatTimer = 0f;
+                    }
+                    return;
+                }
+            }
+        }
+
+        // Step 3: Hunt only if no food is found, creature is a hunter, and hunger is critical (0.3f)
+        if (creatureCombat?.behaviorStyle == CreatureCombat.BehaviorStyle.Hunter && foodLevel <= maxFoodLevel * 0.3f)
+        {
+            Transform huntTarget = FindHuntTarget();
+            if (huntTarget != null)
+            {
+                creatureCombat.SetAttackTarget(huntTarget);
+                return;
+            }
+        }
+
+        // Step 4: If no food or prey, wander
+        PanicWander();
+    }
+
+    private Transform FindClosestFood(string tag, float radius)
+    {
+        Collider[] hits = Physics.OverlapSphere(transform.position, radius, discoverableLayer);
+        Transform closest = null;
+        float minDist = float.MaxValue;
+        foreach (var hit in hits)
+        {
+            if (hit.CompareTag(tag))
+            {
+                float dist = Vector3.Distance(transform.position, hit.transform.position);
+                if (dist < minDist)
+                {
+                    minDist = dist;
+                    closest = hit.transform;
+                }
+            }
+        }
+        return closest;
+    }
+
+    private Transform FindHuntTarget()
+    {
         Transform closest = null;
         float minDist = float.MaxValue;
         foreach (var obj in visibleDiscoverables)
         {
-            if (obj.CompareTag("Apple"))
+            if (obj.CompareTag("Creature"))
             {
-                float dist = Vector3.Distance(transform.position, obj.position);
-                if (dist < minDist)
+                CreatureBehavior other = obj.GetComponent<CreatureBehavior>();
+                if (other != null && other.creatureTypeId != creatureTypeId)
                 {
-                    // Only consider this food source if it’s navigable
-                    if (IsNavigable(obj.position))
+                    float dist = Vector3.Distance(transform.position, obj.position);
+                    if (dist < minDist && IsNavigable(obj.position))
                     {
                         minDist = dist;
                         closest = obj;
@@ -344,30 +411,7 @@ public class CreatureBehavior : MonoBehaviour
                 }
             }
         }
-
-        if (closest != null)
-        {
-            targetFoodSource = closest.GetComponent<FoodSource>();
-            if (targetFoodSource?.HasFood ?? false)
-            {
-                agent.SetDestination(closest.position);
-                if (minDist <= eatingDistance)
-                {
-                    currentState = State.Eating;
-                    agent.isStopped = true;
-                    eatTimer = 0f;
-                }
-            }
-            else
-            {
-                targetFoodSource = null;
-                PanicWander();
-            }
-        }
-        else
-        {
-            PanicWander(); // No navigable food found
-        }
+        return closest;
     }
 
     private void HandlePanic()
@@ -387,7 +431,6 @@ public class CreatureBehavior : MonoBehaviour
         if (agent.speed != sprintSpeed) agent.speed = sprintSpeed;
         if (reproductionTarget)
         {
-            // Only pursue mate if the position is navigable
             if (IsNavigable(reproductionTarget.position))
             {
                 agent.SetDestination(reproductionTarget.position);
@@ -476,7 +519,6 @@ public class CreatureBehavior : MonoBehaviour
             reproductionTarget = FindNearestCreatureOfSameTypeInReproductionRange();
             if (reproductionTarget)
             {
-                // Only set state to SeekingMate if mate is navigable
                 if (IsNavigable(reproductionTarget.position))
                 {
                     currentState = State.SeekingMate;
@@ -546,7 +588,7 @@ public class CreatureBehavior : MonoBehaviour
         float avgSpeed = Mathf.Round((walkingSpeed + partner.walkingSpeed) / 2f * 100f) / 100f;
         childBehavior.size = Mathf.Round((avgSize + Random.Range(-mutationRate, mutationRate) * avgSize) * 100f) / 100f;
         childBehavior.walkingSpeed = Mathf.Round((avgSpeed + Random.Range(-mutationRate, mutationRate) * avgSpeed) * 100f) / 100f;
-        childBehavior.canClimb = canClimb || partner.canClimb; // Child inherits climbing if either parent can climb
+        childBehavior.canClimb = canClimb || partner.canClimb;
 
         childBehavior.age = 0;
         childBehavior.foodLevel = (int)childBehavior.maxFoodLevel;
@@ -563,7 +605,7 @@ public class CreatureBehavior : MonoBehaviour
         childBehavior.size = Mathf.Round((size + sizeVar) * 100f) / 100f;
         float speedVar = Random.Range(-mutationRate, mutationRate) * walkingSpeed;
         childBehavior.walkingSpeed = Mathf.Round((walkingSpeed + speedVar) * 100f) / 100f;
-        childBehavior.canClimb = canClimb; // Child inherits climbing from single parent
+        childBehavior.canClimb = canClimb;
 
         childBehavior.age = startingAge;
         childBehavior.foodLevel = (int)childBehavior.maxFoodLevel;
@@ -602,6 +644,49 @@ public class CreatureBehavior : MonoBehaviour
         }
     }
 
+    public void TakeDamage(float amount, Transform attacker)
+    {
+        health -= amount;
+        if (health <= 0)
+        {
+            Die();
+        }
+        else
+        {
+            creatureCombat?.OnAttacked(attacker);
+            Debug.Log($"{name}: Took {amount} damage from {attacker.name}, health: {health}");
+        }
+    }
+
+    private void Die()
+    {
+        if (meatPrefab != null)
+        {
+            int meatCount = Mathf.CeilToInt(maxFoodLevel / 6f);
+            Debug.Log($"{name}: Died, spawning {meatCount} meat prefabs (maxFoodLevel = {maxFoodLevel})");
+
+            for (int i = 0; i < meatCount; i++)
+            {
+                Vector3 offset = new Vector3(Random.Range(-3f, 3f), 0f, Random.Range(-3f, 3f));
+                Vector3 spawnPosition = transform.position + offset;
+                if (NavMesh.SamplePosition(spawnPosition, out NavMeshHit hit, 3f, NavMesh.AllAreas))
+                {
+                    Instantiate(meatPrefab, hit.position, transform.rotation);
+                }
+                else
+                {
+                    Instantiate(meatPrefab, transform.position, transform.rotation);
+                }
+            }
+        }
+        else
+        {
+            Debug.LogWarning($"{name}: No meatPrefab assigned, no meat spawned!");
+        }
+
+        Destroy(gameObject);
+    }
+
     void OnDrawGizmos()
     {
         Gizmos.color = Color.green;
@@ -610,6 +695,17 @@ public class CreatureBehavior : MonoBehaviour
         {
             Gizmos.color = Color.yellow;
             Gizmos.DrawWireSphere(transform.position, detectionRadius / 1.7f);
+        }
+    }
+
+    private string GetTagFromFoodType(FoodType type)
+    {
+        switch (type)
+        {
+            case FoodType.Apple: return "Apple";
+            case FoodType.Berry: return "Berry";
+            case FoodType.Meat: return "Meat";
+            default: return "";
         }
     }
 }

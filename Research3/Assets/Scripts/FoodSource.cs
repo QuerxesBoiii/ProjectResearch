@@ -2,23 +2,22 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
-// DO NOT REMOVE OR EDIT THIS COMMENT: Code is using Unity 6 (6000.0.37f1)
-// DO NOT REMOVE OR EDIT THIS COMMENT: Make sure the code is easy to understand, and isn't inefficient. Make the code slightly more efficient.
 public class FoodSource : MonoBehaviour
 {
-    [SerializeField] private int maxFood = 10;
-    [SerializeField] public int currentFood = 10;
-    [SerializeField] private float replenishInterval = 15f; // Adjusted to 15s per your request
+    [SerializeField] public int maxFood = 10; // Set in Inspector, not modified by script
+    [SerializeField] private int currentFood = 10; // Set in Inspector, only changed via property
+    [SerializeField] private float replenishInterval = 15f;
+    [SerializeField] public bool isNotReplenishable = false;
     private float replenishTimer = 0f;
     [SerializeField] private bool hasFood = true;
-    [SerializeField] private float foodSatiety = 1f; // How much hunger each apple restores
+    [SerializeField] private float foodSatiety = 1f;
 
     [SerializeField] private List<GameObject> foodObjects = new List<GameObject>();
-    private List<Coroutine> activeCoroutines; // Tracks ongoing animations for each food object
+    private List<Coroutine> activeCoroutines;
 
-    [SerializeField] private float shrinkDuration = 1f; // Duration to shrink from 1 to 0
-    [SerializeField] private float growDuration = 15f; // Duration to grow from 0 to 0.75 (matches replenishInterval)
-    [SerializeField] private float bubbleDuration = 0.5f; // Duration for the 0.75 -> 1.5 -> 1.0 bubble effect
+    [SerializeField] private float shrinkDuration = 1f;
+    [SerializeField] private float growDuration = 15f;
+    [SerializeField] private float bubbleDuration = 0.5f;
 
     void Start()
     {
@@ -27,36 +26,31 @@ public class FoodSource : MonoBehaviour
             PopulateFromChildren();
         }
 
-        if (foodObjects.Count != maxFood)
-        {
-            Debug.LogWarning($"FoodSource '{name}' has {foodObjects.Count} food objects but maxFood is {maxFood}. Adjusting maxFood.");
-            maxFood = foodObjects.Count;
-        }
-
-        currentFood = Mathf.Clamp(currentFood, 0, maxFood);
-        activeCoroutines = new List<Coroutine>(new Coroutine[maxFood]); // Initialize with null coroutines
+        // No automatic adjustment of maxFood or currentFood
+        activeCoroutines = new List<Coroutine>(new Coroutine[maxFood]);
         UpdateFoodState();
 
-        // Set initial state: all food objects start at scale 1
+        // Initialize food object visuals based on currentFood
         for (int i = 0; i < foodObjects.Count; i++)
         {
             if (i < currentFood)
                 foodObjects[i].transform.localScale = Vector3.one;
             else
                 foodObjects[i].transform.localScale = Vector3.zero;
-            foodObjects[i].SetActive(true); // Start with all enabled
+            foodObjects[i].SetActive(true);
         }
     }
 
     void Update()
     {
-        replenishTimer += Time.deltaTime;
-        if (replenishTimer >= replenishInterval && currentFood < maxFood)
+        if (!isNotReplenishable)
         {
-            currentFood++;
-            UpdateFoodState();
-            StartGrowAnimation(currentFood - 1); // Start growing the newly added food
-            replenishTimer = 0f;
+            replenishTimer += Time.deltaTime;
+            if (replenishTimer >= replenishInterval && currentFood < maxFood)
+            {
+                CurrentFood++;
+                replenishTimer = 0f;
+            }
         }
     }
 
@@ -72,17 +66,9 @@ public class FoodSource : MonoBehaviour
 
     private void UpdateFoodState()
     {
-        if (currentFood == 0)
-        {
-            hasFood = false;
-        }
-        else if (currentFood >= maxFood * 0.3f)
-        {
-            hasFood = true;
-        }
+        hasFood = currentFood > 0 && currentFood >= maxFood * 0.3f;
     }
 
-    // Starts the shrink animation for the food object at the given index
     private void StartShrinkAnimation(int index)
     {
         if (index >= 0 && index < foodObjects.Count && foodObjects[index] != null)
@@ -93,19 +79,17 @@ public class FoodSource : MonoBehaviour
         }
     }
 
-    // Starts the grow animation for the food object at the given index
     private void StartGrowAnimation(int index)
     {
         if (index >= 0 && index < foodObjects.Count && foodObjects[index] != null)
         {
             if (activeCoroutines[index] != null)
                 StopCoroutine(activeCoroutines[index]);
-            foodObjects[index].SetActive(true); // Enable before growing
+            foodObjects[index].SetActive(true);
             activeCoroutines[index] = StartCoroutine(GrowFood(foodObjects[index]));
         }
     }
 
-    // Coroutine to shrink food from scale 1 to 0
     private IEnumerator ShrinkFood(GameObject food)
     {
         float elapsed = 0f;
@@ -118,13 +102,11 @@ public class FoodSource : MonoBehaviour
             yield return null;
         }
         food.transform.localScale = Vector3.zero;
-        food.SetActive(false); // Disable after reaching 0
+        food.SetActive(false);
     }
 
-    // Coroutine to grow food from 0 to 0.75, then bubble to 1.5 and back to 1
     private IEnumerator GrowFood(GameObject food)
     {
-        // Phase 1: Grow from 0 to 0.75 over growDuration (15s)
         float elapsed = 0f;
         Vector3 startScale = Vector3.zero;
         Vector3 midScale = Vector3.one * 0.75f;
@@ -137,7 +119,6 @@ public class FoodSource : MonoBehaviour
         }
         food.transform.localScale = midScale;
 
-        // Phase 2: Bubble effect from 0.75 to 1.5 and back to 1 over bubbleDuration
         elapsed = 0f;
         Vector3 peakScale = Vector3.one * 1.5f;
         Vector3 endScale = Vector3.one;
@@ -145,9 +126,9 @@ public class FoodSource : MonoBehaviour
         {
             elapsed += Time.deltaTime;
             float t = elapsed / bubbleDuration;
-            if (t < 0.5f) // First half: 0.75 to 1.5
+            if (t < 0.5f)
                 food.transform.localScale = Vector3.Lerp(midScale, peakScale, t * 2f);
-            else // Second half: 1.5 to 1
+            else
                 food.transform.localScale = Vector3.Lerp(peakScale, endScale, (t - 0.5f) * 2f);
             yield return null;
         }
@@ -156,36 +137,37 @@ public class FoodSource : MonoBehaviour
 
     public int CurrentFood
     {
-        get { return currentFood; }
+        get => currentFood;
         set
         {
             int oldValue = currentFood;
             currentFood = Mathf.Clamp(value, 0, maxFood);
             UpdateFoodState();
 
-            // If food was eaten, start shrink animation for the lost food
             if (currentFood < oldValue)
             {
                 int foodLost = oldValue - currentFood;
                 for (int i = 0; i < foodLost; i++)
                 {
-                    int index = currentFood + i; // Index of the food that was just eaten
-                    StartShrinkAnimation(index);
+                    StartShrinkAnimation(currentFood + i);
                 }
             }
-            // If food was added (e.g., externally), start grow animation
             else if (currentFood > oldValue)
             {
                 int foodGained = currentFood - oldValue;
                 for (int i = 0; i < foodGained; i++)
                 {
-                    int index = oldValue + i; // Index of the newly added food
-                    StartGrowAnimation(index);
+                    StartGrowAnimation(oldValue + i);
                 }
+            }
+
+            if (isNotReplenishable && currentFood <= 0)
+            {
+                Destroy(gameObject);
             }
         }
     }
 
     public bool HasFood => hasFood;
-    public float FoodSatiety => foodSatiety; // Public getter for satiety
+    public float FoodSatiety => foodSatiety;
 }
