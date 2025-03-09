@@ -1,104 +1,97 @@
 using UnityEngine;
-using UnityEngine.AI;
 
-[RequireComponent(typeof(CreatureBehavior))]
+// Code is using Unity 6 (6000.0.37f1)
+// This script manages combat behavior for creatures, including attacking and fleeing.
+// Code should work with multiplayer netcode for gameobjects
+
 public class CreatureCombat : MonoBehaviour
 {
-    public enum BehaviorStyle { Friendly, Neutral, Hunter }
+    // ---- Combat Behavior ----
+    public enum CombatBehavior { Friendly, Neutral, Hunter }
+    [Header("Combat Behavior")]
+    [SerializeField] private CombatBehavior combatBehavior = CombatBehavior.Neutral;
 
-    [Header("Combat Settings")]
-    [SerializeField] public BehaviorStyle behaviorStyle = BehaviorStyle.Neutral;
-    [SerializeField] private float attackRange = 2f;
-    [SerializeField] private float attackDamage = 1f;
-    [SerializeField] private float attackCooldown = 1f;
+    // Public property for accessibility by CreatureBehavior, renamed to avoid conflict with enum
+    public CombatBehavior CurrentCombatBehavior => combatBehavior;
 
-    private CreatureBehavior creatureBehavior;
-    private Transform currentTarget;
-    private Transform currentAttacker;
-    private float nextAttackTime = 0f;
+    // ---- Combat Stats ----
+    [Header("Combat Stats")]
+    [SerializeField] private float attackRange = 2f;       // Distance within which creature can attack
+    [SerializeField] private float attackDamage = 5f;     // Damage dealt per attack
+    [SerializeField] private float attackInterval = 1f;   // Time between attacks
+    private float lastAttackTime = 0f;
+
+    private CreatureBehavior behavior;
 
     void Start()
     {
-        creatureBehavior = GetComponent<CreatureBehavior>();
-        if (!creatureBehavior) Debug.LogError($"{name}: CreatureCombat requires CreatureBehavior!");
+        behavior = GetComponent<CreatureBehavior>();
+        if (!behavior) Debug.LogError($"{name}: No CreatureBehavior component!");
     }
 
-    public void OnAttacked(Transform attacker)
+    // Updates attacking behavior: moves to target and attacks if in range
+    public void AttackUpdate()
     {
-        currentAttacker = attacker;
-    }
-
-    public void HandleCombatReactions()
-    {
-        if (currentAttacker == null || !currentAttacker.gameObject.activeSelf) return;
-
-        if (creatureBehavior.currentState != CreatureBehavior.State.Attacking && 
-            creatureBehavior.currentState != CreatureBehavior.State.Fleeing)
+        if (behavior.AttackTarget == null || behavior.AttackTarget.GetComponent<CreatureBehavior>()?.CurrentState == CreatureBehavior.State.Dead)
         {
-            if (behaviorStyle == BehaviorStyle.Friendly)
-            {
-                creatureBehavior.currentState = CreatureBehavior.State.Fleeing;
-                Debug.Log($"{name}: Fleeing from {currentAttacker.name}");
-            }
-            else // Neutral or Hunter
-            {
-                creatureBehavior.currentState = CreatureBehavior.State.Attacking;
-                currentTarget = currentAttacker;
-                Debug.Log($"{name}: Attacking back {currentTarget.name}");
-            }
-        }
-    }
-
-    public void PerformAttack()
-    {
-        if (currentTarget == null || !currentTarget.gameObject.activeSelf)
-        {
-            creatureBehavior.currentState = CreatureBehavior.State.Idle;
-            currentTarget = null;
-            Debug.Log($"{name}: Target gone, stopping attack");
+            behavior.CurrentState = CreatureBehavior.State.Idle;
+            behavior.AttackTarget = null;
             return;
         }
 
-        float distance = Vector3.Distance(transform.position, currentTarget.position);
+        float distance = Vector3.Distance(behavior.transform.position, behavior.AttackTarget.position);
         if (distance > attackRange)
         {
-            creatureBehavior.Agent.SetDestination(currentTarget.position);
+            behavior.Agent.SetDestination(behavior.AttackTarget.position);
         }
-        else if (Time.time >= nextAttackTime)
+        else if (Time.time - lastAttackTime >= attackInterval)
         {
-            if (currentTarget.TryGetComponent<CreatureBehavior>(out var target))
+            CreatureBehavior target = behavior.AttackTarget.GetComponent<CreatureBehavior>();
+            if (target != null)
             {
-                target.TakeDamage(attackDamage, transform);
-                nextAttackTime = Time.time + attackCooldown;
-                Debug.Log($"{name}: Dealt {attackDamage} damage to {currentTarget.name}");
+                target.TakeDamage(attackDamage, behavior);
+                lastAttackTime = Time.time;
+                Debug.Log($"{name}: Attacked {target.name} for {attackDamage} damage");
             }
         }
     }
 
-    public void PerformFlee()
+    // Updates fleeing behavior: moves away from threat
+    public void FleeUpdate()
     {
-        if (currentAttacker == null || !currentAttacker.gameObject.activeSelf)
+        if (behavior.FleeFrom == null)
         {
-            creatureBehavior.currentState = CreatureBehavior.State.Idle;
-            currentAttacker = null;
-            Debug.Log($"{name}: Attacker gone, stopping flee");
+            behavior.CurrentState = CreatureBehavior.State.Idle;
+            behavior.FleeFrom = null;
             return;
         }
 
-        Vector3 fleeDirection = (transform.position - currentAttacker.position).normalized;
-        Vector3 fleePosition = transform.position + fleeDirection * 10f;
-        if (NavMesh.SamplePosition(fleePosition, out NavMeshHit hit, 10f, creatureBehavior.Agent.areaMask))
+        Vector3 direction = (behavior.transform.position - behavior.FleeFrom.position).normalized;
+        Vector3 fleePosition = behavior.transform.position + direction * 10f;
+        if (UnityEngine.AI.NavMesh.SamplePosition(fleePosition, out UnityEngine.AI.NavMeshHit hit, 10f, behavior.Agent.areaMask))
         {
-            creatureBehavior.Agent.SetDestination(hit.position);
+            behavior.Agent.SetDestination(hit.position);
         }
     }
 
-    public void SetAttackTarget(Transform target)
+    // Called when creature is attacked, determines response based on behavior
+    public void OnAttacked(CreatureBehavior attacker)
     {
-        if (target == null || !target.gameObject.activeSelf) return;
+        if (behavior.CurrentState == CreatureBehavior.State.Dead) return;
 
-        currentTarget = target;
-        creatureBehavior.currentState = CreatureBehavior.State.Attacking;
-        Debug.Log($"{name}: Hunting {target.name}");
+        switch (combatBehavior)
+        {
+            case CombatBehavior.Friendly:
+                behavior.FleeFrom = attacker.transform;
+                behavior.CurrentState = CreatureBehavior.State.Fleeing;
+                Debug.Log($"{name}: Fleeing from {attacker.name}");
+                break;
+            case CombatBehavior.Neutral:
+            case CombatBehavior.Hunter:
+                behavior.AttackTarget = attacker.transform;
+                behavior.CurrentState = CreatureBehavior.State.Attacking;
+                Debug.Log($"{name}: Retaliating against {attacker.name}");
+                break;
+        }
     }
 }

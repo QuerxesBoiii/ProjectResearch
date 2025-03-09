@@ -2,22 +2,41 @@ using UnityEngine;
 using UnityEngine.AI;
 using System.Collections.Generic;
 
+// Code is using Unity 6 (6000.0.37f1)
+// This script controls the behavior of a creature in a simulation, including movement, eating, reproduction, and herd mentality.
+// Code should work with multiplayer netcode for gameobjects
+
 public class CreatureBehavior : MonoBehaviour
 {
     // ---- Core Components ----
     private NavMeshAgent agent;
     private Renderer creatureRenderer;
-    private CreatureCombat creatureCombat;
+    private CreatureCombat combat;
 
-    // Public accessor for agent to allow CreatureCombat to use it
+    // ---- Creature States ----
+    public enum State { Idle, SearchingForFood, Panic, Eating, SeekingMate, Attacking, Fleeing, Dead }
+    [Header("Creature States")]
+    [SerializeField] private State currentState = State.Idle;
+
+    // Public properties for accessibility by CreatureCombat
+    public State CurrentState
+    {
+        get => currentState;
+        set => currentState = value;
+    }
+    public Transform AttackTarget
+    {
+        get => attackTarget;
+        set => attackTarget = value;
+    }
+    public Transform FleeFrom
+    {
+        get => fleeFrom;
+        set => fleeFrom = value;
+    }
     public NavMeshAgent Agent => agent;
 
-    // ---- Inspector Groups ----
-
-    public enum State { Idle, SearchingForFood, Panic, Eating, SeekingMate, Attacking, Fleeing }
-    [Header("Creature States")]
-    [SerializeField] public State currentState = State.Idle;
-
+    // ---- Herd Mentality ----
     public enum HerdMentalityType { Herd, Ignores, Isolation }
     [Header("Herd Mentality")]
     [SerializeField] private HerdMentalityType herdMentality = HerdMentalityType.Ignores;
@@ -29,14 +48,7 @@ public class CreatureBehavior : MonoBehaviour
     [SerializeField] private float size = 1f;
     [SerializeField] private float walkingSpeed = 4f;
     [SerializeField] private bool canClimb = false;
-    [SerializeField] private GameObject meatPrefab; // Prefab with fixed food values
-    private float newWalkingSpeed => 
-        Mathf.Round(walkingSpeed * 
-        (size < 1f 
-            ? (2f - size) 
-            : Mathf.Pow(size, -0.252f)
-        ) * 100f) / 100f;
-
+    private float newWalkingSpeed => Mathf.Round(walkingSpeed * (size < 1f ? (2f - size) : Mathf.Pow(size, -0.252f)) * 100f) / 100f;
     private float sprintSpeed => Mathf.Round(newWalkingSpeed * 2.0f * 100f) / 100f;
 
     [Header("Health and Hunger")]
@@ -73,6 +85,10 @@ public class CreatureBehavior : MonoBehaviour
     [SerializeField] private LayerMask discoverableLayer;
     [SerializeField] private float eatingDistance = 1f;
 
+    [Header("Combat Targets")]
+    [SerializeField] private Transform attackTarget;
+    [SerializeField] private Transform fleeFrom;
+
     [Header("Movement and Wandering")]
     [SerializeField] private float wanderRadius = 20f;
     private float wanderInterval = 5f;
@@ -102,44 +118,57 @@ public class CreatureBehavior : MonoBehaviour
     [SerializeField] private float _currentSizeDisplay => size * ageSize;
     [SerializeField] private float _timeSinceLastReproduction => Time.time - lastReproductionTime;
 
+    // ---- Static Counter for Unique IDs ----
     private static int nextAvailableId = 0;
 
+    // ---- NavMesh Area Masks ----
     private const int WalkableArea = 1 << 0;
     private const int NotWalkableArea = 1 << 1;
     private const int JumpArea = 1 << 2;
     private const int ClimbArea = 1 << 3;
 
+    // ---- Food Preferences with Weights ----
     public enum FoodType { Apple, Berry, Meat }
+    [System.Serializable]
+    public struct FoodPreference
+    {
+        public FoodType Type;
+        public float Weight; // Preference weight (higher = more preferred)
+    }
     [Header("Food Preferences")]
-    [SerializeField] private List<FoodType> foodPreferences = new List<FoodType> { FoodType.Apple };
+    [SerializeField] private List<FoodPreference> foodPreferences = new List<FoodPreference> { new FoodPreference { Type = FoodType.Apple, Weight = 1f } };
+    private Dictionary<string, FoodType> tagToFoodTypeCache = new Dictionary<string, FoodType>();
+
+    // ---- Cached Discoverables for Performance ----
+    private Dictionary<string, List<Transform>> cachedDiscoverablesByTag = new Dictionary<string, List<Transform>>();
 
     void Start()
     {
+        // Component initialization
         agent = GetComponent<NavMeshAgent>();
         if (!agent) { Debug.LogError($"{name}: No NavMeshAgent! Disabling."); enabled = false; return; }
         creatureRenderer = GetComponent<Renderer>();
         if (!creatureRenderer) Debug.LogWarning($"{name}: No Renderer! Color won’t update.");
-        creatureCombat = GetComponent<CreatureCombat>();
-        if (!creatureCombat) Debug.LogWarning($"{name}: No CreatureCombat component found!");
-        if (!meatPrefab) Debug.LogWarning($"{name}: No meatPrefab assigned!");
+        combat = GetComponent<CreatureCombat>();
+        if (!combat) Debug.LogError($"{name}: No CreatureCombat component!");
 
-        size = Mathf.Round(size * 100f) / 100f;
-        walkingSpeed = Mathf.Round(walkingSpeed * 100f) / 100f;
-
+        // NavMesh configuration
         int areaMask = WalkableArea | JumpArea;
-        if (canClimb)
-        {
-            areaMask |= ClimbArea;
-        }
+        if (canClimb) areaMask |= ClimbArea;
         agent.areaMask = areaMask;
 
+        // Initial setup
+        size = Mathf.Round(size * 100f) / 100f;
+        walkingSpeed = Mathf.Round(walkingSpeed * 100f) / 100f;
         lastReproductionTime = Time.time;
+        RandomizeFoodPreferences(); // Randomize food preferences at start
+        InitializeFoodTagCache();
         UpdateSizeAndStats();
         foodLevel = (int)maxFoodLevel;
         agent.speed = newWalkingSpeed;
-
         wanderInterval = Random.Range(2.5f, 10f);
 
+        // Initial spawn logic
         if (creatureTypeId == -1)
         {
             creatureTypeId = nextAvailableId++;
@@ -160,10 +189,12 @@ public class CreatureBehavior : MonoBehaviour
 
     void Update()
     {
-        float deltaTime = Time.deltaTime;
+        if (currentState == State.Dead) return;
 
+        float deltaTime = Time.deltaTime;
         UpdateDiscoverablesDetection();
 
+        // Age progression
         ageTimer += deltaTime;
         if (ageTimer >= ageIncreaseInterval)
         {
@@ -173,6 +204,7 @@ public class CreatureBehavior : MonoBehaviour
             if (age == adultAge) Debug.Log($"{name}: Now adult at age {age}");
         }
 
+        // Hunger management
         float hungerInterval = isHealing ? hungerDecreaseInterval / 2f : hungerDecreaseInterval;
         hungerTimer += deltaTime;
         if (hungerTimer >= hungerInterval)
@@ -182,6 +214,7 @@ public class CreatureBehavior : MonoBehaviour
             UpdateColor();
         }
 
+        // Starvation damage
         if (foodLevel <= 0)
         {
             damageTimer += deltaTime;
@@ -195,6 +228,7 @@ public class CreatureBehavior : MonoBehaviour
         }
         else damageTimer = 0f;
 
+        // Healing
         if (foodLevel > 0 && health < Mathf.Ceil(size * 10f))
         {
             isHealing = true;
@@ -208,7 +242,7 @@ public class CreatureBehavior : MonoBehaviour
         }
         else if (health >= Mathf.Ceil(size * 10f)) { isHealing = false; healTimer = 0f; }
 
-        // Changed from 0.5f to 0.4f
+        // Trigger food search
         if (foodLevel <= maxFoodLevel * 0.4f && currentState == State.Idle)
         {
             currentState = State.SearchingForFood;
@@ -216,6 +250,7 @@ public class CreatureBehavior : MonoBehaviour
             Debug.Log($"{name}: Hungry, searching");
         }
 
+        // Herd mentality check
         if (herdMentality != HerdMentalityType.Ignores)
         {
             mentalityCheckTimer += deltaTime;
@@ -226,6 +261,7 @@ public class CreatureBehavior : MonoBehaviour
             }
         }
 
+        // Reproduction check
         if (age >= adultAge)
         {
             reproductionTimer += deltaTime;
@@ -236,6 +272,7 @@ public class CreatureBehavior : MonoBehaviour
             }
         }
 
+        // Navigation timeout
         if (agent.hasPath)
         {
             navigationTimer += deltaTime;
@@ -248,8 +285,7 @@ public class CreatureBehavior : MonoBehaviour
         }
         else navigationTimer = 0f;
 
-        creatureCombat?.HandleCombatReactions();
-
+        // State machine
         switch (currentState)
         {
             case State.Idle: Wander(); break;
@@ -257,18 +293,55 @@ public class CreatureBehavior : MonoBehaviour
             case State.Panic: HandlePanic(); break;
             case State.Eating: Eat(); break;
             case State.SeekingMate: SeekMate(); break;
-            case State.Attacking: creatureCombat.PerformAttack(); break;
-            case State.Fleeing: creatureCombat.PerformFlee(); break;
+            case State.Attacking: combat.AttackUpdate(); break;
+            case State.Fleeing: combat.FleeUpdate(); break;
+            case State.Dead: break;
         }
     }
 
+    // ---- Helper Methods ----
+
+    // Randomizes food preferences based on creature type for variety
+    private void RandomizeFoodPreferences()
+    {
+        if (Random.value < 0.3f) // 30% chance to randomize
+        {
+            foodPreferences.Clear();
+            int prefCount = Random.Range(1, 3); // 1-2 preferences
+            FoodType[] types = { FoodType.Apple, FoodType.Berry, FoodType.Meat };
+            for (int i = 0; i < prefCount; i++)
+            {
+                FoodType type = types[Random.Range(0, types.Length)];
+                if (!foodPreferences.Exists(p => p.Type == type))
+                    foodPreferences.Add(new FoodPreference { Type = type, Weight = Random.Range(0.5f, 1.5f) });
+            }
+            Debug.Log($"{name}: Randomized food preferences: {string.Join(", ", foodPreferences.ConvertAll(p => $"{p.Type} ({p.Weight})"))}");
+        }
+    }
+
+    // Initializes the tag-to-food-type cache for efficiency
+    private void InitializeFoodTagCache()
+    {
+        tagToFoodTypeCache["Apple"] = FoodType.Apple;
+        tagToFoodTypeCache["Berry"] = FoodType.Berry;
+        tagToFoodTypeCache["Meat"] = FoodType.Meat;
+    }
+
+    // Updates and caches visible discoverables
     private void UpdateDiscoverablesDetection()
     {
         Collider[] hits = Physics.OverlapSphere(transform.position, detectionRadius, discoverableLayer);
         visibleDiscoverables.Clear();
+        cachedDiscoverablesByTag.Clear();
         foreach (var hit in hits)
-            if (hit.transform != transform)
-                visibleDiscoverables.Add(hit.transform);
+        {
+            if (hit.transform == transform) continue;
+            visibleDiscoverables.Add(hit.transform);
+            string tag = hit.tag;
+            if (!cachedDiscoverablesByTag.ContainsKey(tag))
+                cachedDiscoverablesByTag[tag] = new List<Transform>();
+            cachedDiscoverablesByTag[tag].Add(hit.transform);
+        }
     }
 
     private void UpdateSizeAndStats()
@@ -277,11 +350,7 @@ public class CreatureBehavior : MonoBehaviour
         health = Mathf.Ceil(size * 10f);
         maxFoodLevel = Mathf.Ceil(6f + (size * 4f));
         hungerDecreaseInterval = Mathf.Round(
-            30f *
-            (size < 1f 
-                ? (1f + (2f / 3f) * (1f - size))
-                : (1f / (1f + 0.2f * (size - 1f)))
-            ) * 100f
+            30f * (size < 1f ? (1f + (2f / 3f) * (1f - size)) : (1f / (1f + 0.2f * (size - 1f)))) * 100f
         ) / 100f;
     }
 
@@ -311,41 +380,38 @@ public class CreatureBehavior : MonoBehaviour
     private void SearchForFood()
     {
         if (agent.speed != sprintSpeed) agent.speed = sprintSpeed;
-
-        // Step 1: Check for meat first with extended radius
-        if (foodPreferences.Contains(FoodType.Meat))
+        if (visibleDiscoverables.Count == 0 || foodPreferences.Count == 0)
         {
-            Transform closestMeat = FindClosestFood("Meat", detectionRadius * 1.5f);
-            if (closestMeat != null)
-            {
-                targetFoodSource = closestMeat.GetComponent<FoodSource>();
-                if (targetFoodSource?.HasFood ?? false)
-                {
-                    agent.SetDestination(closestMeat.position);
-                    if (Vector3.Distance(transform.position, closestMeat.position) <= eatingDistance)
-                    {
-                        currentState = State.Eating;
-                        agent.isStopped = true;
-                        eatTimer = 0f;
-                    }
-                    return; // Exit early to prioritize meat
-                }
-            }
+            PanicWander();
+            return;
         }
 
-        // Step 2: Check other preferred food types
-        foreach (var preferredType in foodPreferences)
+        // Sort preferences by weight (descending)
+        foodPreferences.Sort((a, b) => b.Weight.CompareTo(a.Weight));
+        foreach (var pref in foodPreferences)
         {
-            if (preferredType == FoodType.Meat) continue; // Already checked
-            string tag = GetTagFromFoodType(preferredType);
-            Transform closest = FindClosestFood(tag, detectionRadius);
+            string tag = GetTagFromFoodType(pref.Type);
+            if (!cachedDiscoverablesByTag.ContainsKey(tag)) continue;
+
+            Transform closest = null;
+            float minDist = float.MaxValue;
+            foreach (var obj in cachedDiscoverablesByTag[tag])
+            {
+                float dist = Vector3.Distance(transform.position, obj.position);
+                if (dist < minDist && IsNavigable(obj.position))
+                {
+                    minDist = dist;
+                    closest = obj;
+                }
+            }
+
             if (closest != null)
             {
                 targetFoodSource = closest.GetComponent<FoodSource>();
                 if (targetFoodSource?.HasFood ?? false)
                 {
                     agent.SetDestination(closest.position);
-                    if (Vector3.Distance(transform.position, closest.position) <= eatingDistance)
+                    if (minDist <= eatingDistance)
                     {
                         currentState = State.Eating;
                         agent.isStopped = true;
@@ -356,58 +422,38 @@ public class CreatureBehavior : MonoBehaviour
             }
         }
 
-        // Step 3: Hunt only if no food is found, creature is a hunter, and hunger is critical (0.3f)
-        if (creatureCombat?.behaviorStyle == CreatureCombat.BehaviorStyle.Hunter && foodLevel <= maxFoodLevel * 0.3f)
+        // Hunter logic
+        if (combat.CombatBehavior == CreatureCombat.CombatBehavior.Hunter && foodLevel < maxFoodLevel * 0.25f)
         {
-            Transform huntTarget = FindHuntTarget();
+            Transform huntTarget = FindHuntableCreature();
             if (huntTarget != null)
             {
-                creatureCombat.SetAttackTarget(huntTarget);
+                attackTarget = huntTarget;
+                currentState = State.Attacking;
+                agent.SetDestination(huntTarget.position);
+                Debug.Log($"{name}: Hunting {huntTarget.name}");
                 return;
             }
         }
 
-        // Step 4: If no food or prey, wander
         PanicWander();
     }
 
-    private Transform FindClosestFood(string tag, float radius)
+    private Transform FindHuntableCreature()
     {
-        Collider[] hits = Physics.OverlapSphere(transform.position, radius, discoverableLayer);
+        if (!cachedDiscoverablesByTag.ContainsKey("Creature")) return null;
         Transform closest = null;
         float minDist = float.MaxValue;
-        foreach (var hit in hits)
+        foreach (var obj in cachedDiscoverablesByTag["Creature"])
         {
-            if (hit.CompareTag(tag))
+            CreatureBehavior other = obj.GetComponent<CreatureBehavior>();
+            if (other != null && other.creatureTypeId != creatureTypeId && other.CurrentState != State.Dead)
             {
-                float dist = Vector3.Distance(transform.position, hit.transform.position);
-                if (dist < minDist)
+                float dist = Vector3.Distance(transform.position, obj.position);
+                if (dist < minDist && IsNavigable(obj.position))
                 {
                     minDist = dist;
-                    closest = hit.transform;
-                }
-            }
-        }
-        return closest;
-    }
-
-    private Transform FindHuntTarget()
-    {
-        Transform closest = null;
-        float minDist = float.MaxValue;
-        foreach (var obj in visibleDiscoverables)
-        {
-            if (obj.CompareTag("Creature"))
-            {
-                CreatureBehavior other = obj.GetComponent<CreatureBehavior>();
-                if (other != null && other.creatureTypeId != creatureTypeId)
-                {
-                    float dist = Vector3.Distance(transform.position, obj.position);
-                    if (dist < minDist && IsNavigable(obj.position))
-                    {
-                        minDist = dist;
-                        closest = obj;
-                    }
+                    closest = obj;
                 }
             }
         }
@@ -466,9 +512,9 @@ public class CreatureBehavior : MonoBehaviour
         float isolationRadius = detectionRadius / 1.7f;
         Transform nearest = null;
         float minDist = float.MaxValue;
-        foreach (var obj in visibleDiscoverables)
+        if (cachedDiscoverablesByTag.ContainsKey("Creature"))
         {
-            if (obj.CompareTag("Creature"))
+            foreach (var obj in cachedDiscoverablesByTag["Creature"])
             {
                 CreatureBehavior other = obj.GetComponent<CreatureBehavior>();
                 if (other?.creatureTypeId == creatureTypeId)
@@ -506,8 +552,9 @@ public class CreatureBehavior : MonoBehaviour
 
     private bool HasCreaturesOfSameTypeInRange()
     {
-        foreach (var obj in visibleDiscoverables)
-            if (obj.CompareTag("Creature") && obj.GetComponent<CreatureBehavior>()?.creatureTypeId == creatureTypeId)
+        if (!cachedDiscoverablesByTag.ContainsKey("Creature")) return false;
+        foreach (var obj in cachedDiscoverablesByTag["Creature"])
+            if (obj.GetComponent<CreatureBehavior>()?.creatureTypeId == creatureTypeId)
                 return true;
         return false;
     }
@@ -644,47 +691,36 @@ public class CreatureBehavior : MonoBehaviour
         }
     }
 
-    public void TakeDamage(float amount, Transform attacker)
+    public void TakeDamage(float damage, CreatureBehavior attacker)
     {
-        health -= amount;
+        if (currentState == State.Dead) return;
+        health = Mathf.Ceil(health - damage);
+        Debug.Log($"{name}: Took {damage} damage, health: {health}");
         if (health <= 0)
         {
             Die();
         }
         else
         {
-            creatureCombat?.OnAttacked(attacker);
-            Debug.Log($"{name}: Took {amount} damage from {attacker.name}, health: {health}");
+            combat.OnAttacked(attacker);
         }
     }
 
     private void Die()
     {
-        if (meatPrefab != null)
+        currentState = State.Dead;
+        agent.enabled = false;
+        transform.Rotate(0, 180, 0);
+        gameObject.tag = "Meat";
+        FoodSource foodSource = GetComponent<FoodSource>();
+        if (foodSource != null)
         {
-            int meatCount = Mathf.CeilToInt(maxFoodLevel / 6f);
-            Debug.Log($"{name}: Died, spawning {meatCount} meat prefabs (maxFoodLevel = {maxFoodLevel})");
-
-            for (int i = 0; i < meatCount; i++)
-            {
-                Vector3 offset = new Vector3(Random.Range(-3f, 3f), 0f, Random.Range(-3f, 3f));
-                Vector3 spawnPosition = transform.position + offset;
-                if (NavMesh.SamplePosition(spawnPosition, out NavMeshHit hit, 3f, NavMesh.AllAreas))
-                {
-                    Instantiate(meatPrefab, hit.position, transform.rotation);
-                }
-                else
-                {
-                    Instantiate(meatPrefab, transform.position, transform.rotation);
-                }
-            }
+            foodSource.enabled = true;
+            foodSource.isNotReplenishable = true;
+            foodSource.maxFood = (int)(size * 5);
+            foodSource.CurrentFood = foodSource.maxFood;
         }
-        else
-        {
-            Debug.LogWarning($"{name}: No meatPrefab assigned, no meat spawned!");
-        }
-
-        Destroy(gameObject);
+        Debug.Log($"{name}: Died and became meat");
     }
 
     void OnDrawGizmos()

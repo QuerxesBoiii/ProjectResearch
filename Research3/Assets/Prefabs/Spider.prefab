@@ -1176,6 +1176,9 @@ PrefabInstance:
       addedObject: {fileID: 6517819659057155754}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 236a53c7497e8cc428204faa391f463b, type: 3}
       insertIndex: -1
+      addedObject: {fileID: -5038620978856107066}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 236a53c7497e8cc428204faa391f463b, type: 3}
+      insertIndex: -1
       addedObject: {fileID: 3297256403213418128}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 236a53c7497e8cc428204faa391f463b, type: 3}
       insertIndex: -1
@@ -1367,6 +1370,28 @@ MonoBehaviour:
   attackRange: 5
   attackDamage: 1
   attackCooldown: 1
+--- !u!114 &-5038620978856107066
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7502398196121900629}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 675c839bdf70ed04ba767f16509199d6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxFood: 10
+  currentFood: 10
+  replenishInterval: 15
+  isNotReplenishable: 0
+  hasFood: 1
+  foodSatiety: 1
+  foodObjects: []
+  shrinkDuration: 1
+  growDuration: 15
+  bubbleDuration: 0.5
 --- !u!195 &3297256403213418128
 NavMeshAgent:
   m_ObjectHideFlags: 0
