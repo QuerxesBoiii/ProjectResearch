@@ -6,8 +6,6 @@ TagManager:
   tags:
   - Apple
   - Creature
-  - Berry
-  - Meat
   layers:
   - Default
   - TransparentFX

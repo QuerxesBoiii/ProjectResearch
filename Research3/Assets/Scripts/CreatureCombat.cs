@@ -1,97 +1,86 @@
 using UnityEngine;
 
-// Code is using Unity 6 (6000.0.37f1)
-// This script manages combat behavior for creatures, including attacking and fleeing.
-// Code should work with multiplayer netcode for gameobjects
+// DO NOT REMOVE OR EDIT THIS COMMENT: Code is using Unity 6 (6000.0.37f1)
+// DO NOT REMOVE OR EDIT THIS COMMENT: Make sure the code is easy to understand, and isn't inefficient. Make the code slightly more efficient.
+// DO NOT REMOVE OR EDIT THIS COMMENT: This script controls the combat mechanics for creatures, including dealing adjustable damage, checking attack range, and playing attack sound effects.
+// DO NOT REMOVE OR EDIT THIS COMMENT: Code should work with multiplayer netcode for gameobjects
+// DO NOT REMOVE OR EDIT THIS COMMENT: Always provide full code whenever changes have occurred, don't make unnecessary changes.
 
 public class CreatureCombat : MonoBehaviour
 {
-    // ---- Combat Behavior ----
-    public enum CombatBehavior { Friendly, Neutral, Hunter }
-    [Header("Combat Behavior")]
-    [SerializeField] private CombatBehavior combatBehavior = CombatBehavior.Neutral;
-
-    // Public property for accessibility by CreatureBehavior, renamed to avoid conflict with enum
-    public CombatBehavior CurrentCombatBehavior => combatBehavior;
-
-    // ---- Combat Stats ----
-    [Header("Combat Stats")]
-    [SerializeField] private float attackRange = 2f;       // Distance within which creature can attack
-    [SerializeField] private float attackDamage = 5f;     // Damage dealt per attack
-    [SerializeField] private float attackInterval = 1f;   // Time between attacks
-    private float lastAttackTime = 0f;
-
     private CreatureBehavior behavior;
+    private AudioSource attackAudioSource; // Reference to the AudioSource for attack sounds
 
+    [Header("Combat Settings")]
+    [SerializeField] private float attackDamage = 1f; // Adjustable damage per attack
+    [SerializeField] private float attackRange = 1f; // Adjustable range within which attacks can occur
+    [SerializeField] private AudioClip attackSound; // Sound to play when attacking
+
+    // Called when the script instance is being loaded
     void Start()
     {
         behavior = GetComponent<CreatureBehavior>();
-        if (!behavior) Debug.LogError($"{name}: No CreatureBehavior component!");
+        if (!behavior) { Debug.LogError($"{name}: No CreatureBehavior component found!"); }
+
+        // Get the AudioSource from the child object
+        attackAudioSource = GetComponentInChildren<AudioSource>();
+        if (!attackAudioSource) { Debug.LogError($"{name}: No AudioSource found in children!"); }
+        else if (attackSound) { attackAudioSource.clip = attackSound; } // Assign the clip if set
     }
 
-    // Updates attacking behavior: moves to target and attacks if in range
-    public void AttackUpdate()
+    // Attempts to attack a target creature if within range and not dead
+    public void Attack(CreatureBehavior target)
     {
-        if (behavior.AttackTarget == null || behavior.AttackTarget.GetComponent<CreatureBehavior>()?.CurrentState == CreatureBehavior.State.Dead)
-        {
-            behavior.CurrentState = CreatureBehavior.State.Idle;
-            behavior.AttackTarget = null;
-            return;
-        }
+        if (target == null || target.currentState == CreatureBehavior.State.Dead) return;
 
-        float distance = Vector3.Distance(behavior.transform.position, behavior.AttackTarget.position);
-        if (distance > attackRange)
+        // Check if the target is within attack range
+        float distanceToTarget = Vector3.Distance(transform.position, target.transform.position);
+        if (distanceToTarget <= attackRange)
         {
-            behavior.Agent.SetDestination(behavior.AttackTarget.position);
+            target.creatureCombat.TakeDamage(attackDamage, behavior);
+            PlayAttackSound();
+            Debug.Log($"{name} attacked {target.name} for {attackDamage} damage at range {distanceToTarget}");
         }
-        else if (Time.time - lastAttackTime >= attackInterval)
+    }
+
+    // Applies damage to this creature and triggers appropriate behavior responses
+    public void TakeDamage(float amount, CreatureBehavior attacker)
+    {
+        if (behavior.currentState == CreatureBehavior.State.Dead) return;
+
+        behavior.health -= amount;
+        Debug.Log($"{name} took {amount} damage from {attacker.name}, health now {behavior.health}");
+
+        if (behavior.health <= 0)
         {
-            CreatureBehavior target = behavior.AttackTarget.GetComponent<CreatureBehavior>();
-            if (target != null)
+            behavior.Die();
+        }
+        else if (attacker != null) // Ensure attacker exists before reacting
+        {
+            if (behavior.combatBehavior == CreatureBehavior.CombatBehavior.Neutral)
             {
-                target.TakeDamage(attackDamage, behavior);
-                lastAttackTime = Time.time;
-                Debug.Log($"{name}: Attacked {target.name} for {attackDamage} damage");
+                behavior.combatTarget = attacker.transform;
+                behavior.currentState = CreatureBehavior.State.Attacking;
+                Debug.Log($"{name} (Neutral) is now attacking {attacker.name}");
+            }
+            else if (behavior.combatBehavior == CreatureBehavior.CombatBehavior.Friendly)
+            {
+                behavior.combatTarget = attacker.transform;
+                behavior.currentState = CreatureBehavior.State.Fleeing;
+                Debug.Log($"{name} (Friendly) is now fleeing from {attacker.name}");
             }
         }
     }
 
-    // Updates fleeing behavior: moves away from threat
-    public void FleeUpdate()
+    // Plays the attack sound effect if an AudioSource and clip are available
+    private void PlayAttackSound()
     {
-        if (behavior.FleeFrom == null)
+        if (attackAudioSource != null && attackSound != null)
         {
-            behavior.CurrentState = CreatureBehavior.State.Idle;
-            behavior.FleeFrom = null;
-            return;
-        }
-
-        Vector3 direction = (behavior.transform.position - behavior.FleeFrom.position).normalized;
-        Vector3 fleePosition = behavior.transform.position + direction * 10f;
-        if (UnityEngine.AI.NavMesh.SamplePosition(fleePosition, out UnityEngine.AI.NavMeshHit hit, 10f, behavior.Agent.areaMask))
-        {
-            behavior.Agent.SetDestination(hit.position);
+            attackAudioSource.PlayOneShot(attackSound); // Play sound as a one-shot to allow overlapping
         }
     }
 
-    // Called when creature is attacked, determines response based on behavior
-    public void OnAttacked(CreatureBehavior attacker)
-    {
-        if (behavior.CurrentState == CreatureBehavior.State.Dead) return;
-
-        switch (combatBehavior)
-        {
-            case CombatBehavior.Friendly:
-                behavior.FleeFrom = attacker.transform;
-                behavior.CurrentState = CreatureBehavior.State.Fleeing;
-                Debug.Log($"{name}: Fleeing from {attacker.name}");
-                break;
-            case CombatBehavior.Neutral:
-            case CombatBehavior.Hunter:
-                behavior.AttackTarget = attacker.transform;
-                behavior.CurrentState = CreatureBehavior.State.Attacking;
-                Debug.Log($"{name}: Retaliating against {attacker.name}");
-                break;
-        }
-    }
+    // Public property to access attackRange from CreatureBehavior
+    public float AttackRange => attackRange;
 }
