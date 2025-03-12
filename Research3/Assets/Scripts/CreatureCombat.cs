@@ -53,7 +53,7 @@ public class CreatureCombat : MonoBehaviour
 
         if (behavior.health <= 0)
         {
-            behavior.Die();
+            StartCoroutine(behavior.DieWithRotation()); // Call the coroutine for death
         }
         else if (attacker != null) // Ensure attacker exists before reacting
         {
