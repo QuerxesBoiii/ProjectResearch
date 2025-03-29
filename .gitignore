@@ -24,6 +24,7 @@ Research3/UserSettings/
 *.unityproj
 *.booproj
 *.dwlt
+*.vs
 
 # Ignore specific files with no extension
 ArtifactDB

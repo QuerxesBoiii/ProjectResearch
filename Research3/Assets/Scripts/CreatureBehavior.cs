@@ -3,6 +3,7 @@ using UnityEngine.AI;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using JetBrains.Annotations;
 
 public class CreatureBehavior : MonoBehaviour
 {
@@ -130,12 +131,22 @@ public class CreatureBehavior : MonoBehaviour
     [SerializeField] private CreatureBehavior mother;
     [SerializeField] private CreatureBehavior father;
 
+    // ---- Public reading for other gameobjects ----
+    public float _size;
+    public int _creatureTypeId;
+    public int _foodLevel;
+    public float _maxFoodLevel;
+    public float _health;
+    public State _currentState;
+    public Gender _gender;
+    public bool _isPregnant;
+    public int _totalFoodLostSincePregnant;
+    public int _ReproductionCost;
     // ---- Herd Mentality Variables ----
     [Header("Herd Mentality")]
     [SerializeField] private int preferredGroupSize = 2; // Number of same-type creatures it prefers to be near (excluding itself)
     private float panicDelayTimer = 0f; // Tracks time elapsed during delay
     private float panicDelayTime = -1f; // Delay before reacting, -1 means not active
-
     // ---- Initialization ----
     void Start()
     {
@@ -446,6 +457,16 @@ public class CreatureBehavior : MonoBehaviour
             agent.radius = size * 0.5f;
             agent.height = size;
         }
+        _size = size;
+        _creatureTypeId = creatureTypeId;
+        _foodLevel = foodLevel;
+        _maxFoodLevel = maxFoodLevel;
+        _health = health;
+        _currentState = currentState;
+        _gender = gender;
+        _isPregnant = isPregnant;
+        _totalFoodLostSincePregnant = totalFoodLostSincePregnant;
+        _ReproductionCost = ReproductionCost;
     }
 
     // ---- Movement Behaviors ----

@@ -65,12 +65,15 @@
     <Compile Include="Assets\SourceMovement\Movement\ISurfControllable.cs" />
     <Compile Include="Assets\Samples\Infinite Lands\0.7.5\Shared Content (Global)\TOP SECRET\Stats.cs" />
     <Compile Include="Assets\Scripts\RelayManager.cs" />
+    <Compile Include="Assets\Scenes\The Lab\Doohickeys\ScanToolScript.cs" />
     <Compile Include="Assets\Scripts\CreatureBehavior.cs" />
+    <Compile Include="Assets\Scripts\Sway.cs" />
     <Compile Include="Assets\SourceMovement\CameraWaterCheck.cs" />
     <Compile Include="Assets\SourceMovement\Extensions\IntExtensions.cs" />
     <Compile Include="Assets\SourceMovement\Movement\SurfCharacter.cs" />
     <Compile Include="Assets\SourceMovement\Movement\SurfPhysics.cs" />
     <Compile Include="Assets\FoodSource.cs" />
+    <Compile Include="Assets\Scripts\ItemSwitching.cs" />
     <Compile Include="Assets\Samples\Infinite Lands\0.7.5\Shared Content (Global)\TOP SECRET\Follow code.cs" />
     <Compile Include="Assets\Scripts\ClientNetworkTransform.cs" />
     <Compile Include="Assets\SourceMovement\Water.cs" />
@@ -87,6 +90,7 @@
     <Compile Include="Assets\SourceMovement\Extensions\VectorExtensions.cs" />
     <Compile Include="Assets\SourceMovement\Movement\InputButtons.cs" />
     <Compile Include="Assets\Scripts\CameraController.cs" />
+    <Compile Include="Assets\Scenes\The Lab\SpriteRendering.cs" />
     <Compile Include="Assets\SourceMovement\Movement\MoveData.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -1294,6 +1298,10 @@
     </Reference>
     <Reference Include="Unity.VisualScripting.State">
       <HintPath>Library\ScriptAssemblies\Unity.VisualScripting.State.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Unity.2D.Sprite.Editor">
+      <HintPath>Library\ScriptAssemblies\Unity.2D.Sprite.Editor.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Unity.Services.Core.Environments">
