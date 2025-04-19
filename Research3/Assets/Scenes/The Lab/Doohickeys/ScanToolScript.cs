@@ -34,16 +34,16 @@ public class ScanToolScript : MonoBehaviour
                 creature = hit.transform.gameObject.GetComponent<CreatureBehavior>();
                 if (creature != null)
                 {
-                    int maxHealth = Mathf.CeilToInt(creature._size * 10f);
-                    string text = $"ID {creature._creatureTypeId}\n{creature._foodLevel}/{creature._maxFoodLevel} FOOD\n" +
-                                  $"{(creature.currentState == CreatureBehavior.State.Dead ? 0 : Mathf.CeilToInt(creature.health))}/{maxHealth} HP";
+                    int maxHealth = Mathf.CeilToInt(creature.Size * 10f);
+                    string text = $"ID {creature.CreatureTypeId}\n{creature.FoodLevel}/{creature.MaxFoodLevel} FOOD\n" +
+                                  $"{(creature.currentState == CreatureBehavior.State.Dead ? 0 : Mathf.CeilToInt(creature.Health))}/{maxHealth} HP";
 
-                    if (creature._gender == CreatureBehavior.Gender.Female && creature._isPregnant)
+                    if (creature.gender == CreatureBehavior.Gender.Female && creature.IsPregnant)
                     {
-                        int reproductionCostCounter = creature._totalFoodLostSincePregnant / 2;
-                        text += $"\nPregnant: {reproductionCostCounter}/{creature._ReproductionCost}";
+                        int reproductionCostCounter = creature.TotalFoodLostSincePregnant / 2;
+                        text += $"\nPregnant: {reproductionCostCounter}/{creature.ReproductionCostProperty}";
                     }
-                    text += $"\n{creature._gender}";
+                    text += $"\n{creature.gender}";
 
                     textDisplay.text = text;
                 }

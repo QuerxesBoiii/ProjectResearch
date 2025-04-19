@@ -1435,36 +1435,36 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentState: 0
-  socialMentality: 1
-  strangerMentality: 1
   combatBehavior: 2
+  gender: 0
   creatureTypeId: -1
-  size: 2
+  traitIds: 
+  size: 1
   walkingSpeed: 6
   canClimb: 1
   health: 0
-  foodLevel: 0
   maxFoodLevel: 0
+  foodLevel: 10
   hungerDecreaseInterval: 0
-  age: 0
-  gender: 0
+  maxAge: 100
+  currentAge: 0
   isPregnant: 0
   totalFoodLostSincePregnant: 0
   lastImpregnationTime: -1000
+  reproductionCheckInterval: 20
+  reproductionCooldown: 60
+  reproductionDistance: 8
   mutationRate: 0.1
   children: []
-  attachmentLevel: 0
-  visibleDiscoverables: []
   baseDetectionRadius: 50
   discoverableLayer:
     serializedVersion: 2
     m_Bits: 8
-  eatingDistance: 4
+  visibleDiscoverables: []
+  eatingDistance: 5
   wanderRadius: 20
-  foodPreferences: 02000000
   combatTarget: {fileID: 0}
-  mother: {fileID: 0}
-  father: {fileID: 0}
+  foodPreferences: 0000000001000000
 --- !u!114 &7300394219335186493
 MonoBehaviour:
   m_ObjectHideFlags: 0
