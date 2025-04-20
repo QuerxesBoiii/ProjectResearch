@@ -13,7 +13,7 @@ public class CreatureBehaviorEditor : Editor
 
         CreatureBehavior creature = (CreatureBehavior)target;
 
-        List<int> allTraitIds = TraitManager.GetAllTraitIds();
+        List<int> allTraitIds = TraitManager.GetAllTraitIds().ToList();
         List<string> traitNames = allTraitIds.Select(id => TraitManager.GetTraitName(id)).ToList();
         traitNames.Insert(0, "None");
 
