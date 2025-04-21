@@ -17,6 +17,8 @@ public class FoodSource : MonoBehaviour
     [SerializeField] private bool hasFood = true;
     [SerializeField] private float foodSatiety = 1f;
     [SerializeField] public bool isNotReplenishable = false;
+    [SerializeField] private int reservedFood = 0; // Tracks reserved food units
+    [SerializeField] private List<(CreatureBehavior creature, float timeout)> reservations = new List<(CreatureBehavior, float)>(); // Tracks reservations with timeouts
 
     [SerializeField] private List<GameObject> foodObjects = new List<GameObject>();
     private List<Coroutine> activeCoroutines;
@@ -105,7 +107,7 @@ public class FoodSource : MonoBehaviour
         {
             hasFood = false;
         }
-        else if (currentFood >= maxFood * 0.3f)
+        else if (currentFood >= maxFood * 0.5f)
         {
             hasFood = true;
         }
@@ -191,6 +193,14 @@ public class FoodSource : MonoBehaviour
             currentFood = Mathf.Clamp(value, 0, maxFood);
             UpdateFoodState();
 
+            // Ensure reservedFood doesn't exceed currentFood
+            reservedFood = Mathf.Min(reservedFood, currentFood);
+            if (reservedFood < reservations.Count)
+            {
+                // Clear excess reservations if currentFood decreased
+                reservations.RemoveRange(reservedFood, reservations.Count - reservedFood);
+            }
+
             if (!isNotReplenishable) // Only animate for replenishable sources
             {
                 if (currentFood < oldValue)
@@ -215,10 +225,51 @@ public class FoodSource : MonoBehaviour
 
             if (isNotReplenishable && currentFood <= 0)
             {
+                // Clear all reservations before destroying
+                reservations.Clear();
+                reservedFood = 0;
                 Destroy(gameObject);
             }
         }
     }
+
+    // Add method to release a reservation
+    public void ReleaseReservation(CreatureBehavior creature)
+    {
+        var reservation = reservations.Find(r => r.creature == creature);
+        if (reservation.creature != null)
+        {
+            reservations.Remove(reservation);
+            reservedFood = Mathf.Max(0, reservedFood - 1); // Decrease reserved food (1 unit per creature)
+            Debug.Log($"{creature.name}: Released reservation on {name}. Reserved food: {reservedFood}/{CurrentFood}");
+        }
+    }
+
+    // Add method to update reservations and handle timeouts
+    public void UpdateReservations()
+    {
+        for (int i = reservations.Count - 1; i >= 0; i--)
+        {
+            var reservation = reservations[i];
+            if (Time.time > reservation.timeout)
+            {
+                reservations.RemoveAt(i);
+                reservedFood = Mathf.Max(0, reservedFood - 1);
+                Debug.Log($"{reservation.creature.name}: Reservation on {name} timed out. Reserved food: {reservedFood}/{CurrentFood}");
+            }
+        }
+    }
+
+    // Add method to reserve food
+    public void ReserveFood(CreatureBehavior creature, float timeout)
+    {
+        reservedFood++;
+        reservations.Add((creature, Time.time + timeout));
+        Debug.Log($"{creature.name}: Reserved food at {name} (Available: {CurrentFood - ReservedFood})");
+    }
+
+    // Add property to access reserved food
+    public int ReservedFood => reservedFood;
 
     public bool HasFood => hasFood;
     public float FoodSatiety => foodSatiety;

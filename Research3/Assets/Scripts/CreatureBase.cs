@@ -1,168 +1,247 @@
-using UnityEngine;
 using System.Collections.Generic;
+using UnityEngine;
 using System.Linq;
+using TMPro;
 
 public class CreatureBase : MonoBehaviour
 {
-    public List<CreatureBehavior> livingCreatures = new List<CreatureBehavior>();
-    private int typeSpawnCount = 0; // Tracks spawn count for this creature type
-    private List<int> creatureTypeTraits = new List<int>(); // Fixed traits for this base's creature type
-    private string typeNameBase = ""; // Base name for this type (e.g., "Prolific Rascal")
-    private List<string> randomNames = new List<string>
+    [SerializeField] private GameObject creaturePrefab;
+    [SerializeField] private int maxTraitPoints = 8;
+    [SerializeField] private int initialCreatureCount = 5; // Exactly 5 creatures at the start
+    [SerializeField] private float spawnRadius = 20f;
+
+    [SerializeField] private List<CreatureBehavior> spawnedCreatures = new List<CreatureBehavior>(); // Visible in Inspector
+    [SerializeField] private int population = 0; // Tracks current living creatures
+    private List<int> selectedTraitIds = new List<int>();
+    private Color creatureTypeColor = Color.white;
+    private int maleSpawnCount = 0; // Tracks total males spawned
+    private int femaleSpawnCount = 0; // Tracks total females spawned
+    private bool lastSpawnedWasMale = false; // Tracks the last gender for alternating initial spawns
+
+    // List of 30 unique secondary names (no overlap with trait names like Loyal, Giant, Gluttonous, etc.)
+    private static readonly string[] secondaryNames = new string[]
     {
-        "Rascal", "Scout", "Wanderer", "Sprout", "Nibbler", "Dash", "Glimmer", "Breeze", "Spark", "Twig",
-        "Arachnid", "Wisp", "Drake", "Fern", "Cinder", "Skitter", "Prowler", "Sylph", "Grove", "Mire",
-        "Wyrm", "Shade", "Flicker", "Thorn", "Rift", "Boulder", "Zephyr", "Crag", "Moth", "Viper",
-        "Talon", "Mist", "Ember", "Ridge", "Chasm", "Lynx", "Specter", "Bramble", "Flux", "Raven",
-        "Gale", "Crest", "Dusk", "Fang", "Haze", "Tide", "Blaze", "Stalker", "Vine", "Frost", "Echo"
+        "Rascal", "Arachnid", "Boy", "Viper", "Wanderer", "Scout", "Drifter", "Nomad", "Prowler", "Stalker",
+        "Gazer", "Sentry", "Rogue", "Bandit", "Maverick", "Outlaw", "Rebel", "Voyager", "Seeker", "Explorer",
+        "Strider", "Runner", "Chaser", "Dasher", "Sprinter", "Hopper", "Leaper", "Glider", "Skimmer", "Diver",
+        "Lurker", "Warden", "Trickster", "Sniper", "Fixer", "Watcher", "Tamer", "Slinger", "Vulture", "Brawler",
+        "Judge", "Agent", "Maven", "Seeker", "Operator", "Rebel", "Planner", "Charmer", "Deceiver", "Pretender"
     };
 
-    [Header("Spawn Settings")]
-    [SerializeField] private GameObject creaturePrefab; // Single creature prefab to spawn
-    [SerializeField] private int minCreaturesToSpawn = 5; // Minimum number of creatures to spawn
-    [SerializeField] private int maxCreaturesToSpawn = 10; // Maximum number of creatures to spawn
-    [SerializeField] private float spawnRadius = 20f; // Radius around CreatureBase to spawn creatures
-    [SerializeField] private int maxTraitPoints = 8; // Max trait cost for creature type
+    private string secondaryName; // The chosen secondary name for this CreatureBase's creatures
 
     void Start()
     {
-        // Define creature type (traits and name) once
-        DefineCreatureType();
+        // Select a secondary name for all creatures of this type
+        secondaryName = secondaryNames[Random.Range(0, secondaryNames.Length)];
 
-        // Spawn initial creatures
-        int creaturesToSpawn = Random.Range(minCreaturesToSpawn, maxCreaturesToSpawn + 1);
-        for (int i = 0; i < creaturesToSpawn; i++)
-        {
-            SpawnCreature();
-        }
+        SelectCreatureTraits();
+        SetCreatureTypeColor();
+        SpawnInitialCreatures();
     }
 
-    private void DefineCreatureType()
+    private void SelectCreatureTraits()
     {
-        // Select random traits until total cost equals maxTraitPoints
-        creatureTypeTraits.Clear();
-        List<int> availableTraitIds = TraitManager.GetAllTraitIds().ToList();
-        int totalCost = 0;
-        int loopLimit = 100; // Safety limit to prevent infinite loops
-        int loopCount = 0;
+        int[] allTraitIds = TraitManager.GetAllTraitIds();
+        int pointsUsed = 0;
 
-        while (totalCost < maxTraitPoints && loopCount < loopLimit)
+        while (pointsUsed < maxTraitPoints)
         {
-            // Filter traits that fit within remaining points
-            List<int> validTraitIds = availableTraitIds
-                .Where(id => TraitManager.GetTraitCost(id) <= maxTraitPoints - totalCost)
-                .ToList();
+            int remainingPoints = maxTraitPoints - pointsUsed;
+            var affordableTraits = allTraitIds
+                .Where(id => TraitManager.GetTraitCost(id) <= remainingPoints && !selectedTraitIds.Contains(id))
+                .ToArray();
 
-            if (validTraitIds.Count == 0)
-            {
-                Debug.LogWarning($"{name}: No traits available to reach exactly {maxTraitPoints} points. Total cost: {totalCost}");
-                break;
-            }
+            if (affordableTraits.Length == 0) break;
 
-            // Pick a random valid trait
-            int index = Random.Range(0, validTraitIds.Count);
-            int traitId = validTraitIds[index];
-            int traitCost = TraitManager.GetTraitCost(traitId);
-
-            creatureTypeTraits.Add(traitId);
-            totalCost += traitCost;
-            loopCount++;
+            int randomTraitId = affordableTraits[Random.Range(0, affordableTraits.Length)];
+            selectedTraitIds.Add(randomTraitId);
+            pointsUsed += TraitManager.GetTraitCost(randomTraitId);
         }
 
-        if (totalCost != maxTraitPoints)
+        if (selectedTraitIds.Count == 0)
         {
-            Debug.LogWarning($"{name}: Failed to reach exactly {maxTraitPoints} points after {loopCount} iterations. Total cost: {totalCost}, Traits: {string.Join(", ", creatureTypeTraits.Select(id => TraitManager.GetTraitName(id)))}");
+            Debug.LogWarning($"{name}: No traits selected, using default configuration.");
         }
         else
         {
-            Debug.Log($"{name}: Creature type defined with traits: {string.Join(", ", creatureTypeTraits.Select(id => TraitManager.GetTraitName(id)))} (Total cost: {totalCost})");
+            string traitNames = string.Join(", ", selectedTraitIds.Select(id => TraitManager.GetTraitName(id)));
+            Debug.Log($"{name}: Creature type defined with traits: {traitNames} (Total cost: {pointsUsed})");
         }
-
-        // Generate type name
-        string traitName = "Unknown";
-        if (creatureTypeTraits.Count > 0)
-        {
-            int randomTraitId = creatureTypeTraits[Random.Range(0, creatureTypeTraits.Count)];
-            traitName = TraitManager.GetTraitName(randomTraitId) ?? "Unknown";
-        }
-        string randomName = randomNames[Random.Range(0, randomNames.Count)];
-        typeNameBase = $"{traitName} {randomName}";
     }
 
-    private void SpawnCreature()
+    private void SetCreatureTypeColor()
     {
-        if (creaturePrefab == null)
+        if (selectedTraitIds.Count == 0)
         {
-            Debug.LogWarning($"{name}: No creature prefab assigned to spawn!");
+            creatureTypeColor = Color.white;
+            Debug.Log($"{name}: No traits selected, using default white color.");
             return;
         }
 
-        Vector3 spawnPos = transform.position + Random.insideUnitSphere * spawnRadius;
-        spawnPos.y = transform.position.y; // Keep spawn on same Y level
+        float r = 0f, g = 0f, b = 0f;
+        int count = selectedTraitIds.Count;
 
-        // Ensure spawn position is on NavMesh
-        if (UnityEngine.AI.NavMesh.SamplePosition(spawnPos, out UnityEngine.AI.NavMeshHit hit, spawnRadius, UnityEngine.AI.NavMesh.AllAreas))
+        foreach (int traitId in selectedTraitIds)
+        {
+            string hex = TraitManager.GetTraitHexColor(traitId);
+            if (ColorUtility.TryParseHtmlString(hex, out Color traitColor))
+            {
+                r += traitColor.r;
+                g += traitColor.g;
+                b += traitColor.b;
+            }
+            else
+            {
+                Debug.LogWarning($"{name}: Invalid hex color '{hex}' for trait ID {traitId}. Using white.");
+            }
+        }
+
+        creatureTypeColor = new Color(r / count, g / count, b / count);
+        Debug.Log($"{name}: Creature type color set to {creatureTypeColor}");
+    }
+
+    private void SpawnInitialCreatures()
+    {
+        int creatureCount = initialCreatureCount; // Always spawn exactly 5 creatures
+        for (int i = 0; i < creatureCount; i++)
+        {
+            // Alternate genders: start with male, then female, then male, etc.
+            CreatureBehavior.Gender gender = lastSpawnedWasMale ? CreatureBehavior.Gender.Female : CreatureBehavior.Gender.Male;
+            SpawnCreature(gender);
+            lastSpawnedWasMale = !lastSpawnedWasMale;
+        }
+        Debug.Log($"{name}: Spawned {creatureCount} initial creatures.");
+    }
+
+    public void SpawnCreature(CreatureBehavior.Gender gender)
+    {
+        Vector3 spawnPosition = transform.position + Random.insideUnitSphere * spawnRadius;
+        spawnPosition.y = transform.position.y;
+
+        if (UnityEngine.AI.NavMesh.SamplePosition(spawnPosition, out UnityEngine.AI.NavMeshHit hit, spawnRadius, UnityEngine.AI.NavMesh.AllAreas))
         {
             GameObject creatureObj = Instantiate(creaturePrefab, hit.position, Quaternion.identity);
-            CreatureBehavior creature = creatureObj.GetComponent<CreatureBehavior>();
-            if (creature != null)
-            {
-                // Randomize creature attributes
-                creature.baseSize = Random.Range(0.8f, 1.2f);
-                creature.baseWalkingSpeed = Random.Range(3f, 5f);
-                creature.baseHealth = Random.Range(8f, 12f);
-                creature.baseMaxFoodLevel = Random.Range(8f, 12f);
-                creature.gender = Random.value < 0.5f ? CreatureBehavior.Gender.Male : CreatureBehavior.Gender.Female;
+            CreatureBehavior creatureBehavior = creatureObj.GetComponent<CreatureBehavior>();
 
-                // Assign fixed traits for this creature type
-                creature.traitIds.Clear();
-                creature.traitIds.AddRange(creatureTypeTraits);
+            creatureBehavior.baseSize = 1f;
+            creatureBehavior.baseWalkingSpeed = 4f;
+            creatureBehavior.baseHealth = 20f;
+            creatureBehavior.baseMaxFoodLevel = 10f;
+            creatureBehavior.baseHungerDecreaseInterval = 40f; // 40 seconds as per previous update
 
-                // Set owning base
-                creature.owningBase = this;
+            creatureBehavior.currentAge = 10f; // Start as adult
+            creatureBehavior.traitIds = new List<int>(selectedTraitIds);
+            creatureBehavior.typeColor = creatureTypeColor;
+            creatureBehavior.owningBase = this;
 
-                AddCreature(creature);
-            }
+            creatureBehavior.gender = gender;
+            int spawnNumber = IncrementSpawnCounter(creatureBehavior.gender);
+
+            string creatureName = GenerateCreatureName(spawnNumber, creatureBehavior.gender);
+            creatureObj.name = creatureName;
+
+            spawnedCreatures.Add(creatureBehavior);
+            population = spawnedCreatures.Count; // Update population counter
+
+            Debug.Log($"{name}: Spawned creature '{creatureObj.name}' at {hit.position} with traits: {string.Join(", ", creatureBehavior.traitIds.Select(id => TraitManager.GetTraitName(id)))}");
         }
         else
         {
-            Debug.LogWarning($"{name}: Failed to find valid NavMesh position for spawning creature!");
+            Debug.LogWarning($"{name}: Failed to find valid NavMesh position for creature spawn.");
         }
+    }
+
+    public void SpawnChild(CreatureBehavior mother, CreatureBehavior father, Vector3 spawnPosition)
+    {
+        if (UnityEngine.AI.NavMesh.SamplePosition(spawnPosition, out UnityEngine.AI.NavMeshHit hit, 5f, UnityEngine.AI.NavMesh.AllAreas))
+        {
+            GameObject childObj = Instantiate(creaturePrefab, hit.position, Quaternion.identity);
+            CreatureBehavior childBehavior = childObj.GetComponent<CreatureBehavior>();
+
+            childBehavior.baseSize = mother.baseSize;
+            childBehavior.baseWalkingSpeed = mother.baseWalkingSpeed;
+            childBehavior.baseHealth = mother.baseHealth;
+            childBehavior.baseMaxFoodLevel = mother.baseMaxFoodLevel;
+            childBehavior.baseHungerDecreaseInterval = mother.baseHungerDecreaseInterval;
+
+            childBehavior.currentAge = 0f; // Start as baby
+            childBehavior.traitIds = new List<int>(mother.traitIds);
+            childBehavior.typeColor = mother.typeColor;
+            childBehavior.owningBase = this;
+            childBehavior.mother = mother;
+            childBehavior.father = father;
+
+            childBehavior.gender = Random.value < 0.5f ? CreatureBehavior.Gender.Male : CreatureBehavior.Gender.Female;
+            int spawnNumber = IncrementSpawnCounter(childBehavior.gender);
+
+            childBehavior.isPregnant = false;
+            childBehavior.totalFoodLostSincePregnant = 0;
+            childBehavior.lastImpregnationTime = -1000f;
+            childBehavior.lastBirthTime = -1000f;
+            childBehavior.pregnantWith = null;
+
+            string childName = GenerateCreatureName(spawnNumber, childBehavior.gender);
+            childObj.name = childName;
+
+            spawnedCreatures.Add(childBehavior);
+            population = spawnedCreatures.Count; // Update population counter
+
+            Debug.Log($"Child born: {childObj.name}, Gender: {childBehavior.gender}, Size: {childBehavior.Size}, Color: {childBehavior.typeColor}, Mother: {mother.name}, Father: {father.name}");
+        }
+        else
+        {
+            Debug.LogWarning($"{name}: Failed to find valid NavMesh position for child spawn at {spawnPosition}.");
+        }
+    }
+
+    private int IncrementSpawnCounter(CreatureBehavior.Gender gender)
+    {
+        if (gender == CreatureBehavior.Gender.Male)
+        {
+            maleSpawnCount++;
+            return maleSpawnCount;
+        }
+        else
+        {
+            femaleSpawnCount++;
+            return femaleSpawnCount;
+        }
+    }
+
+    private string GenerateCreatureName(int spawnNumber, CreatureBehavior.Gender gender)
+    {
+        // Get the prefix from TraitManager (e.g., "Loyal", "Giant", "Gluttonous")
+        string prefix = "";
+        foreach (int traitId in selectedTraitIds)
+        {
+            prefix = TraitManager.GetTraitPrefix(traitId);
+            if (!string.IsNullOrEmpty(prefix))
+            {
+                break;
+            }
+        }
+
+        // Use the secondary name chosen for this CreatureBase
+        string baseName = prefix.Length > 0 ? $"{prefix} {secondaryName}" : $"Creature {secondaryName}";
+
+        // Add the gender marker and spawn number (e.g., "M2" or "F1")
+        string genderMarker = gender == CreatureBehavior.Gender.Male ? "M" : "F";
+        return $"{baseName} ({genderMarker}{spawnNumber})";
     }
 
     public void AddCreature(CreatureBehavior creature)
     {
-        if (!livingCreatures.Contains(creature))
+        if (!spawnedCreatures.Contains(creature))
         {
-            livingCreatures.Add(creature);
-            AssignCreatureName(creature);
-            Debug.Log($"Added creature: {creature.gameObject.name} to base {name}");
+            spawnedCreatures.Add(creature);
+            population = spawnedCreatures.Count; // Update population counter
         }
     }
 
     public void RemoveCreature(CreatureBehavior creature)
     {
-        if (livingCreatures.Contains(creature))
-        {
-            livingCreatures.Remove(creature);
-            Debug.Log($"Removed creature: {creature.gameObject.name} from base {name}");
-        }
-    }
-
-    private void AssignCreatureName(CreatureBehavior creature)
-    {
-        typeSpawnCount++;
-        string creatureName = $"{typeNameBase} ({typeSpawnCount})";
-        creature.gameObject.name = creatureName;
-
-        // Update text display to reflect new name
-        creature.UpdateTextDisplay();
-    }
-
-    public string GenerateChildName(CreatureBehavior child)
-    {
-        // Use current spawn count without incrementing (incremented in AddCreature)
-        int currentSpawnCount = typeSpawnCount + 1;
-        return $"{typeNameBase} ({currentSpawnCount})";
+        spawnedCreatures.Remove(creature);
+        population = spawnedCreatures.Count; // Update population counter
     }
 }

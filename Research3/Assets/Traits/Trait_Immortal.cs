@@ -6,9 +6,10 @@ public class Trait_Immortal : Trait
 
     public override void ApplyTrait(CreatureBehavior creature)
     {
-        creature.MaxAge *= 2f; // +100% lifespan
-        creature.healthMultiplier *= 1.2f; // +20% health
-        creature.reproductionCheckIntervalMultiplier *= 1.5f; // -50% reproduction frequency
-        creature.hungerDecreaseIntervalMultiplier *= 0.9f; // -10% hunger interval
+        // Set maxAge to 9 * adultAge
+        creature.maxAge = 9 * creature.adultAge;
+
+        // Increase reproduction cost by 50%
+        creature.reproductionCostMultiplier *= 1.5f;
     }
 }

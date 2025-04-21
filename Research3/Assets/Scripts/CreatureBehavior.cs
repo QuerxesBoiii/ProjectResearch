@@ -30,17 +30,19 @@ public class CreatureBehavior : MonoBehaviour
     [Header("Physical Attributes")]
     [SerializeField] public float baseSize = 1f;
     [SerializeField] public float baseWalkingSpeed = 4f;
-    [SerializeField] public float baseHealth = 10f;
+    [SerializeField] public float baseHealth = 20f;
     [SerializeField] public float baseMaxFoodLevel = 10f;
-    [SerializeField] public float baseHungerDecreaseInterval = 30f;
-    [SerializeField] public float baseReproductionCheckInterval = 20f;
+    [SerializeField] public float baseHungerDecreaseInterval = 40f;
     [SerializeField] public bool canClimb = false;
     public float sizeMultiplier = 1f;
     public float walkingSpeedMultiplier = 1f;
     public float healthMultiplier = 1f;
     public float maxFoodLevelMultiplier = 1f;
     public float hungerDecreaseIntervalMultiplier = 1f;
-    public float reproductionCheckIntervalMultiplier = 1f;
+    public float reproductionIntervalMultiplier = 1f;
+    public float reproductionChanceMultiplier = 1f;
+    public float mateDetectionRadiusMultiplier = 1.5f;
+    public float reproductionCostMultiplier = 1f;
 
     public float Size => baseSize * sizeMultiplier;
     public float Health
@@ -49,17 +51,20 @@ public class CreatureBehavior : MonoBehaviour
         set => baseHealth = value / healthMultiplier;
     }
     private float walkingSpeed => baseWalkingSpeed * walkingSpeedMultiplier;
-    public float MaxFoodLevel => baseMaxFoodLevel * maxFoodLevelMultiplier;
+    public float MaxFoodLevel => Mathf.Ceil(baseMaxFoodLevel * maxFoodLevelMultiplier);
     private float hungerDecreaseInterval => baseHungerDecreaseInterval * hungerDecreaseIntervalMultiplier;
-    private float reproductionCheckInterval => baseReproductionCheckInterval * reproductionCheckIntervalMultiplier;
+    private float reproductionInterval => 40f * reproductionIntervalMultiplier;
+    private float reproductionChance => 25f * reproductionChanceMultiplier;
+    private float baseReproductionCost => 10f;
 
     private float newWalkingSpeed => walkingSpeed;
     private float sprintSpeed
     {
         get
         {
-            float speed = walkingSpeed * (traitIds.Contains(8) ? 3.0f : 2.0f); // Hunter: 3x, others: 2x
-            if (traitIds.Contains(28) && Health < Size * 10f * 0.3f) speed *= 1.5f; // Adrenaline
+            float speed = walkingSpeed * 2.0f; // Default sprint speed is 2x walking speed
+            if (traitIds.Contains(8)) speed *= 1.5f; // Hunter trait adjustment
+            if (traitIds.Contains(19) && Health < baseHealth * healthMultiplier * 0.3f) speed *= 1.5f; // Adrenaline trait
             return speed;
         }
     }
@@ -67,31 +72,45 @@ public class CreatureBehavior : MonoBehaviour
     [Header("Health and Hunger")]
     [SerializeField] public float foodLevel;
     [SerializeField] private float hungerTimer = 0f;
+    [SerializeField] private bool isDyingOfOldAge = false; // For gradual death from old age
 
     [Header("Stamina")]
-    [SerializeField] public float maxStamina = 10f;
-    [SerializeField] public float stamina = 10f;
-    [SerializeField] public float staminaRegenRate = 1f;
+    [SerializeField] public float maxStamina = 20f;
+    [SerializeField] public float stamina = 20f;
+    [SerializeField] public float staminaRegenRate = 2f;
     [SerializeField] public float staminaDrainRate = 1f;
+    [SerializeField] public float lastStaminaUseTime = 0f; // Made public for access by CreatureCombat
+    [SerializeField] private bool canSprint = true; // Controls sprinting eligibility
 
     [Header("Age and Lifespan")]
-    [SerializeField] public float maxAge = 100f;
+    [SerializeField] public float maxAge = 30f; // Will be set to 3 * adultAge
+    [SerializeField] private float _adultAge = 10f;
+    public float adultAge { get => _adultAge; set => _adultAge = value; }
     [SerializeField] public float currentAge = 0f;
     public float Age { get => currentAge; set => currentAge = value; }
 
     [Header("Reproduction")]
-    [SerializeField] private bool isPregnant = false;
-    [SerializeField] private int totalFoodLostSincePregnant = 0;
-    [SerializeField] private float lastImpregnationTime = -1000f;
-    private CreatureBehavior pregnantWith;
-    [SerializeField] private float reproductionCooldown = 60f;
+    [SerializeField] public bool isPregnant = false;
+    [SerializeField] public int totalFoodLostSincePregnant = 0;
+    [SerializeField] public float lastImpregnationTime = -1000f;
+    [SerializeField] public float lastBirthTime = -1000f;
+    [SerializeField] public CreatureBehavior pregnantWith;
+    [SerializeField] public CreatureBehavior mother;
+    [SerializeField] public CreatureBehavior father;
+    [SerializeField] private CreatureBehavior firstMate; // For Loyal trait
+    [SerializeField] private float maleReproductionCooldown = 160f;
+    [SerializeField] private float femaleReproductionCooldown = 120f;
+    [SerializeField] private float twinChance = 0.05f;
+    [SerializeField] private float tripletChance = 0.005f;
+    public float TwinChance { get => twinChance; set => twinChance = value; }
+    public float TripletChance { get => tripletChance; set => tripletChance = value; }
     private Transform reproductionTarget;
     [SerializeField] private float reproductionDistance = 3f;
     [SerializeField] private float reproductionTimer = 0f;
 
     public bool IsPregnant => isPregnant;
     public int TotalFoodLostSincePregnant => totalFoodLostSincePregnant;
-    public int ReproductionCost => Mathf.RoundToInt(Size * (traitIds.Contains(41) ? 6.4f : 8f)) + Mathf.FloorToInt(walkingSpeed / 3); // SwiftBreeder: -20%
+    public int ReproductionCost => Mathf.RoundToInt(baseReproductionCost * reproductionCostMultiplier);
 
     [Header("Detection and Interaction")]
     [SerializeField] public float baseDetectionRadius = 50f;
@@ -104,16 +123,17 @@ public class CreatureBehavior : MonoBehaviour
     [SerializeField] public float wanderRadius = 20f;
     [SerializeField] private float wanderTimer = 0f;
     [SerializeField] private float wanderInterval = 5f;
-    [SerializeField] private float migrationTimer = 0f; // For Migratory
+    [SerializeField] private float migrationTimer = 0f;
 
     [Header("Eating Mechanics")]
     [SerializeField] private float eatTimer = 0f;
     [SerializeField] private float noFoodTimer = 0f;
+    private FoodSource reservedFoodSource;
 
     [Header("Combat")]
     [SerializeField] public Transform combatTarget;
     [SerializeField] private float attackTimer = 0f;
-    private float attackInterval => traitIds.Contains(36) ? 1f * 1.2f : 1f; // Ambusher: -20% attack speed
+    private float attackInterval => traitIds.Contains(23) ? 1f * 1.2f : 1f;
 
     [Header("Burrowing")]
     [SerializeField] public bool isBurrowing = false;
@@ -126,11 +146,31 @@ public class CreatureBehavior : MonoBehaviour
     [SerializeField] public CreatureBehavior lastAttackedBy;
 
     [Header("Base Reference")]
-    [SerializeField] public CreatureBase owningBase; // Reference to the spawning base
+    [SerializeField] public CreatureBase owningBase;
+
+    [Header("Visuals")]
+    [SerializeField] public GameObject meshRendererObject;
+    [SerializeField] public Color typeColor = Color.white;
+    [SerializeField] public Light bioluminescentLight; // Made public for access by Trait_Bioluminescent
 
     public enum FoodType { Apple, Berry, Meat }
     [Header("Food Preferences")]
     [SerializeField] public List<FoodType> foodPreferences = new List<FoodType> { FoodType.Apple };
+
+    private HashSet<CreatureBehavior> overlappingCreatures = new HashSet<CreatureBehavior>();
+    private float unstickCooldown = 0f;
+
+    // Status Effect Icons
+    [Header("Status Effect Icons")]
+    [SerializeField] private GameObject poisonIcon; // Reference to PoisonIcon GameObject
+    [SerializeField] private GameObject pregnantIcon; // Reference to PregnantIcon GameObject
+    [SerializeField] private GameObject hungryIcon; // Reference to HungryIcon GameObject
+    [SerializeField] private GameObject panickingIcon; // Reference to PanickingIcon GameObject
+
+    // Placeholder for poison status (you can replace with your actual poison logic)
+    [Header("Status Effects")]
+    [SerializeField] private bool poisoned = false; // Placeholder for poison status
+    public bool Poisoned { get => poisoned; set => poisoned = value; }
 
     private const int WalkableArea = 1 << 0;
     private const int JumpArea = 1 << 2;
@@ -181,15 +221,6 @@ public class CreatureBehavior : MonoBehaviour
             UpdateSizeAndStats();
         }
     }
-    public float BaseReproductionCheckInterval
-    {
-        get => baseReproductionCheckInterval;
-        set
-        {
-            baseReproductionCheckInterval = value;
-            UpdateSizeAndStats();
-        }
-    }
     public float MaxAge { get => maxAge; set => maxAge = value; }
     public float FoodLevel => foodLevel;
     public float MaxStamina => maxStamina;
@@ -204,12 +235,10 @@ public class CreatureBehavior : MonoBehaviour
 
         SetupTextDisplay();
 
-        baseSize = Mathf.Round(baseSize * 100f) / 100f;
-        baseWalkingSpeed = Mathf.Round(baseWalkingSpeed * 100f) / 100f;
-        baseHealth = Mathf.Max(baseHealth, Mathf.Ceil(Size * 10f));
+        // Set maxAge to 3 * adultAge before traits are applied
+        maxAge = 3 * adultAge;
 
-        // Apply trait effects
-        foreach (int traitId in traitIds)
+        foreach (int traitId in traitIds.ToList())
         {
             Type traitType = TraitManager.GetTraitType(traitId);
             if (traitType != null)
@@ -219,13 +248,42 @@ public class CreatureBehavior : MonoBehaviour
             }
         }
 
+        // Apply random variation to maxAge after traits are applied
+        maxAge += UnityEngine.Random.Range(-adultAge, adultAge);
+
+        if (meshRendererObject != null)
+        {
+            SkinnedMeshRenderer renderer = meshRendererObject.GetComponent<SkinnedMeshRenderer>();
+            if (renderer != null)
+            {
+                renderer.material.SetColor("_BaseColor", typeColor);
+                Debug.Log($"{name}: Applied color {typeColor} to SkinnedMeshRenderer");
+            }
+            else
+            {
+                Debug.LogWarning($"{name}: No SkinnedMeshRenderer found on meshRendererObject!");
+            }
+        }
+        else
+        {
+            Debug.LogWarning($"{name}: meshRendererObject not assigned!");
+        }
+
+        // Disable bioluminescent light by default
+        if (bioluminescentLight != null)
+        {
+            bioluminescentLight.enabled = false;
+        }
+
         int areaMask = WalkableArea | JumpArea;
         if (canClimb) areaMask |= ClimbArea;
         agent.areaMask = areaMask;
 
         UpdateSizeAndStats();
-        foodLevel = MaxFoodLevel;
+        foodLevel = Mathf.Ceil(MaxFoodLevel);
         stamina = maxStamina;
+        Health = baseHealth * healthMultiplier; // Initialize health to max
+        reservedFoodSource = null;
 
         if (!agent.isOnNavMesh)
         {
@@ -251,10 +309,9 @@ public class CreatureBehavior : MonoBehaviour
             foodSource.enabled = false;
         }
 
-        wanderInterval = UnityEngine.Random.Range(2.5f, 10f);
+        wanderInterval = 5f;
         agent.speed = newWalkingSpeed;
 
-        // Register with CreatureBase if not already done
         if (owningBase != null)
         {
             owningBase.AddCreature(this);
@@ -265,7 +322,7 @@ public class CreatureBehavior : MonoBehaviour
         }
 
         UpdateTextDisplay();
-        Debug.Log($"{name}: Initialized - Gender: {gender}, Size: {Size}, Speed: {walkingSpeed}, Food: {foodLevel}/{MaxFoodLevel}, Stamina: {stamina}/{maxStamina}");
+        Debug.Log($"{name}: Initialized - Gender: {gender}, Size: {Size}, Speed: {walkingSpeed}, Food: {foodLevel}/{MaxFoodLevel}, Stamina: {stamina}/{maxStamina}, Color: {typeColor}");
     }
 
     void Update()
@@ -274,8 +331,15 @@ public class CreatureBehavior : MonoBehaviour
 
         float deltaTime = Time.deltaTime;
         UpdateDiscoverablesDetection();
+        UpdateSizeAndStats();
 
-        // Immobilization
+        if (currentState == State.Attacking && combatBehavior != CombatBehavior.Hunter && lastAttackedBy == null)
+        {
+            ChangeState(State.SearchingForFood);
+            combatTarget = null;
+            Debug.Log($"{name}: Non-hunter stopped attacking (not retaliating)");
+        }
+
         if (immobilized)
         {
             immobilizedTimer -= deltaTime;
@@ -288,12 +352,11 @@ public class CreatureBehavior : MonoBehaviour
             }
         }
 
-        // Burrowing
         if (isBurrowing)
         {
             burrowTimer -= deltaTime;
             agent.isStopped = true;
-            gameObject.layer = LayerMask.NameToLayer("Ignore Raycast"); // Undetectable
+            gameObject.layer = LayerMask.NameToLayer("Ignore Raycast");
             if (burrowTimer <= 0)
             {
                 isBurrowing = false;
@@ -302,37 +365,62 @@ public class CreatureBehavior : MonoBehaviour
                 Debug.Log($"{name}: Emerged from burrowing");
             }
             UpdateTextDisplay();
-            return; // Skip other updates while burrowing
+            return;
         }
-        else if (traitIds.Contains(43))
+        else if (traitIds.Contains(25))
         {
             burrowCooldown -= deltaTime;
         }
 
-        // Stamina management
-        bool isSprinting = (currentState == State.Fleeing || currentState == State.Attacking || (currentState == State.SearchingForFood && visibleDiscoverables.Count == 0));
-        if (isSprinting && stamina > maxStamina * 0.25f)
+        // Define sprinting conditions
+        bool isSprinting = (currentState == State.Fleeing || 
+                           currentState == State.Attacking || 
+                           currentState == State.SearchingForFood || 
+                           (currentState == State.Eating && agent.hasPath));
+
+        // Handle sprinting and stamina
+        if (isSprinting && stamina > 0 && canSprint)
         {
             stamina = Mathf.Max(stamina - staminaDrainRate * deltaTime, 0);
+            lastStaminaUseTime = Time.time;
             agent.speed = sprintSpeed;
         }
         else
         {
-            stamina = Mathf.Min(stamina + staminaRegenRate * deltaTime, maxStamina);
             agent.speed = newWalkingSpeed;
         }
 
-        // Altruist food sharing (10% chance per second)
+        // Regenerate stamina if 2 seconds have passed since last use
+        if (Time.time - lastStaminaUseTime >= 2f)
+        {
+            stamina = Mathf.Min(stamina + staminaRegenRate * deltaTime, maxStamina);
+        }
+
+        // Prevent sprinting if stamina is 0 until it reaches 25%
+        if (stamina <= 0) canSprint = false;
+        if (stamina >= maxStamina * 0.25f) canSprint = true;
+
         if (traitIds.Contains(17) && foodLevel > MaxFoodLevel * 0.4f && UnityEngine.Random.value < 0.1f * deltaTime)
         {
             TryShareFood();
         }
 
         currentAge += deltaTime / 60f;
-        if (currentAge >= maxAge && !traitIds.Contains(6)) // Immortal prevents age death
+
+        // Handle old age death gradually
+        if (currentAge >= maxAge)
         {
-            StartCoroutine(DieWithRotation());
-            return;
+            isDyingOfOldAge = true;
+        }
+
+        if (isDyingOfOldAge)
+        {
+            Health = Mathf.Max(Health - deltaTime * 0.5f, 0); // Same rate as starvation
+            if (Health <= 0)
+            {
+                StartCoroutine(DieWithRotation());
+                return;
+            }
         }
 
         float hungerMultiplier = isPregnant ? 2f : 1f;
@@ -352,10 +440,20 @@ public class CreatureBehavior : MonoBehaviour
                     BirthBaby();
                     isPregnant = false;
                     totalFoodLostSincePregnant = 0;
+                    lastBirthTime = Time.time;
                 }
             }
             hungerTimer -= hungerDecreaseInterval;
             UpdateTextDisplay();
+        }
+
+        // Check if pregnant creature's health is below 50%
+        if (isPregnant && Health < (baseHealth * healthMultiplier) * 0.5f)
+        {
+            isPregnant = false;
+            totalFoodLostSincePregnant = 0;
+            pregnantWith = null;
+            Debug.Log($"{name}: Lost pregnancy due to low health");
         }
 
         if (foodLevel <= 0)
@@ -364,11 +462,11 @@ public class CreatureBehavior : MonoBehaviour
             if (Health <= 0) StartCoroutine(DieWithRotation());
         }
 
-        if (foodLevel > 0 && Health < Mathf.Ceil(Size * 10f))
+        if (foodLevel > 0 && Health < (baseHealth * healthMultiplier))
         {
             if (hungerTimer >= 10f)
             {
-                Health = Mathf.Min(Health + 1, Mathf.Ceil(Size * 10f));
+                Health = Mathf.Min(Health + 1, (baseHealth * healthMultiplier));
                 hungerTimer = 0f;
                 UpdateTextDisplay();
             }
@@ -376,22 +474,21 @@ public class CreatureBehavior : MonoBehaviour
 
         if (foodLevel <= MaxFoodLevel * 0.4f && currentState == State.Idle)
         {
-            currentState = State.SearchingForFood;
+            ChangeState(State.SearchingForFood);
             noFoodTimer = 0f;
-            Debug.Log($"{name}: Hungry, searching");
         }
 
-        if (currentAge >= maxAge * 0.1f && currentState != State.Eating && currentState != State.SeekingMate)
+        if (currentAge >= adultAge && currentState != State.Eating && currentState != State.SeekingMate)
         {
             reproductionTimer += deltaTime;
-            if (reproductionTimer >= reproductionCheckInterval)
+            if (reproductionTimer >= reproductionInterval)
             {
-                if (CanSeekReproduction() && UnityEngine.Random.value < 1f / 3f)
+                if (CanSeekReproduction() && UnityEngine.Random.Range(0f, 100f) <= reproductionChance)
                 {
                     reproductionTarget = FindMateForReproduction();
                     if (reproductionTarget != null)
                     {
-                        currentState = State.SeekingMate;
+                        ChangeState(State.SeekingMate);
                         agent.SetDestination(reproductionTarget.position);
                         Debug.Log($"{name}: Seeking mate {reproductionTarget.name}");
                     }
@@ -400,16 +497,43 @@ public class CreatureBehavior : MonoBehaviour
             }
         }
 
-        // Migratory wandering
-        if (traitIds.Contains(31))
+        if (traitIds.Contains(21))
         {
             migrationTimer += deltaTime;
-            if (migrationTimer >= 120f) // 2 minutes
+            if (migrationTimer >= 120f)
             {
                 WanderMigratory();
                 migrationTimer = 0f;
             }
         }
+
+        if (overlappingCreatures.Count > 0 && Time.time % 1f < 0.02f && unstickCooldown <= 0)
+        {
+            foreach (var other in overlappingCreatures)
+            {
+                if (other.currentState == State.Dead) continue;
+
+                float dist = Vector3.Distance(transform.position, other.transform.position);
+                float minDist = (Size + other.Size) * 0.5f;
+                if (dist < minDist)
+                {
+                    Vector3 pushDir = (transform.position - other.transform.position).normalized;
+                    Vector3 newPos = transform.position + pushDir * (Size + other.Size) * 0.1f * Time.deltaTime;
+                    if (NavMesh.SamplePosition(newPos, out NavMeshHit hit, 1f, agent.areaMask))
+                    {
+                        transform.position = hit.position;
+                        agent.Warp(hit.position);
+                        agent.isStopped = true;
+                        StartCoroutine(ResumeAgent());
+                        unstickCooldown = 1f;
+                    }
+                }
+            }
+        }
+
+        unstickCooldown -= deltaTime;
+
+        reservedFoodSource?.UpdateReservations();
 
         switch (currentState)
         {
@@ -428,7 +552,7 @@ public class CreatureBehavior : MonoBehaviour
             case State.Attacking:
                 if (combatTarget == null || combatTarget.GetComponent<CreatureBehavior>()?.currentState == State.Dead)
                 {
-                    currentState = State.SearchingForFood;
+                    ChangeState(State.SearchingForFood);
                     noFoodTimer = 0f;
                     break;
                 }
@@ -446,7 +570,7 @@ public class CreatureBehavior : MonoBehaviour
             case State.Fleeing:
                 if (combatTarget == null)
                 {
-                    currentState = State.Idle;
+                    ChangeState(State.Idle);
                     break;
                 }
                 Vector3 directionAway = (transform.position - combatTarget.position).normalized;
@@ -457,7 +581,7 @@ public class CreatureBehavior : MonoBehaviour
                 }
                 if (Vector3.Distance(transform.position, combatTarget.position) > detectionRadius)
                 {
-                    currentState = State.Idle;
+                    ChangeState(State.Idle);
                 }
                 break;
         }
@@ -475,8 +599,8 @@ public class CreatureBehavior : MonoBehaviour
                 if (other != null && other != this && other.foodLevel <= other.MaxFoodLevel * 0.4f)
                 {
                     foodLevel = Mathf.Max(foodLevel - 1, 0);
-                    other.foodLevel = Mathf.Min(other.foodLevel + 1, other.MaxFoodLevel);
-                    Debug.Log($"{name} (Altruist) shared 1 food with {other.name}");
+                    other.foodLevel = Mathf.Ceil(Mathf.Min(other.foodLevel + 1, other.MaxFoodLevel));
+                    Debug.Log($"{name} (Altruistic) shared 1 food with {other.name}");
                     UpdateTextDisplay();
                     other.UpdateTextDisplay();
                     break;
@@ -487,12 +611,15 @@ public class CreatureBehavior : MonoBehaviour
 
     private void UpdateSizeAndStats()
     {
-        transform.localScale = Vector3.one * Size;
+        float ageSizeMultiplier = currentAge <= adultAge ? (0.25f + (currentAge / adultAge) * (1f - 0.25f)) : 1f;
+        transform.localScale = Vector3.one * Size * ageSizeMultiplier;
         if (agent != null && agent.isActiveAndEnabled)
         {
-            agent.radius = Size * 0.5f;
-            agent.height = Size;
+            agent.radius = Size * ageSizeMultiplier * 0.5f;
+            agent.height = Size * ageSizeMultiplier;
             agent.speed = newWalkingSpeed;
+            agent.obstacleAvoidanceType = ObstacleAvoidanceType.HighQualityObstacleAvoidance;
+            agent.avoidancePriority = Mathf.Clamp(50 - (int)(Size * 10f), 0, 99);
         }
     }
 
@@ -509,7 +636,6 @@ public class CreatureBehavior : MonoBehaviour
                 agent.SetDestination(hit.position);
             }
             wanderTimer = 0f;
-            wanderInterval = UnityEngine.Random.Range(2.5f, 10f);
         }
     }
 
@@ -529,6 +655,12 @@ public class CreatureBehavior : MonoBehaviour
     {
         if (!agent.isActiveAndEnabled || !agent.isOnNavMesh) return;
 
+        if (reservedFoodSource != null)
+        {
+            reservedFoodSource.ReleaseReservation(this);
+            reservedFoodSource = null;
+        }
+
         if (visibleDiscoverables.Count == 0 || foodPreferences.Count == 0)
         {
             HandleNoFood();
@@ -542,36 +674,42 @@ public class CreatureBehavior : MonoBehaviour
 
             Transform closest = null;
             float minDist = float.MaxValue;
+            FoodSource closestFoodSource = null;
 
             foreach (var obj in visibleDiscoverables)
             {
-                if (obj.CompareTag(tag) || (traitIds.Contains(45) && obj.CompareTag("Meat"))) // Cannibal includes same-type Meat
+                if (obj.CompareTag(tag) || obj.CompareTag("Meat"))
                 {
                     float dist = Vector3.Distance(transform.position, obj.position);
-                    if (dist < minDist && IsNavigable(obj.position))
+                    FoodSource foodSource = obj.GetComponent<FoodSource>();
+                    if (foodSource != null)
                     {
-                        minDist = dist;
-                        closest = obj;
+                        int availableFood = foodSource.CurrentFood - foodSource.ReservedFood;
+                        if (dist < minDist && IsNavigable(obj.position) && availableFood >= 1)
+                        {
+                            minDist = dist;
+                            closest = obj;
+                            closestFoodSource = foodSource;
+                        }
                     }
                 }
             }
 
             if (closest != null)
             {
-                FoodSource targetFoodSource = closest.GetComponent<FoodSource>();
-                if (targetFoodSource != null && targetFoodSource.HasFood)
+                closestFoodSource.ReserveFood(this, 30f);
+                reservedFoodSource = closestFoodSource;
+
+                agent.SetDestination(closest.position);
+                if (minDist <= eatingDistance)
                 {
-                    agent.SetDestination(closest.position);
-                    if (minDist <= eatingDistance)
-                    {
-                        currentState = State.Eating;
-                        agent.isStopped = true;
-                        eatTimer = 0f;
-                        this.targetFoodSource = targetFoodSource;
-                        noFoodTimer = 0f;
-                    }
-                    return;
+                    currentState = State.Eating;
+                    agent.isStopped = true;
+                    eatTimer = 0f;
+                    this.targetFoodSource = closestFoodSource;
+                    noFoodTimer = 0f;
                 }
+                return;
             }
         }
 
@@ -580,17 +718,22 @@ public class CreatureBehavior : MonoBehaviour
 
     private void HandleNoFood()
     {
-        noFoodTimer += Time.deltaTime;
-
-        if (combatBehavior == CombatBehavior.Hunter && noFoodTimer >= 10f)
+        if (combatBehavior == CombatBehavior.Hunter && foodLevel < MaxFoodLevel * 0.2f)
         {
-            combatTarget = FindHuntingTarget();
-            if (combatTarget != null)
+            bool nonLethalFoodAvailable = visibleDiscoverables.Any(obj => 
+                (obj.CompareTag("Apple") || obj.CompareTag("Berry") || obj.CompareTag("Meat")) && 
+                obj.GetComponent<FoodSource>()?.HasFood == true);
+
+            if (!nonLethalFoodAvailable)
             {
-                currentState = State.Attacking;
-                agent.SetDestination(combatTarget.position);
-                noFoodTimer = 0f;
-                return;
+                combatTarget = FindHuntingTarget();
+                if (combatTarget != null)
+                {
+                    ChangeState(State.Attacking);
+                    agent.SetDestination(combatTarget.position);
+                    Debug.Log($"{name}: Hunting {combatTarget.name} (no non-lethal food available)");
+                    return;
+                }
             }
         }
 
@@ -607,16 +750,19 @@ public class CreatureBehavior : MonoBehaviour
             if (targetFoodSource != null && targetFoodSource.HasFood && targetFoodSource.CurrentFood > 0 && foodLevel < MaxFoodLevel)
             {
                 targetFoodSource.CurrentFood--;
-                foodLevel = Mathf.Min(foodLevel + (int)targetFoodSource.FoodSatiety, (int)MaxFoodLevel);
+                foodLevel = Mathf.Ceil(Mathf.Min(foodLevel + (int)targetFoodSource.FoodSatiety, MaxFoodLevel));
+                reservedFoodSource?.ReleaseReservation(this);
+                reservedFoodSource = null;
                 UpdateTextDisplay();
             }
             else
             {
-                currentState = foodLevel >= MaxFoodLevel ? State.Idle : State.SearchingForFood;
+                ChangeState(foodLevel >= MaxFoodLevel ? State.Idle : State.SearchingForFood);
                 agent.isStopped = false;
+                reservedFoodSource?.ReleaseReservation(this);
+                reservedFoodSource = null;
                 targetFoodSource = null;
                 noFoodTimer = 0f;
-                Debug.Log($"{name}: {(foodLevel >= MaxFoodLevel ? "Full" : "Food gone")}");
             }
             eatTimer = 0f;
         }
@@ -626,36 +772,74 @@ public class CreatureBehavior : MonoBehaviour
 
     private bool CanSeekReproduction()
     {
+        if (currentAge < adultAge || foodLevel < MaxFoodLevel * 0.75f)
+            return false;
+
         if (gender == Gender.Female)
         {
-            return !isPregnant && foodLevel >= MaxFoodLevel * 0.7f;
+            return !isPregnant && (Time.time - lastBirthTime) >= femaleReproductionCooldown;
         }
         else
         {
-            return (Time.time - lastImpregnationTime) >= reproductionCooldown && foodLevel >= MaxFoodLevel * 0.7f;
+            return (Time.time - lastImpregnationTime) >= maleReproductionCooldown;
         }
     }
 
     private Transform FindMateForReproduction()
     {
-        float range = detectionRadius * (traitIds.Contains(54) ? 2f : 1.5f); // Pheromonal: +50% range
+        float range = detectionRadius * mateDetectionRadiusMultiplier;
         Transform nearest = null;
         float minDist = float.MaxValue;
         Collider[] hits = Physics.OverlapSphere(transform.position, range, discoverableLayer);
+
+        // For Loyal trait, only mate with firstMate if set
+        if (traitIds.Contains(33) && firstMate != null)
+        {
+            if (firstMate.currentState == State.Dead)
+            {
+                return null; // Can't reproduce if first mate is dead
+            }
+
+            if (Vector3.Distance(transform.position, firstMate.transform.position) <= range &&
+                IsNavigable(firstMate.transform.position))
+            {
+                CreatureBehavior other = firstMate;
+                if (other.gender != gender && other.currentAge >= other.adultAge && other.foodLevel >= other.MaxFoodLevel * 0.75f)
+                {
+                    if (gender == Gender.Female && other.gender == Gender.Male)
+                    {
+                        if ((Time.time - other.lastImpregnationTime) >= other.maleReproductionCooldown)
+                        {
+                            return other.transform;
+                        }
+                    }
+                    else if (gender == Gender.Male && other.gender == Gender.Female)
+                    {
+                        if (!other.isPregnant && (Time.time - other.lastBirthTime) >= other.femaleReproductionCooldown)
+                        {
+                            return other.transform;
+                        }
+                    }
+                }
+            }
+            return null;
+        }
+
+        // Normal mate finding logic
         foreach (var hit in hits)
         {
             if (hit.transform == transform) continue;
             if (hit.CompareTag("Creature"))
             {
                 CreatureBehavior other = hit.GetComponent<CreatureBehavior>();
-                if (other != null && other.gender != gender)
+                if (other != null && other.gender != gender && other.currentAge >= other.adultAge && other.foodLevel >= other.MaxFoodLevel * 0.75f)
                 {
                     if (gender == Gender.Female && other.gender == Gender.Male)
                     {
-                        if ((Time.time - other.lastImpregnationTime) >= reproductionCooldown && other.foodLevel >= other.MaxFoodLevel * 0.8f)
+                        if ((Time.time - other.lastImpregnationTime) >= other.maleReproductionCooldown)
                         {
                             float dist = Vector3.Distance(transform.position, hit.transform.position);
-                            if (dist < minDist)
+                            if (dist < minDist && IsNavigable(hit.transform.position))
                             {
                                 minDist = dist;
                                 nearest = hit.transform;
@@ -664,10 +848,10 @@ public class CreatureBehavior : MonoBehaviour
                     }
                     else if (gender == Gender.Male && other.gender == Gender.Female)
                     {
-                        if (!other.isPregnant && other.foodLevel >= other.MaxFoodLevel * 0.7f)
+                        if (!other.isPregnant && (Time.time - other.lastBirthTime) >= other.femaleReproductionCooldown)
                         {
                             float dist = Vector3.Distance(transform.position, hit.transform.position);
-                            if (dist < minDist)
+                            if (dist < minDist && IsNavigable(hit.transform.position))
                             {
                                 minDist = dist;
                                 nearest = hit.transform;
@@ -695,14 +879,12 @@ public class CreatureBehavior : MonoBehaviour
             else
             {
                 reproductionTarget = null;
-                currentState = State.Idle;
-                Debug.Log($"{name}: Mate unreachable");
+                ChangeState(State.Idle);
             }
         }
         else
         {
-            currentState = State.Idle;
-            Debug.Log($"{name}: Mate lost");
+            ChangeState(State.Idle);
         }
     }
 
@@ -712,9 +894,25 @@ public class CreatureBehavior : MonoBehaviour
         CreatureBehavior partner = reproductionTarget.GetComponent<CreatureBehavior>();
         if (partner == null || partner.gender == gender) return;
 
+        // Health check before reproduction
+        if (Health < (baseHealth * healthMultiplier) * 0.5f || 
+            partner.Health < (partner.baseHealth * partner.healthMultiplier) * 0.5f)
+        {
+            reproductionTarget = null;
+            ChangeState(State.Idle);
+            return;
+        }
+
+        // Set firstMate for Loyal trait
+        if (traitIds.Contains(33) && firstMate == null)
+        {
+            firstMate = partner;
+        }
+
         if (gender == Gender.Female && partner.gender == Gender.Male)
         {
-            if (!isPregnant && foodLevel >= MaxFoodLevel * 0.7f && (Time.time - partner.lastImpregnationTime) >= reproductionCooldown && partner.foodLevel >= partner.MaxFoodLevel * 0.8f)
+            if (!isPregnant && foodLevel >= MaxFoodLevel * 0.75f && (Time.time - lastBirthTime) >= femaleReproductionCooldown &&
+                (Time.time - partner.lastImpregnationTime) >= partner.maleReproductionCooldown && partner.foodLevel >= partner.MaxFoodLevel * 0.75f)
             {
                 isPregnant = true;
                 totalFoodLostSincePregnant = 0;
@@ -725,7 +923,8 @@ public class CreatureBehavior : MonoBehaviour
         }
         else if (gender == Gender.Male && partner.gender == Gender.Female)
         {
-            if (!partner.isPregnant && partner.foodLevel >= partner.MaxFoodLevel * 0.7f && (Time.time - lastImpregnationTime) >= reproductionCooldown && foodLevel >= partner.MaxFoodLevel * 0.8f)
+            if (!partner.isPregnant && partner.foodLevel >= partner.MaxFoodLevel * 0.75f && (Time.time - partner.lastBirthTime) >= partner.femaleReproductionCooldown &&
+                (Time.time - lastImpregnationTime) >= maleReproductionCooldown && foodLevel >= MaxFoodLevel * 0.75f)
             {
                 partner.isPregnant = true;
                 partner.totalFoodLostSincePregnant = 0;
@@ -735,66 +934,33 @@ public class CreatureBehavior : MonoBehaviour
             }
         }
         reproductionTarget = null;
-        currentState = State.Idle;
-    }
-
-    private void SpawnChild(CreatureBehavior mother, CreatureBehavior father)
-    {
-        GameObject child = Instantiate(gameObject, mother.transform.position + Vector3.right * 2f, Quaternion.identity);
-        CreatureBehavior childBehavior = child.GetComponent<CreatureBehavior>();
-
-        childBehavior.baseSize = mother.baseSize;
-        childBehavior.baseWalkingSpeed = mother.baseWalkingSpeed;
-        childBehavior.baseHealth = mother.baseHealth;
-        childBehavior.baseMaxFoodLevel = mother.baseMaxFoodLevel;
-        childBehavior.baseHungerDecreaseInterval = mother.baseHungerDecreaseInterval;
-        childBehavior.baseReproductionCheckInterval = mother.baseReproductionCheckInterval;
-        childBehavior.canClimb = mother.canClimb;
-        childBehavior.traitIds = new List<int>(mother.traitIds);
-
-        childBehavior.currentAge = 0f;
-        childBehavior.foodLevel = (int)childBehavior.MaxFoodLevel;
-        childBehavior.stamina = childBehavior.maxStamina;
-        childBehavior.gender = (UnityEngine.Random.value < 0.5f) ? Gender.Male : Gender.Female;
-        childBehavior.isPregnant = false;
-        childBehavior.totalFoodLostSincePregnant = 0;
-        childBehavior.lastImpregnationTime = -1000f;
-        childBehavior.pregnantWith = null;
-        childBehavior.owningBase = mother.owningBase; // Inherit mother's base
-
-        if (NavMesh.SamplePosition(child.transform.position, out NavMeshHit hit, 5f, childBehavior.agent.areaMask))
-        {
-            child.transform.position = hit.position;
-            childBehavior.agent.Warp(hit.position);
-        }
-
-        if (childBehavior.owningBase != null)
-        {
-            // Assign name before adding to CreatureBase
-            childBehavior.gameObject.name = childBehavior.owningBase.GenerateChildName(childBehavior);
-            childBehavior.owningBase.AddCreature(childBehavior);
-        }
-        else
-        {
-            Debug.LogWarning($"Child {childBehavior.gameObject.name}: No CreatureBase found to register with!");
-        }
-
-        Debug.Log($"Child born: {childBehavior.name}, Gender: {childBehavior.gender}, Size: {childBehavior.Size}, Speed: {childBehavior.walkingSpeed}, CanClimb: {childBehavior.canClimb}");
+        ChangeState(State.Idle);
     }
 
     private void BirthBaby()
     {
         if (pregnantWith == null) return;
-        SpawnChild(this, pregnantWith);
-        float twinChance = traitIds.Contains(16) ? 0.1f : 0.05f; // Prolific: 10%, others: 5%
-        if (UnityEngine.Random.value < twinChance)
+        owningBase.SpawnChild(this, pregnantWith, transform.position + Vector3.right * 2f);
+        bool hasTwins = UnityEngine.Random.value < twinChance;
+        bool hasTriplets = UnityEngine.Random.value < tripletChance;
+
+        if (hasTriplets)
         {
-            SpawnChild(this, pregnantWith);
+            owningBase.SpawnChild(this, pregnantWith, transform.position + Vector3.right * 2f);
+            owningBase.SpawnChild(this, pregnantWith, transform.position + Vector3.right * 2f);
+            Debug.Log($"{name} gave birth to triplets!");
+        }
+        else if (hasTwins)
+        {
+            owningBase.SpawnChild(this, pregnantWith, transform.position + Vector3.right * 2f);
             Debug.Log($"{name} gave birth to twins!");
         }
+
         isPregnant = false;
         totalFoodLostSincePregnant = 0;
         pregnantWith = null;
+        lastBirthTime = Time.time;
+        Debug.Log($"{name} gave birth");
     }
 
     private void PanicWander()
@@ -822,6 +988,7 @@ public class CreatureBehavior : MonoBehaviour
                 CreatureBehavior other = obj.GetComponent<CreatureBehavior>();
                 if (other != null && other.currentState != State.Dead && other != this)
                 {
+                    if (other.traitIds.SequenceEqual(traitIds)) continue;
                     float dist = Vector3.Distance(transform.position, obj.position);
                     if (dist < minDist && IsNavigable(obj.position))
                     {
@@ -845,22 +1012,31 @@ public class CreatureBehavior : MonoBehaviour
 
     private void UpdateDiscoverablesDetection()
     {
-        if (isBurrowing) return; // Undetectable while burrowing
+        if (isBurrowing) return;
 
-        Collider[] hits = Physics.OverlapSphere(transform.position, detectionRadius);
+        Collider[] hits = Physics.OverlapSphere(transform.position, detectionRadius, discoverableLayer);
         visibleDiscoverables.Clear();
         foreach (var hit in hits)
-            if (hit.transform != transform)
+        {
+            if (hit.transform == transform) continue;
+
+            string tag = hit.transform.tag;
+            if (tag == "Creature" || tag == "Apple" || tag == "Berry" || tag == "Meat")
+            {
                 visibleDiscoverables.Add(hit.transform);
+            }
+        }
     }
 
     public float GetFoodDetectionRadius()
     {
-        return detectionRadius * (traitIds.Contains(59) ? 1.25f : 1f); // Keen: +25%
+        return detectionRadius * (traitIds.Contains(28) ? 1.25f : 1f);
     }
 
     public IEnumerator DieWithRotation()
     {
+        reservedFoodSource?.ReleaseReservation(this);
+        reservedFoodSource = null;
         currentState = State.Dead;
         agent.enabled = false;
 
@@ -886,7 +1062,7 @@ public class CreatureBehavior : MonoBehaviour
             foodSource.CurrentFood = (int)MaxFoodLevel;
         }
 
-        MeshRenderer[] renderers = GetComponentsInChildren<MeshRenderer>();
+        SkinnedMeshRenderer[] renderers = GetComponentsInChildren<SkinnedMeshRenderer>();
         foreach (var renderer in renderers) renderer.enabled = true;
         transform.localScale = Vector3.one * Size;
         foreach (Transform child in transform) child.gameObject.SetActive(true);
@@ -917,14 +1093,24 @@ public class CreatureBehavior : MonoBehaviour
     {
         if (!textDisplay) return;
 
-        int maxHealth = Mathf.CeilToInt(Size * 10f);
-        string text = $"Food: {foodLevel:F0}/{MaxFoodLevel:F0}\nHP: {(currentState == State.Dead ? 0 : Mathf.CeilToInt(Health))}/{maxHealth}\nStamina: {stamina:F0}/{maxStamina:F0}";
+        float maxHealth = baseHealth * healthMultiplier;
+        string text = $"Food: {foodLevel:F0}/{MaxFoodLevel:F0}\nHP: {(currentState == State.Dead ? 0 : Mathf.CeilToInt(Health))}/{maxHealth:F0}\nStamina: {stamina:F0}/{maxStamina:F0}";
         if (gender == Gender.Female && isPregnant)
             text += $"\nPregnant: {totalFoodLostSincePregnant / 2}/{ReproductionCost}";
         if (isBurrowing)
             text += "\nBurrowing";
         text += $"\n{gender}";
         textDisplay.text = text;
+
+        // Update Status Icons
+        if (poisonIcon != null)
+            poisonIcon.SetActive(poisoned);
+        if (pregnantIcon != null)
+            pregnantIcon.SetActive(isPregnant);
+        if (hungryIcon != null)
+            hungryIcon.SetActive(foodLevel <= MaxFoodLevel * 0.4f);
+        if (panickingIcon != null)
+            panickingIcon.SetActive(currentState == State.Fleeing);
     }
 
     private string GetTagFromFoodType(FoodType type)
@@ -942,5 +1128,52 @@ public class CreatureBehavior : MonoBehaviour
     {
         Gizmos.color = Color.green;
         Gizmos.DrawWireSphere(transform.position, detectionRadius);
+    }
+
+    void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Creature"))
+        {
+            CreatureBehavior otherCreature = other.GetComponent<CreatureBehavior>();
+            if (otherCreature != null && otherCreature != this)
+            {
+                overlappingCreatures.Add(otherCreature);
+            }
+        }
+    }
+
+    void OnTriggerExit(Collider other)
+    {
+        if (other.CompareTag("Creature"))
+        {
+            CreatureBehavior otherCreature = other.GetComponent<CreatureBehavior>();
+            if (otherCreature != null)
+            {
+                overlappingCreatures.Remove(otherCreature);
+            }
+        }
+    }
+
+    private IEnumerator ResumeAgent()
+    {
+        yield return new WaitForSeconds(0.5f);
+        if (agent.isActiveAndEnabled && agent.isOnNavMesh)
+        {
+            agent.isStopped = false;
+        }
+    }
+
+    private void ChangeState(State newState)
+    {
+        if (currentState == newState) return;
+
+        if ((currentState == State.SearchingForFood || currentState == State.Eating) &&
+            (newState != State.SearchingForFood && newState != State.Eating))
+        {
+            reservedFoodSource?.ReleaseReservation(this);
+            reservedFoodSource = null;
+        }
+
+        currentState = newState;
     }
 }
