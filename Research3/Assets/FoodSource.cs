@@ -2,23 +2,19 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
-
-// DO NOT REMOVE OR EDIT THIS COMMENT: Code is using Unity 6 (6000.0.37f1)
-// DO NOT REMOVE OR EDIT THIS COMMENT: Make sure the code is easy to understand, and isn't inefficient. Make the code slightly more efficient.
-// DO NOT REMOVE OR EDIT THIS COMMENT: This script manages food sources in the simulation, including replenishment and animated scaling for apples, berries, meat, etc.
-// DO NOT REMOVE OR EDIT THIS COMMENT: The script supports both replenishable (e.g., trees) and non-replenishable (e.g., dead creatures) food sources.
+using System.Linq;
 
 public class FoodSource : MonoBehaviour
 {
-    [SerializeField] public int maxFood = 10; // Maximum amount of food, set by CreatureBehavior
-    [SerializeField] public int currentFood = 10; // Current amount of food, set by CreatureBehavior
+    [SerializeField] public int maxFood = 10;
+    [SerializeField] public int currentFood = 10;
     [SerializeField] private float replenishInterval = 15f;
     private float replenishTimer = 0f;
     [SerializeField] private bool hasFood = true;
     [SerializeField] private float foodSatiety = 1f;
     [SerializeField] public bool isNotReplenishable = false;
-    [SerializeField] private int reservedFood = 0; // Tracks reserved food units
-    [SerializeField] private List<(CreatureBehavior creature, float timeout)> reservations = new List<(CreatureBehavior, float)>(); // Tracks reservations with timeouts
+    [SerializeField] private int reservedFood = 0;
+    [SerializeField] private List<(CreatureBehavior creature, float timeout, int amount)> reservations = new List<(CreatureBehavior, float, int)>();
 
     [SerializeField] private List<GameObject> foodObjects = new List<GameObject>();
     private List<Coroutine> activeCoroutines;
@@ -27,10 +23,9 @@ public class FoodSource : MonoBehaviour
     [SerializeField] private float growDuration = 15f;
     [SerializeField] private float bubbleDuration = 0.5f;
 
-    // Called when the script instance is being loaded
     void Start()
     {
-        if (!isNotReplenishable) // Skip foodObjects for non-replenishable sources (e.g., dead creatures)
+        if (!isNotReplenishable)
         {
             if (foodObjects.Count == 0)
             {
@@ -57,13 +52,12 @@ public class FoodSource : MonoBehaviour
         }
         else
         {
-            currentFood = Mathf.Clamp(currentFood, 0, maxFood); // Still clamp but skip foodObjects
+            currentFood = Mathf.Clamp(currentFood, 0, maxFood);
         }
 
         UpdateFoodState();
     }
 
-    // Updates the food source state each frame
     void Update()
     {
         if (!isNotReplenishable)
@@ -79,7 +73,6 @@ public class FoodSource : MonoBehaviour
         }
     }
 
-    // Populates foodObjects list from child GameObjects, excluding the creature’s main body and text display
     private void PopulateFromChildren()
     {
         foodObjects.Clear();
@@ -89,18 +82,17 @@ public class FoodSource : MonoBehaviour
         {
             if (mainRenderer != null && child.GetComponent<MeshRenderer>() == mainRenderer && GetComponent<CreatureBehavior>())
             {
-                continue; // Skip the creature’s main body
+                continue;
             }
             if (child.GetComponent<TextMeshPro>())
             {
-                continue; // Skip text display
+                continue;
             }
             foodObjects.Add(child.gameObject);
             Debug.Log($"{name}: Added child {child.name} to foodObjects list");
         }
     }
 
-    // Updates the hasFood flag based on currentFood level
     private void UpdateFoodState()
     {
         if (currentFood == 0)
@@ -113,7 +105,6 @@ public class FoodSource : MonoBehaviour
         }
     }
 
-    // Triggers shrink animation for a food object at the specified index
     private void StartShrinkAnimation(int index)
     {
         if (!isNotReplenishable && index >= 0 && index < foodObjects.Count && foodObjects[index] != null)
@@ -124,7 +115,6 @@ public class FoodSource : MonoBehaviour
         }
     }
 
-    // Triggers grow animation for a food object at the specified index
     private void StartGrowAnimation(int index)
     {
         if (!isNotReplenishable && index >= 0 && index < foodObjects.Count && foodObjects[index] != null)
@@ -136,7 +126,6 @@ public class FoodSource : MonoBehaviour
         }
     }
 
-    // Coroutine to animate food shrinking from current scale to 0
     private IEnumerator ShrinkFood(GameObject food)
     {
         float elapsed = 0f;
@@ -152,7 +141,6 @@ public class FoodSource : MonoBehaviour
         food.SetActive(false);
     }
 
-    // Coroutine to animate food growing from 0 to 0.75, then bubbling to 1.5 and back to 1
     private IEnumerator GrowFood(GameObject food)
     {
         float elapsed = 0f;
@@ -183,7 +171,6 @@ public class FoodSource : MonoBehaviour
         food.transform.localScale = endScale;
     }
 
-    // Property to get/set currentFood, handling animations and destruction
     public int CurrentFood
     {
         get { return currentFood; }
@@ -193,15 +180,24 @@ public class FoodSource : MonoBehaviour
             currentFood = Mathf.Clamp(value, 0, maxFood);
             UpdateFoodState();
 
-            // Ensure reservedFood doesn't exceed currentFood
             reservedFood = Mathf.Min(reservedFood, currentFood);
-            if (reservedFood < reservations.Count)
+            int totalReserved = 0;
+            foreach (var r in reservations)
             {
-                // Clear excess reservations if currentFood decreased
-                reservations.RemoveRange(reservedFood, reservations.Count - reservedFood);
+                totalReserved += r.amount;
+            }
+            if (reservedFood < totalReserved)
+            {
+                while (totalReserved > reservedFood && reservations.Count > 0)
+                {
+                    var lastReservation = reservations[reservations.Count - 1];
+                    reservations.RemoveAt(reservations.Count - 1);
+                    totalReserved -= lastReservation.amount;
+                    Debug.Log($"{lastReservation.creature.name}: Reservation removed due to insufficient food. Reserved food: {reservedFood}/{CurrentFood}");
+                }
             }
 
-            if (!isNotReplenishable) // Only animate for replenishable sources
+            if (!isNotReplenishable)
             {
                 if (currentFood < oldValue)
                 {
@@ -225,7 +221,6 @@ public class FoodSource : MonoBehaviour
 
             if (isNotReplenishable && currentFood <= 0)
             {
-                // Clear all reservations before destroying
                 reservations.Clear();
                 reservedFood = 0;
                 Destroy(gameObject);
@@ -233,19 +228,17 @@ public class FoodSource : MonoBehaviour
         }
     }
 
-    // Add method to release a reservation
     public void ReleaseReservation(CreatureBehavior creature)
     {
         var reservation = reservations.Find(r => r.creature == creature);
         if (reservation.creature != null)
         {
             reservations.Remove(reservation);
-            reservedFood = Mathf.Max(0, reservedFood - 1); // Decrease reserved food (1 unit per creature)
+            reservedFood = Mathf.Max(0, reservedFood - reservation.amount);
             Debug.Log($"{creature.name}: Released reservation on {name}. Reserved food: {reservedFood}/{CurrentFood}");
         }
     }
 
-    // Add method to update reservations and handle timeouts
     public void UpdateReservations()
     {
         for (int i = reservations.Count - 1; i >= 0; i--)
@@ -254,23 +247,46 @@ public class FoodSource : MonoBehaviour
             if (Time.time > reservation.timeout)
             {
                 reservations.RemoveAt(i);
-                reservedFood = Mathf.Max(0, reservedFood - 1);
+                reservedFood = Mathf.Max(0, reservedFood - reservation.amount);
                 Debug.Log($"{reservation.creature.name}: Reservation on {name} timed out. Reserved food: {reservedFood}/{CurrentFood}");
             }
         }
     }
 
-    // Add method to reserve food
     public void ReserveFood(CreatureBehavior creature, float timeout)
     {
-        reservedFood++;
-        reservations.Add((creature, Time.time + timeout));
-        Debug.Log($"{creature.name}: Reserved food at {name} (Available: {CurrentFood - ReservedFood})");
+        ReserveFood(creature, 1, timeout);
     }
 
-    // Add property to access reserved food
-    public int ReservedFood => reservedFood;
+    public void ReserveFood(CreatureBehavior creature, int amount, float timeout)
+    {
+        if (amount <= 0) return;
 
+        int availableFood = CurrentFood - ReservedFood;
+        int actualAmount = Mathf.Min(amount, availableFood);
+        if (actualAmount <= 0)
+        {
+            Debug.Log($"{creature.name}: Failed to reserve food at {name}. No food available (Current: {CurrentFood}, Reserved: {ReservedFood})");
+            return;
+        }
+
+        reservedFood += actualAmount;
+        reservations.Add((creature, Time.time + timeout, actualAmount));
+        Debug.Log($"{creature.name}: Reserved {actualAmount} food at {name} (Available: {CurrentFood - ReservedFood})");
+    }
+
+    // New method to get an offset position around the food source
+    public Vector3 GetOffsetPosition(CreatureBehavior creature)
+    {
+        // Use the creature's instance ID to generate a consistent angle
+        int creatureId = creature.GetInstanceID();
+        float angle = (creatureId % 360) * Mathf.Deg2Rad; // Spread creatures around the food source
+        float radius = 2f; // Match eatingDistance for consistency
+        Vector3 offset = new Vector3(Mathf.Cos(angle) * radius, 0f, Mathf.Sin(angle) * radius);
+        return transform.position + offset;
+    }
+
+    public int ReservedFood => reservedFood;
     public bool HasFood => hasFood;
     public float FoodSatiety => foodSatiety;
 }

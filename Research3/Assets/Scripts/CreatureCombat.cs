@@ -1,124 +1,81 @@
 using UnityEngine;
-using System.Collections;
 
 public class CreatureCombat : MonoBehaviour
 {
     private CreatureBehavior creatureBehavior;
-    public float AttackRange => creatureBehavior.Size * 2f;
-    [SerializeField] private float defaultAttackDamage = 4f; // Default attack damage
+    private float baseAttackDamage = 2f;
+    private float attackDamageMultiplier = 1f;
+    private float baseAttackRange = 2f;
+    private float attackRangeMultiplier = 1f;
+    private float baseAttackSpeed = 1f;
+    private float attackSpeedMultiplier = 1f;
+
+    public float AttackDamage => baseAttackDamage * attackDamageMultiplier;
+    public float AttackRange => baseAttackRange * attackRangeMultiplier;
+    public float AttackSpeed => baseAttackSpeed * attackSpeedMultiplier;
 
     void Start()
     {
         creatureBehavior = GetComponent<CreatureBehavior>();
-        if (!creatureBehavior) { Debug.LogError($"{name}: No CreatureBehavior!"); }
+        if (!creatureBehavior)
+        {
+            Debug.LogError($"{name}: No CreatureBehavior component found!");
+            enabled = false;
+            return;
+        }
+
+        // Apply trait effects for combat stats
+        if (creatureBehavior.traitIds.Contains(8)) // Hunter trait
+        {
+            attackDamageMultiplier *= 1.5f;
+            attackSpeedMultiplier *= 1.2f;
+        }
+        if (creatureBehavior.traitIds.Contains(14)) // Berserker trait
+        {
+            attackDamageMultiplier *= 1.5f;
+            attackSpeedMultiplier *= 1.3f;
+        }
     }
 
     public void Attack(CreatureBehavior target)
     {
         if (target == null || target.currentState == CreatureBehavior.State.Dead) return;
 
-        // Friendly creatures only attack if previously attacked
-        if (creatureBehavior.traitIds.Contains(9) && creatureBehavior.lastAttackedBy == null)
+        float damage = AttackDamage;
+        float defenseReduction = target.Defense * 0.1f; // Now uses target.Defense from CreatureBehavior
+        float finalDamage = Mathf.Max(1, damage - defenseReduction);
+
+        // Apply trait effects
+        if (creatureBehavior.traitIds.Contains(13)) // Venomous trait
         {
-            return;
+            target.Poisoned = true;
+            Debug.Log($"{name} applied poison to {target.name}");
         }
 
-        // Deduct stamina for attacking
-        creatureBehavior.stamina = Mathf.Max(creatureBehavior.stamina - 2f, 0);
-        creatureBehavior.lastStaminaUseTime = Time.time;
-
-        float damage = defaultAttackDamage; // Use default attack damage as base
-
-        // Berserker: +25% damage if health < 30%
-        if (creatureBehavior.traitIds.Contains(14) && creatureBehavior.Health < creatureBehavior.baseHealth * creatureBehavior.healthMultiplier * 0.3f)
-        {
-            damage *= 1.25f;
-        }
-
-        // Tactician: +25% damage if target's health % is lower
-        if (creatureBehavior.traitIds.Contains(34))
-        {
-            float targetHealthPercent = target.Health / (target.baseHealth * target.healthMultiplier);
-            float ownHealthPercent = creatureBehavior.Health / (creatureBehavior.baseHealth * creatureBehavior.healthMultiplier);
-            if (targetHealthPercent < ownHealthPercent)
-            {
-                damage *= 1.25f;
-            }
-        }
-
-        // Ambusher: +50% damage on first attack
-        if (creatureBehavior.traitIds.Contains(36) && !target.lastAttackedBy)
-        {
-            damage *= 1.5f;
-        }
-
-        // Apply damage
-        target.Health -= damage;
-
-        // Spiky: Reflect 20% damage back
-        if (target.traitIds.Contains(60))
-        {
-            creatureBehavior.Health -= damage * 0.2f;
-            Debug.Log($"{target.name} (Spiky) reflected {damage * 0.2f} damage to {name}");
-        }
-
-        // Venomous: Apply poison (0.5 damage/s for 5s)
-        if (creatureBehavior.traitIds.Contains(13))
-        {
-            target.StartCoroutine(ApplyPoison(target));
-        }
-
-        // Parasitic: Steal 1 food if target has food
-        if (creatureBehavior.traitIds.Contains(29) && target.FoodLevel > 0)
-        {
-            target.foodLevel = Mathf.Max(target.foodLevel - 1, 0);
-            creatureBehavior.foodLevel = Mathf.Min(creatureBehavior.foodLevel + 1, creatureBehavior.MaxFoodLevel);
-            Debug.Log($"{name} (Parasitic) stole 1 food from {target.name}");
-        }
-
-        // TrapMaker: Immobilize target for 3s on first attack
-        if (creatureBehavior.traitIds.Contains(64) && !target.lastAttackedBy)
-        {
-            target.immobilized = true;
-            target.immobilizedTimer = 3f;
-            Debug.Log($"{name} (TrapMaker) immobilized {target.name} for 3 seconds");
-        }
-
+        target.Health -= finalDamage;
         target.lastAttackedBy = creatureBehavior;
+        Debug.Log($"{name} attacked {target.name} for {finalDamage} damage. Target health: {target.Health}");
 
-        // Burrower: Burrow if hit and not on cooldown
-        if (target.traitIds.Contains(43) && !target.isBurrowing && target.burrowCooldown <= 0)
-        {
-            target.isBurrowing = true;
-            target.burrowTimer = 10f;
-            target.burrowCooldown = 60f;
-            Debug.Log($"{target.name} (Burrower) is burrowing due to attack");
-        }
-
-        target.UpdateTextDisplay();
         creatureBehavior.UpdateTextDisplay();
+        target.UpdateTextDisplay();
 
         if (target.Health <= 0)
         {
             StartCoroutine(target.DieWithRotation());
         }
-    }
 
-    private IEnumerator ApplyPoison(CreatureBehavior target)
-    {
-        float duration = 5f;
-        float elapsed = 0f;
-        while (elapsed < duration && target.currentState != CreatureBehavior.State.Dead)
+        // Check for retaliation (Spiky trait)
+        if (target.traitIds.Contains(29)) // Spiky trait
         {
-            target.Health -= 0.5f;
-            target.UpdateTextDisplay();
-            if (target.Health <= 0)
+            float spikyDamage = finalDamage * 0.3f;
+            creatureBehavior.Health -= spikyDamage;
+            Debug.Log($"{target.name} (Spiky) retaliated, dealing {spikyDamage} damage to {name}. Attacker health: {creatureBehavior.Health}");
+            creatureBehavior.UpdateTextDisplay();
+
+            if (creatureBehavior.Health <= 0)
             {
-                StartCoroutine(target.DieWithRotation());
-                yield break;
+                StartCoroutine(creatureBehavior.DieWithRotation());
             }
-            elapsed += 1f;
-            yield return new WaitForSeconds(1f);
         }
     }
 }

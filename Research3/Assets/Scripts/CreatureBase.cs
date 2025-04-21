@@ -7,37 +7,55 @@ public class CreatureBase : MonoBehaviour
 {
     [SerializeField] private GameObject creaturePrefab;
     [SerializeField] private int maxTraitPoints = 8;
-    [SerializeField] private int initialCreatureCount = 5; // Exactly 5 creatures at the start
+    [SerializeField] private int initialCreatureCount = 5;
     [SerializeField] private float spawnRadius = 20f;
 
-    [SerializeField] private List<CreatureBehavior> spawnedCreatures = new List<CreatureBehavior>(); // Visible in Inspector
-    [SerializeField] private int population = 0; // Tracks current living creatures
+    [SerializeField] private List<CreatureBehavior> spawnedCreatures = new List<CreatureBehavior>();
+    [SerializeField] private int population = 0;
     private List<int> selectedTraitIds = new List<int>();
     private Color creatureTypeColor = Color.white;
-    private int maleSpawnCount = 0; // Tracks total males spawned
-    private int femaleSpawnCount = 0; // Tracks total females spawned
-    private bool lastSpawnedWasMale = false; // Tracks the last gender for alternating initial spawns
+    private int maleSpawnCount = 0;
+    private int femaleSpawnCount = 0;
+    private bool lastSpawnedWasMale = false;
 
-    // List of 30 unique secondary names (no overlap with trait names like Loyal, Giant, Gluttonous, etc.)
     private static readonly string[] secondaryNames = new string[]
     {
         "Rascal", "Arachnid", "Boy", "Viper", "Wanderer", "Scout", "Drifter", "Nomad", "Prowler", "Stalker",
         "Gazer", "Sentry", "Rogue", "Bandit", "Maverick", "Outlaw", "Rebel", "Voyager", "Seeker", "Explorer",
-        "Strider", "Runner", "Chaser", "Dasher", "Sprinter", "Hopper", "Leaper", "Glider", "Skimmer", "Diver",
-        "Lurker", "Warden", "Trickster", "Sniper", "Fixer", "Watcher", "Tamer", "Slinger", "Vulture", "Brawler",
-        "Judge", "Agent", "Maven", "Seeker", "Operator", "Rebel", "Planner", "Charmer", "Deceiver", "Pretender"
+        "Strider", "Runner", "Chaser", "Dasher", "Sprinter", "Hopper", "Leaper", "Glider", "Skimmer", "Diver"
     };
 
-    private string secondaryName; // The chosen secondary name for this CreatureBase's creatures
+    private string secondaryName;
+    private CreatureBehavior leader;
+    public CreatureBehavior Leader => leader;
+
+    [SerializeField] private float currentFood = 0f;
+    [SerializeField] private float maxFoodCapacity = 0f;
+    private bool isDepositing = false;
+    private bool isEatingFromBase = false;
+
+    private bool isMovingBase = false;
+    private CreatureBehavior creatureMovingBase;
+
+    private Vector3 defaultScale;
 
     void Start()
     {
-        // Select a secondary name for all creatures of this type
+        defaultScale = transform.localScale;
+
         secondaryName = secondaryNames[Random.Range(0, secondaryNames.Length)];
 
         SelectCreatureTraits();
         SetCreatureTypeColor();
         SpawnInitialCreatures();
+        SelectLeader();
+        UpdateFoodCapacity();
+    }
+
+    void Update()
+    {
+        UpdateBaseScale();
+        CheckLeaderDistanceForBaseMove();
     }
 
     private void SelectCreatureTraits()
@@ -49,7 +67,9 @@ public class CreatureBase : MonoBehaviour
         {
             int remainingPoints = maxTraitPoints - pointsUsed;
             var affordableTraits = allTraitIds
-                .Where(id => TraitManager.GetTraitCost(id) <= remainingPoints && !selectedTraitIds.Contains(id))
+                .Where(id => TraitManager.GetTraitCost(id) <= remainingPoints && 
+                             !selectedTraitIds.Contains(id) && 
+                             !TraitManager.IsTraitRequired(id))
                 .ToArray();
 
             if (affordableTraits.Length == 0) break;
@@ -57,6 +77,13 @@ public class CreatureBase : MonoBehaviour
             int randomTraitId = affordableTraits[Random.Range(0, affordableTraits.Length)];
             selectedTraitIds.Add(randomTraitId);
             pointsUsed += TraitManager.GetTraitCost(randomTraitId);
+        }
+
+        var requiredTraits = allTraitIds.Where(id => TraitManager.IsTraitRequired(id)).ToArray();
+        if (requiredTraits.Length > 0)
+        {
+            int randomRequiredTraitId = requiredTraits[Random.Range(0, requiredTraits.Length)];
+            selectedTraitIds.Add(randomRequiredTraitId);
         }
 
         if (selectedTraitIds.Count == 0)
@@ -103,10 +130,9 @@ public class CreatureBase : MonoBehaviour
 
     private void SpawnInitialCreatures()
     {
-        int creatureCount = initialCreatureCount; // Always spawn exactly 5 creatures
+        int creatureCount = initialCreatureCount;
         for (int i = 0; i < creatureCount; i++)
         {
-            // Alternate genders: start with male, then female, then male, etc.
             CreatureBehavior.Gender gender = lastSpawnedWasMale ? CreatureBehavior.Gender.Female : CreatureBehavior.Gender.Male;
             SpawnCreature(gender);
             lastSpawnedWasMale = !lastSpawnedWasMale;
@@ -128,9 +154,9 @@ public class CreatureBase : MonoBehaviour
             creatureBehavior.baseWalkingSpeed = 4f;
             creatureBehavior.baseHealth = 20f;
             creatureBehavior.baseMaxFoodLevel = 10f;
-            creatureBehavior.baseHungerDecreaseInterval = 40f; // 40 seconds as per previous update
+            creatureBehavior.baseHungerDecreaseInterval = 40f;
 
-            creatureBehavior.currentAge = 10f; // Start as adult
+            creatureBehavior.currentAge = 10f;
             creatureBehavior.traitIds = new List<int>(selectedTraitIds);
             creatureBehavior.typeColor = creatureTypeColor;
             creatureBehavior.owningBase = this;
@@ -142,7 +168,7 @@ public class CreatureBase : MonoBehaviour
             creatureObj.name = creatureName;
 
             spawnedCreatures.Add(creatureBehavior);
-            population = spawnedCreatures.Count; // Update population counter
+            population = spawnedCreatures.Count;
 
             Debug.Log($"{name}: Spawned creature '{creatureObj.name}' at {hit.position} with traits: {string.Join(", ", creatureBehavior.traitIds.Select(id => TraitManager.GetTraitName(id)))}");
         }
@@ -165,7 +191,7 @@ public class CreatureBase : MonoBehaviour
             childBehavior.baseMaxFoodLevel = mother.baseMaxFoodLevel;
             childBehavior.baseHungerDecreaseInterval = mother.baseHungerDecreaseInterval;
 
-            childBehavior.currentAge = 0f; // Start as baby
+            childBehavior.currentAge = 0f;
             childBehavior.traitIds = new List<int>(mother.traitIds);
             childBehavior.typeColor = mother.typeColor;
             childBehavior.owningBase = this;
@@ -185,7 +211,7 @@ public class CreatureBase : MonoBehaviour
             childObj.name = childName;
 
             spawnedCreatures.Add(childBehavior);
-            population = spawnedCreatures.Count; // Update population counter
+            population = spawnedCreatures.Count;
 
             Debug.Log($"Child born: {childObj.name}, Gender: {childBehavior.gender}, Size: {childBehavior.Size}, Color: {childBehavior.typeColor}, Mother: {mother.name}, Father: {father.name}");
         }
@@ -211,7 +237,6 @@ public class CreatureBase : MonoBehaviour
 
     private string GenerateCreatureName(int spawnNumber, CreatureBehavior.Gender gender)
     {
-        // Get the prefix from TraitManager (e.g., "Loyal", "Giant", "Gluttonous")
         string prefix = "";
         foreach (int traitId in selectedTraitIds)
         {
@@ -222,10 +247,7 @@ public class CreatureBase : MonoBehaviour
             }
         }
 
-        // Use the secondary name chosen for this CreatureBase
         string baseName = prefix.Length > 0 ? $"{prefix} {secondaryName}" : $"Creature {secondaryName}";
-
-        // Add the gender marker and spawn number (e.g., "M2" or "F1")
         string genderMarker = gender == CreatureBehavior.Gender.Male ? "M" : "F";
         return $"{baseName} ({genderMarker}{spawnNumber})";
     }
@@ -235,13 +257,127 @@ public class CreatureBase : MonoBehaviour
         if (!spawnedCreatures.Contains(creature))
         {
             spawnedCreatures.Add(creature);
-            population = spawnedCreatures.Count; // Update population counter
+            population = spawnedCreatures.Count;
+            UpdateFoodCapacity();
         }
     }
 
     public void RemoveCreature(CreatureBehavior creature)
     {
         spawnedCreatures.Remove(creature);
-        population = spawnedCreatures.Count; // Update population counter
+        population = spawnedCreatures.Count;
+        UpdateFoodCapacity();
+
+        if (creatureMovingBase == creature)
+        {
+            isMovingBase = false;
+            creatureMovingBase = null;
+        }
+
+        if (creature == leader)
+        {
+            SelectLeader();
+        }
     }
+
+    private void SelectLeader()
+    {
+        if (spawnedCreatures.Count == 0)
+        {
+            leader = null;
+            return;
+        }
+
+        leader = spawnedCreatures.OrderByDescending(c => c.currentAge).First();
+        // Increase leader's size by 25%
+        leader.sizeMultiplier *= 1.25f;
+        leader.UpdateSizeAndStats();
+        Debug.Log($"{name}: New leader selected: {leader.name} (Age: {leader.currentAge}, Size increased by 25%)");
+    }
+
+    private void UpdateFoodCapacity()
+    {
+        maxFoodCapacity = population * 5f;
+    }
+
+    public bool DepositFood(float amount)
+    {
+        if (isDepositing) return false;
+
+        isDepositing = true;
+        currentFood += amount; // Allow over-depositing
+        isDepositing = false;
+
+        Debug.Log($"{name}: Deposited {amount} food. Current food: {currentFood}/{maxFoodCapacity}");
+        return true;
+    }
+
+    public bool EatFromBase(float amount, out float amountEaten)
+    {
+        amountEaten = 0f;
+        if (isEatingFromBase || currentFood <= 0) return false;
+
+        isEatingFromBase = true;
+        amountEaten = Mathf.Min(amount, currentFood);
+        currentFood -= amountEaten;
+        isEatingFromBase = false;
+
+        Debug.Log($"{name}: Ate {amountEaten} food from base. Current food: {currentFood}/{maxFoodCapacity}");
+        return true;
+    }
+
+    private void CheckLeaderDistanceForBaseMove()
+    {
+        if (leader == null || isMovingBase) return;
+
+        float distanceToLeader = Vector3.Distance(transform.position, leader.transform.position);
+        if (distanceToLeader > 2 * spawnRadius)
+        {
+            var eligibleCreatures = spawnedCreatures
+                .Where(c => c != leader && c.currentState != CreatureBehavior.State.Dead)
+                .ToList();
+
+            if (eligibleCreatures.Count > 0)
+            {
+                creatureMovingBase = eligibleCreatures[Random.Range(0, eligibleCreatures.Count)];
+                isMovingBase = true;
+                Debug.Log($"{name}: Assigning {creatureMovingBase.name} to move the base to leader {leader.name}");
+            }
+        }
+    }
+
+    private void UpdateBaseScale()
+    {
+        if (maxFoodCapacity <= 0)
+        {
+            transform.localScale = defaultScale * 0.5f;
+            return;
+        }
+
+        float foodRatio = currentFood / maxFoodCapacity;
+        float scaleMultiplier = Mathf.Lerp(0.5f, 2f, foodRatio);
+        transform.localScale = defaultScale * scaleMultiplier;
+    }
+
+    public bool TryAssignBaseMoveJob(CreatureBehavior creature)
+    {
+        if (isMovingBase && creatureMovingBase == creature)
+        {
+            return true;
+        }
+        return false;
+    }
+
+    public void CompleteBaseMove()
+    {
+        isMovingBase = false;
+        creatureMovingBase = null;
+        Debug.Log($"{name}: Base movement completed");
+    }
+
+    public float CurrentFood => currentFood;
+    public float MaxFoodCapacity => maxFoodCapacity;
+
+    // New property to check if food gathering is needed
+    public bool NeedsFood => currentFood < maxFoodCapacity;
 }
