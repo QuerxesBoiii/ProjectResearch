@@ -5,7 +5,6 @@ public class CreatureCombat : MonoBehaviour
 {
     private CreatureBehavior creatureBehavior;
     public float AttackRange => creatureBehavior.Size * 2f;
-    [SerializeField] private float defaultAttackDamage = 4f; // Default attack damage
 
     void Start()
     {
@@ -23,14 +22,10 @@ public class CreatureCombat : MonoBehaviour
             return;
         }
 
-        // Deduct stamina for attacking
-        creatureBehavior.stamina = Mathf.Max(creatureBehavior.stamina - 2f, 0);
-        creatureBehavior.lastStaminaUseTime = Time.time;
-
-        float damage = defaultAttackDamage; // Use default attack damage as base
+        float damage = creatureBehavior.Size * 2f; // Base damage
 
         // Berserker: +25% damage if health < 30%
-        if (creatureBehavior.traitIds.Contains(14) && creatureBehavior.Health < creatureBehavior.baseHealth * creatureBehavior.healthMultiplier * 0.3f)
+        if (creatureBehavior.traitIds.Contains(14) && creatureBehavior.Health < creatureBehavior.Size * 10f * 0.3f)
         {
             damage *= 1.25f;
         }
@@ -38,8 +33,8 @@ public class CreatureCombat : MonoBehaviour
         // Tactician: +25% damage if target's health % is lower
         if (creatureBehavior.traitIds.Contains(34))
         {
-            float targetHealthPercent = target.Health / (target.baseHealth * target.healthMultiplier);
-            float ownHealthPercent = creatureBehavior.Health / (creatureBehavior.baseHealth * creatureBehavior.healthMultiplier);
+            float targetHealthPercent = target.Health / (target.Size * 10f);
+            float ownHealthPercent = creatureBehavior.Health / (creatureBehavior.Size * 10f);
             if (targetHealthPercent < ownHealthPercent)
             {
                 damage *= 1.25f;
