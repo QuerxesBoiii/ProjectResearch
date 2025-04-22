@@ -2332,7 +2332,6 @@ MonoBehaviour:
   baseHealth: 20
   baseMaxFoodLevel: 10
   baseHungerDecreaseInterval: 30
-  baseDefense: 0
   canClimb: 1
   sizeMultiplier: 1
   walkingSpeedMultiplier: 1
@@ -2343,7 +2342,6 @@ MonoBehaviour:
   reproductionChanceMultiplier: 1
   mateDetectionRadiusMultiplier: 1.5
   reproductionCostMultiplier: 1
-  defenseMultiplier: 1
   foodLevel: 10
   hungerTimer: 0
   isDyingOfOldAge: 0
@@ -2375,14 +2373,13 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 8
   visibleDiscoverables: []
-  eatingDistance: 4.5
+  eatingDistance: 3
   wanderRadius: 20
   wanderTimer: 0
   wanderInterval: 5
   migrationTimer: 0
   eatTimer: 0
   noFoodTimer: 0
-  currentCarriedFood: 0
   combatTarget: {fileID: 0}
   attackTimer: 0
   isBurrowing: 0
@@ -2413,6 +2410,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5ab90822bf225794692bec737411bba0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  defaultAttackDamage: 4
 --- !u!114 &8704133662870276698
 MonoBehaviour:
   m_ObjectHideFlags: 0
