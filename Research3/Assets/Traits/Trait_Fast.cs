@@ -6,8 +6,7 @@ public class Trait_Fast : Trait
 
     public override void ApplyTrait(CreatureBehavior creature)
     {
-        creature.walkingSpeedMultiplier *= 1.25f; // +25% speed
-        creature.hungerDecreaseIntervalMultiplier *= 0.9f; // -10% hunger interval (eat more often)
-        creature.healthMultiplier *= 0.9f; // -10% health
+        creature.walkingSpeedMultiplier *= 1.5f;
+        Debug.Log($"{creature.name}: Applied Fast trait - Speed +50%.");
     }
 }

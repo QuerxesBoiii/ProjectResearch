@@ -6,7 +6,7 @@ public class Trait_Scout : Trait
 
     public override void ApplyTrait(CreatureBehavior creature)
     {
-        creature.baseDetectionRadius *= 1.25f; // +25% detection radius
-        creature.healthMultiplier *= 0.9f; // -10% health
+        creature.baseDetectionRadius *= 1.5f;
+        Debug.Log($"{creature.name}: Applied Scout trait - Detection radius +50%.");
     }
 }

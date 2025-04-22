@@ -5,6 +5,10 @@ public class CreatureCombat : MonoBehaviour
 {
     private CreatureBehavior creatureBehavior;
     public float AttackRange => creatureBehavior.Size * 2f;
+    public float attackDamageMultiplier = 1f; // Added for Berserker and Tactician
+    public bool canPoison = false; // Added for Venomous
+    public bool canReflectDamage = false; // Added for Spiky
+    public bool canImmobilize = false; // Added for TrapMaker
 
     void Start()
     {
@@ -22,49 +26,26 @@ public class CreatureCombat : MonoBehaviour
             return;
         }
 
-        float damage = creatureBehavior.Size * 2f; // Base damage
-
-        // Berserker: +25% damage if health < 30%
-        if (creatureBehavior.traitIds.Contains(14) && creatureBehavior.Health < creatureBehavior.Size * 10f * 0.3f)
-        {
-            damage *= 1.25f;
-        }
-
-        // Tactician: +25% damage if target's health % is lower
-        if (creatureBehavior.traitIds.Contains(34))
-        {
-            float targetHealthPercent = target.Health / (target.Size * 10f);
-            float ownHealthPercent = creatureBehavior.Health / (creatureBehavior.Size * 10f);
-            if (targetHealthPercent < ownHealthPercent)
-            {
-                damage *= 1.25f;
-            }
-        }
-
-        // Ambusher: +50% damage on first attack
-        if (creatureBehavior.traitIds.Contains(36) && !target.lastAttackedBy)
-        {
-            damage *= 1.5f;
-        }
+        float damage = creatureBehavior.Size * 2f * attackDamageMultiplier; // Base damage with multiplier
 
         // Apply damage
         target.Health -= damage;
 
         // Spiky: Reflect 20% damage back
-        if (target.traitIds.Contains(60))
+        if (target.traitIds.Contains(29) && canReflectDamage)
         {
             creatureBehavior.Health -= damage * 0.2f;
             Debug.Log($"{target.name} (Spiky) reflected {damage * 0.2f} damage to {name}");
         }
 
         // Venomous: Apply poison (0.5 damage/s for 5s)
-        if (creatureBehavior.traitIds.Contains(13))
+        if (creatureBehavior.traitIds.Contains(13) && canPoison)
         {
             target.StartCoroutine(ApplyPoison(target));
         }
 
         // Parasitic: Steal 1 food if target has food
-        if (creatureBehavior.traitIds.Contains(29) && target.FoodLevel > 0)
+        if (creatureBehavior.traitIds.Contains(20) && target.FoodLevel > 0)
         {
             target.foodLevel = Mathf.Max(target.foodLevel - 1, 0);
             creatureBehavior.foodLevel = Mathf.Min(creatureBehavior.foodLevel + 1, creatureBehavior.MaxFoodLevel);
@@ -72,7 +53,7 @@ public class CreatureCombat : MonoBehaviour
         }
 
         // TrapMaker: Immobilize target for 3s on first attack
-        if (creatureBehavior.traitIds.Contains(64) && !target.lastAttackedBy)
+        if (creatureBehavior.traitIds.Contains(30) && canImmobilize && !target.lastAttackedBy)
         {
             target.immobilized = true;
             target.immobilizedTimer = 3f;
@@ -80,15 +61,6 @@ public class CreatureCombat : MonoBehaviour
         }
 
         target.lastAttackedBy = creatureBehavior;
-
-        // Burrower: Burrow if hit and not on cooldown
-        if (target.traitIds.Contains(43) && !target.isBurrowing && target.burrowCooldown <= 0)
-        {
-            target.isBurrowing = true;
-            target.burrowTimer = 10f;
-            target.burrowCooldown = 60f;
-            Debug.Log($"{target.name} (Burrower) is burrowing due to attack");
-        }
 
         target.UpdateTextDisplay();
         creatureBehavior.UpdateTextDisplay();

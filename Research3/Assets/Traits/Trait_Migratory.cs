@@ -6,6 +6,7 @@ public class Trait_Migratory : Trait
 
     public override void ApplyTrait(CreatureBehavior creature)
     {
-        creature.hungerDecreaseIntervalMultiplier *= 0.95f; // +5% hunger rate
+        // Migratory wandering is handled in CreatureBehavior's WanderMigratory
+        Debug.Log($"{creature.name}: Applied Migratory trait - Moves to new locations periodically.");
     }
 }

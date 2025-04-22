@@ -6,6 +6,7 @@ public class Trait_SwiftBreeder : Trait
 
     public override void ApplyTrait(CreatureBehavior creature)
     {
-        creature.healthMultiplier *= 0.9f; // -10% health
+        creature.reproductionCostMultiplier *= 0.5f;
+        Debug.Log($"{creature.name}: Applied Swift Breeder trait - Reproduction cost halved.");
     }
 }

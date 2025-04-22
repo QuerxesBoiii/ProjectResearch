@@ -6,7 +6,8 @@ public class Trait_Fertile : Trait
 
     public override void ApplyTrait(CreatureBehavior creature)
     {
-        creature.reproductionCheckIntervalMultiplier *= 0.7f; // +30% reproduction frequency
-        creature.healthMultiplier *= 0.9f; // -10% health
+        creature.reproductionChanceMultiplier *= 2f;
+        creature.reproductionIntervalMultiplier *= 0.5f;
+        Debug.Log($"{creature.name}: Applied Fertile trait - Reproduction chance doubled, interval halved.");
     }
 }

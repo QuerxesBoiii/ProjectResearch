@@ -6,6 +6,7 @@ public class Trait_Berserker : Trait
 
     public override void ApplyTrait(CreatureBehavior creature)
     {
-        creature.maxFoodLevelMultiplier *= 0.9f; // -10% max food
+        creature.creatureCombat.attackDamageMultiplier *= 1.5f;
+        Debug.Log($"{creature.name}: Applied Berserk trait - Attack damage +50%.");
     }
 }

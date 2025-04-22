@@ -6,8 +6,8 @@ public class Trait_Enduring : Trait
 
     public override void ApplyTrait(CreatureBehavior creature)
     {
-        creature.maxStamina *= 1.5f; // +50% max stamina
-        creature.staminaRegenRate *= 1.1f; // +10% stamina regen
-        creature.walkingSpeedMultiplier *= 0.8f; // -20% walking speed
+        creature.maxStamina *= 2f;
+        creature.staminaRegenRate *= 1.5f;
+        Debug.Log($"{creature.name}: Applied Enduring trait - Stamina doubled, regen rate +50%.");
     }
 }

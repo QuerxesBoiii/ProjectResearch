@@ -6,7 +6,7 @@ public class Trait_Wanderer : Trait
 
     public override void ApplyTrait(CreatureBehavior creature)
     {
-        creature.wanderRadius *= 1.5f; // +50% wander radius
-        creature.reproductionCheckIntervalMultiplier *= 1.2f; // -20% reproduction frequency
+        creature.wanderRadius *= 2f;
+        Debug.Log($"{creature.name}: Applied Wandering trait - Wander radius doubled.");
     }
 }

@@ -6,6 +6,7 @@ public class Trait_Pheromonal : Trait
 
     public override void ApplyTrait(CreatureBehavior creature)
     {
-        creature.maxFoodLevelMultiplier *= 0.9f; // -10% max food
+        creature.mateDetectionRadiusMultiplier *= 2f;
+        Debug.Log($"{creature.name}: Applied Pheromonal trait - Mate detection radius doubled.");
     }
 }

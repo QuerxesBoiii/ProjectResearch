@@ -6,6 +6,7 @@ public class Trait_Keen : Trait
 
     public override void ApplyTrait(CreatureBehavior creature)
     {
-        creature.maxStamina *= 0.9f; // -10% max stamina
+        // Food detection radius increase is handled in CreatureBehavior's GetFoodDetectionRadius
+        Debug.Log($"{creature.name}: Applied Keen trait - Food detection radius +25%.");
     }
 }

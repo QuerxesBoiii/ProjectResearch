@@ -6,7 +6,7 @@ public class Trait_Climber : Trait
 
     public override void ApplyTrait(CreatureBehavior creature)
     {
-        creature.canClimb = true; // Enable climbing
-        creature.walkingSpeedMultiplier *= 0.95f; // -5% speed
+        creature.canClimb = true;
+        Debug.Log($"{creature.name}: Applied Climbing trait - Can climb.");
     }
 }

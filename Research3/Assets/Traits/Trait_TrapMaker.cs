@@ -6,6 +6,7 @@ public class Trait_TrapMaker : Trait
 
     public override void ApplyTrait(CreatureBehavior creature)
     {
-        creature.walkingSpeedMultiplier *= 0.85f; // -15% speed
+        creature.creatureCombat.canImmobilize = true;
+        Debug.Log($"{creature.name}: Applied TrapMaker trait - Attacks can immobilize enemies.");
     }
 }

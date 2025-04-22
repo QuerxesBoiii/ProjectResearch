@@ -6,6 +6,7 @@ public class Trait_Adrenaline : Trait
 
     public override void ApplyTrait(CreatureBehavior creature)
     {
-        creature.staminaRegenRate *= 0.8f; // -20% stamina regen
+        // Speed boost when health < 30% is handled in CreatureBehavior's sprintSpeed
+        Debug.Log($"{creature.name}: Applied Adrenaline trait - Speed +50% when health below 30%.");
     }
 }

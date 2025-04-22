@@ -6,6 +6,8 @@ public class Trait_Prolific : Trait
 
     public override void ApplyTrait(CreatureBehavior creature)
     {
-        creature.healthMultiplier *= 0.9f; // -10% health
+        creature.TwinChance += 0.1f;
+        creature.TripletChance += 0.01f;
+        Debug.Log($"{creature.name}: Applied Prolific trait - Twin chance +10%, Triplet chance +1%.");
     }
 }

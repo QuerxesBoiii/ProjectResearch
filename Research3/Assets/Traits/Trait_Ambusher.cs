@@ -6,6 +6,7 @@ public class Trait_Ambusher : Trait
 
     public override void ApplyTrait(CreatureBehavior creature)
     {
-        // Attack speed handled in CreatureBehavior.attackInterval
+        // Faster attack interval is handled in CreatureBehavior's attackInterval
+        Debug.Log($"{creature.name}: Applied Ambush trait - Attack interval reduced by 20%.");
     }
 }

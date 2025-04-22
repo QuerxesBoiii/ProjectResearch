@@ -1,111 +1,96 @@
 using UnityEngine;
 using TMPro;
+using System.Linq; // Added for Select
 
 public class ScanToolScript : MonoBehaviour
 {
-    [SerializeField] private Camera mainCamera;
-    [SerializeField] private TextMeshProUGUI displayText; // Optional: UI text for displaying stats
+    [SerializeField] private TextMeshProUGUI scanText;
     [SerializeField] private float scanRange = 10f;
-    [SerializeField] private LayerMask creatureLayer;
+    [SerializeField] private LayerMask scanLayer;
 
-    void Start()
+    private void Update()
     {
-        if (mainCamera == null)
+        if (Input.GetMouseButtonDown(0))
         {
-            mainCamera = Camera.main;
-            if (mainCamera == null)
-            {
-                Debug.LogError($"{name}: No main camera assigned or found!");
-                enabled = false;
-            }
-        }
-
-        if (displayText == null)
-        {
-            Debug.LogWarning($"{name}: No TextMeshProUGUI assigned; using Debug.Log for output.");
+            Scan();
         }
     }
 
-    void Update()
+    private void Scan()
     {
-        if (Input.GetMouseButtonDown(0)) // Left-click to scan
-        {
-            ScanCreature();
-        }
-    }
-
-    private void ScanCreature()
-    {
-        Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
-        if (Physics.Raycast(ray, out RaycastHit hit, scanRange, creatureLayer))
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        if (Physics.Raycast(ray, out RaycastHit hit, scanRange, scanLayer))
         {
             CreatureBehavior creature = hit.collider.GetComponent<CreatureBehavior>();
+            FoodSource foodSource = hit.collider.GetComponent<FoodSource>();
+            CreatureBase creatureBase = hit.collider.GetComponent<CreatureBase>();
+
             if (creature != null)
             {
                 DisplayCreatureInfo(creature);
             }
+            else if (foodSource != null)
+            {
+                DisplayFoodSourceInfo(foodSource);
+            }
+            else if (creatureBase != null)
+            {
+                DisplayCreatureBaseInfo(creatureBase);
+            }
             else
             {
-                ClearDisplay("No creature detected.");
+                scanText.text = "No scannable object detected.";
             }
         }
         else
         {
-            ClearDisplay("No creature in range.");
+            scanText.text = "Nothing in range to scan.";
         }
     }
 
     private void DisplayCreatureInfo(CreatureBehavior creature)
     {
-        string info = $"Creature: {creature.gameObject.name}\n";
-        info += $"Gender: {creature.gender}\n";
-        info += $"State: {creature.currentState}\n";
-        info += $"Health: {Mathf.CeilToInt(creature.Health)}/{Mathf.CeilToInt(creature.Size * 10f)}\n";
-        info += $"Food: {creature.FoodLevel:F0}/{creature.MaxFoodLevel:F0}\n";
-        info += $"Stamina: {creature.Stamina:F0}/{creature.MaxStamina:F0}\n";
-        info += $"Age: {creature.Age:F1}/{creature.MaxAge:F1}\n";
+        string traits = string.Join(", ", creature.traitIds.Select(id => TraitManager.GetTraitName(id)));
+        string state = creature.currentState.ToString();
+        string health = $"HP: {(creature.currentState == CreatureBehavior.State.Dead ? 0 : Mathf.CeilToInt(creature.Health))}/{creature.baseHealth * creature.healthMultiplier:F0}";
+        string food = $"Food: {creature.foodLevel:F0}/{creature.MaxFoodLevel:F0}";
+        string stamina = $"Stamina: {creature.stamina:F0}/{creature.maxStamina:F0}";
+        string age = $"Age: {creature.currentAge:F1}/{creature.maxAge:F1}";
+        string gender = $"Gender: {creature.gender}";
+        string additionalInfo = "";
 
-        // Display traits
-        info += "Traits:\n";
-        if (creature.traitIds.Count > 0)
+        if (creature.gender == CreatureBehavior.Gender.Female && creature.isPregnant)
         {
-            foreach (int traitId in creature.traitIds)
-            {
-                string traitName = TraitManager.GetTraitName(traitId) ?? "Unknown";
-                info += $"- {traitName}\n";
-            }
+            additionalInfo += $"\nPregnant: {creature.totalFoodLostSincePregnant / 2}/{creature.ReproductionCost}";
         }
-        else
+        if (creature.FoodGrabbed > 0) // Updated to use public property
         {
-            info += "- None\n";
+            additionalInfo += $"\nCarrying Food: {creature.FoodGrabbed}/{Mathf.Ceil(creature.MaxFoodLevel / 2)}";
         }
-
-        // Pregnancy status
-        if (creature.gender == CreatureBehavior.Gender.Female && creature.IsPregnant)
+        if (creature.Poisoned)
         {
-            info += $"Pregnant: {creature.TotalFoodLostSincePregnant / 2}/{creature.ReproductionCost}\n";
+            additionalInfo += "\nPoisoned";
+        }
+        if (creature.immobilized)
+        {
+            additionalInfo += $"\nImmobilized: {creature.immobilizedTimer:F1}s remaining";
         }
 
-        // Burrowing status
-        if (creature.isBurrowing)
-        {
-            info += $"Burrowing: {creature.burrowTimer:F1}s remaining\n";
-        }
-
-        // Output to UI or Debug.Log
-        if (displayText != null)
-        {
-            displayText.text = info;
-        }
-        Debug.Log(info);
+        scanText.text = $"Creature: {creature.name}\nTraits: {traits}\nState: {state}\n{health}\n{food}\n{stamina}\n{age}\n{gender}{additionalInfo}";
     }
 
-    private void ClearDisplay(string message)
+    private void DisplayFoodSourceInfo(FoodSource foodSource)
     {
-        if (displayText != null)
-        {
-            displayText.text = message;
-        }
-        Debug.Log(message);
+        string foodAmount = $"Food: {foodSource.CurrentFood}/{foodSource.maxFood}";
+        string status = foodSource.HasFood ? "Has Food" : "Depleted";
+        scanText.text = $"Food Source: {foodSource.name}\n{foodAmount}\nStatus: {status}";
+    }
+
+    private void DisplayCreatureBaseInfo(CreatureBase creatureBase)
+    {
+        string foodAmount = $"Food: {creatureBase.CurrentFood}/{creatureBase.MaxFoodCapacity}";
+        string creatureCount = $"Creatures: {creatureBase.Creatures.Count}";
+        string leader = creatureBase.Leader != null ? $"Leader: {creatureBase.Leader.name}" : "No Leader";
+        scanText.text = $"Creature Base: {creatureBase.name}\n{foodAmount}\n{creatureCount}\n{leader}";
     }
 }
